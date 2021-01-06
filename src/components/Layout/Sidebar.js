@@ -1,4 +1,4 @@
-import logo200Image from 'assets/img/logo/logo_200.png';
+import logo200Image from 'assets/img/logo/logo.png';
 import sidebarBgImage from 'assets/img/sidebar/sidebarSawah.jpg';
 import SourceLink from 'components/SourceLink';
 import React from 'react';
@@ -273,8 +273,8 @@ class Sidebar extends React.Component {
             <SourceLink className="navbar-brand d-flex">
               <img
                 src={logo200Image}
-                width="40"
-                height="30"
+                width="200"
+                height="50"
                 className="pr-2"
                 alt=""
               />

@@ -1,8 +1,17 @@
 import Page from 'components/Page';
-import logo200Image from 'assets/img/logo/logo_200.png';
-import AuthForm, { STATE_CHECK } from 'components/AuthForm';
+import logo200Image from 'assets/img/logo/logo.png';
 import React from 'react';
-import { Button, Card, CardBody, Col, Row, Label, Input } from 'reactstrap';
+import {
+  Button,
+  Card,
+  CardBody,
+  Col,
+  Row,
+  Label,
+  Input,
+  Form,
+  FormGroup,
+} from 'reactstrap';
 import { MdExitToApp } from 'react-icons/md';
 import * as myUrl from '../urlLink';
 // import * as firebase from 'firebase/app';
@@ -14,7 +23,7 @@ const colors = getThemeColors();
 
 // const perf = firebase.performance();
 
-class CheckGudang extends React.Component {
+class CheckDomisili extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -129,7 +138,7 @@ class CheckGudang extends React.Component {
             onChange={this.setGroup}
           >
             <option value={0} disabled selected hidden id="pilih">
-              Pilih Gudang
+              Pilih Data
             </option>
             .dela
             {renderGudang}
@@ -146,55 +155,127 @@ class CheckGudang extends React.Component {
           </td>
         </tr>
       );
-    //totaldata
 
     return (
       <Page>
+        {/* untuk redirect keluar/masuk dalam kondisi boolean */}
         {this.renderRedirect()}
         <Row
           style={{
-            height: '80vh',
+            height: '100vh',
             justifyContent: 'center',
             alignItems: 'center',
           }}
         >
-          <Col sm={4} md={4} lg={4}>
-            <Card>
-              <div className="text-center pb-4">
-                <img
-                  src={logo200Image}
-                  className="rounded"
-                  style={{ width: 60, height: 60, marginTop: '5%' }}
-                  alt="logo"
-                />
-              </div>
-              <CardBody style={{textAlign:'center'}}>
-                <Label style={{textAlign:'center'}}>Silahkan Pilih Gudang:</Label>
-                {listGudang ? (
-                  (
-                    <Input
-                      type="select"
-                      autoComplete="off"
-                      name="select"
-                      color="primary"
-                      style={{ marginRight: '1px' }}
-                      onChange={this.setGroup}
-                    >
-                      <option value={0} disabled selected hidden id="pilih">
-                        Pilih Gudang
-                      </option>
-                      {renderGudang}
-                    </Input>
-                  ) || <LoadingSpinner status={5} />
-                ) : this.state.dataAvailable ? (
-                  <Row style={{ textAlign: 'center' }}>
-                    <Col style={{ textAlign: 'center' }}>
-                      <br></br>TIDAK ADA DATA GUDANG
-                    </Col>
-                  </Row>
-                ) : (
-                  <LoadingSpinner status={5} />
-                )}
+          <Col md={6} lg={4}>
+            <Card body>
+              <Form onSubmit={this.handleSubmit}>
+                {/* untuk tampilan logo */}
+                <div className="text-center pb-4">
+                  <img
+                    src={logo200Image}
+                    className="rounded"
+                    style={{ width: 320, height: 80 }}
+                    alt="logo"
+                  />
+                </div>
+                {/* untuk pilh provinsi */}
+                <FormGroup>
+                  <Label style={{ textAlign: 'center' }}>
+                    Silahkan Pilih Provinsi:
+                  </Label>
+                  {/* semantic validasi loading dan get data provinsi */}
+                  {listGudang ? (
+                    (
+                      <Input
+                        type="select"
+                        autoComplete="off"
+                        name="select"
+                        color="primary"
+                        style={{ marginRight: '1px' }}
+                        onChange={this.setGroup}
+                      >
+                        <option value={0} disabled selected hidden id="pilih">
+                          Pilih Provinsi
+                        </option>
+                        {renderGudang}
+                      </Input>
+                    ) || <LoadingSpinner status={5} />
+                  ) : this.state.dataAvailable ? (
+                    <Row style={{ textAlign: 'center' }}>
+                      <Col style={{ textAlign: 'center' }}>
+                        <br></br>TIDAK ADA DATA
+                      </Col>
+                    </Row>
+                  ) : (
+                    <LoadingSpinner status={5} />
+                  )}
+                </FormGroup>
+                {/* untuk pilih kota/kabupaten */}
+                <FormGroup>
+                  <Label style={{ textAlign: 'center' }}>
+                    Silahkan Pilih Kota/Kabupaten:
+                  </Label>
+                  {/* semantic validasi loading dan get data kota/kabupaten */}
+                  {listGudang ? (
+                    (
+                      <Input
+                        type="select"
+                        autoComplete="off"
+                        name="select"
+                        color="primary"
+                        style={{ marginRight: '1px' }}
+                        onChange={this.setGroup}
+                      >
+                        <option value={0} disabled selected hidden id="pilih">
+                          Pilih Kota/Kabupaten
+                        </option>
+                        {renderGudang}
+                      </Input>
+                    ) || <LoadingSpinner status={5} />
+                  ) : this.state.dataAvailable ? (
+                    <Row style={{ textAlign: 'center' }}>
+                      <Col style={{ textAlign: 'center' }}>
+                        <br></br>TIDAK ADA DATA
+                      </Col>
+                    </Row>
+                  ) : (
+                    <LoadingSpinner status={5} />
+                  )}
+                </FormGroup>
+                {/* untuk pilih kecamatan */}
+                <FormGroup>
+                  <Label style={{ textAlign: 'center' }}>
+                    Silahkan Pilih Kecamatan:
+                  </Label>
+                  {/* semantic validasi loading dan get data kecamatan */}
+                  {listGudang ? (
+                    (
+                      <Input
+                        type="select"
+                        autoComplete="off"
+                        name="select"
+                        color="primary"
+                        style={{ marginRight: '1px' }}
+                        onChange={this.setGroup}
+                      >
+                        <option value={0} disabled selected hidden id="pilih">
+                          Pilih Kecamatan
+                        </option>
+                        {renderGudang}
+                      </Input>
+                    ) || <LoadingSpinner status={5} />
+                  ) : this.state.dataAvailable ? (
+                    <Row style={{ textAlign: 'center' }}>
+                      <Col style={{ textAlign: 'center' }}>
+                        <br></br>TIDAK ADA DATA
+                      </Col>
+                    </Row>
+                  ) : (
+                    <LoadingSpinner status={5} />
+                  )}
+                </FormGroup>
+                {/* untuk tampilan masuk/keluar */}
                 <div
                   className="text-center pt-1"
                   style={{ textAlign: 'center' }}
@@ -202,6 +283,7 @@ class CheckGudang extends React.Component {
                   <Col style={{ textAlign: 'center' }}>
                     <br></br>
                     <Button
+                      color="primary"
                       disabled={this.state.pilihGudang === undefined}
                       style={{ width: '150px' }}
                       onClick={this.Masuk}
@@ -220,7 +302,7 @@ class CheckGudang extends React.Component {
                     </Button>
                   </Col>
                 </div>
-              </CardBody>
+              </Form>
             </Card>
           </Col>
         </Row>
@@ -228,4 +310,4 @@ class CheckGudang extends React.Component {
     );
   }
 }
-export default CheckGudang;
+export default CheckDomisili;

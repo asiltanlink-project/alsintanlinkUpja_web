@@ -8,9 +8,9 @@ if (window.location.hostname.includes('staging-logistic')) {
     'https://staging-api.cfu.pharmalink.id/auth/forgotpassword';
   var url_verifyOTP = 'https://staging-api.cfu.pharmalink.id/auth/verifyotp';
   var url_changePassword =
-    'https://staging-api.cfu.pharmalink.id/auth//changePassword';
+    'https://staging-api.cfu.pharmalink.id/auth/changePassword';
   var url_loginChangePassword =
-    'https://staging-api.cfu.pharmalink.id/auth//login/changePassword';
+    'https://staging-api.cfu.pharmalink.id/auth/login/changePassword';
 
   //URL TEAM PAK DEANDLES (GUDANG TN)
   var base_url_all = 'https://staging-api.cfu.pharmalink.id/retur/';
