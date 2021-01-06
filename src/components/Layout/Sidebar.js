@@ -1,5 +1,5 @@
 import logo200Image from 'assets/img/logo/logo_200.png';
-import sidebarBgImage from 'assets/img/sidebar/sidebar-0.jpg';
+import sidebarBgImage from 'assets/img/sidebar/sidebarSawah.jpg';
 import SourceLink from 'components/SourceLink';
 import React from 'react';
 import {
