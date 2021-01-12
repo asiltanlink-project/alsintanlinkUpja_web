@@ -3,7 +3,7 @@
 if (window.location.hostname.includes('staging-logistic')) {
   console.log('STAGING-logistic');
   //URL LOGIN
-  var url_login = 'https://staging-api.cfu.pharmalink.id/auth/login';
+  var url_login = 'http://alsintanlink.com/api/upja/login';
   var url_changeForgottenPassword =
     'https://staging-api.cfu.pharmalink.id/auth/forgotpassword';
   var url_verifyOTP = 'https://staging-api.cfu.pharmalink.id/auth/verifyotp';
@@ -92,7 +92,7 @@ if (window.location.hostname.includes('staging-logistic')) {
   console.log('logistic');
 
   //URL LOGIN
-  var url_login = 'https://api.cfu.pharmalink.id/auth/login';
+  var url_login = 'http://alsintanlink.com/api/upja/login';
   var url_changeForgottenPassword =
     'https://api.cfu.pharmalink.id/auth/forgotpassword';
   var url_verifyOTP = 'https://api.cfu.pharmalink.id/auth/verifyotp';
@@ -179,7 +179,7 @@ if (window.location.hostname.includes('staging-logistic')) {
   console.log('LOCALHOST-logistic');
 
   //URL LOGIN
-  var url_login = 'https://staging-api.cfu.pharmalink.id/auth/login';
+  var url_login = 'http://alsintanlink.com/api/upja/login';
   var url_changeForgottenPassword =
     'https://staging-api.cfu.pharmalink.id/auth/forgotpassword';
   var url_verifyOTP = 'https://staging-api.cfu.pharmalink.id/auth/verifyotp';
@@ -276,7 +276,18 @@ if (window.location.hostname.includes('staging-logistic')) {
     'https://staging-api.cfu.pharmalink.id/monitoring-gudang/GetOutstanding?type=all&gudangID=';
 }
 
+var url_registarsiUpja = 'http://alsintanlink.com/api/upja/register';
+
+// Show Domisili
+var url_getProvince = 'http://alsintanlink.com/api/location/province';
+var url_getCity = 'http://alsintanlink.com/api/location/city';
+var url_getDistrict = 'http://alsintanlink.com/api/location/district';
+
 export {
+  url_getProvince,
+  url_getCity,
+  url_getDistrict,
+  url_registarsiUpja,
   url_login,
   url_allGudang,
   url_changeForgottenPassword,

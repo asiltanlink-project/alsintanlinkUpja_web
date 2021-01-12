@@ -28,16 +28,15 @@ class AuthPage extends React.Component {
     this.props.history.push('/login');
   };
 
-  requestLogin = async (username, password) => {
+  requestLogin = async (email, password) => {
     const urlA = myUrl.url_login;
-    var status = false;
-    //console.log("url", urlA);
 
     var payload = {
-      username: username,
+      email: email,
       password: password,
     };
 
+    console.log('PAYLOAD', payload);
     const option = {
       method: 'POST',
       json: true,
@@ -47,11 +46,9 @@ class AuthPage extends React.Component {
       },
       body: JSON.stringify(payload),
     };
-    //console.log(option);
     let data = await fetch(urlA, option)
       .then(response => {
         if (response.ok) {
-          //console.log("LOGIN2");
           return response;
         } else {
           if (response.status === 401) {
@@ -59,14 +56,12 @@ class AuthPage extends React.Component {
           } else if (response.status === 500) {
             this.showNotification('Internal Server Error', 'error');
           } else {
-            // console.log("FETCHING DONE");
             this.showNotification('Koneksi ke server gagal 1', 'error');
           }
           return true;
         }
       })
-      .catch(err => {
-        //console.log(err);
+      .catch(() => {
         this.showNotification('Koneksi ke server gagal!', 'error');
         return true;
       });
@@ -75,52 +70,25 @@ class AuthPage extends React.Component {
       return true;
     }
     if (data) {
-      var token = data.headers.get('Authorization');
       data = await data.json();
 
-      //console.log(data);
-      var data1 = data.data;
-      var error = data.error;
-      var metadata = data.metadata;
+      console.log('DATA LOGIN', data);
+      var message = data.result.message;
+      var profile = data.result.upja;
+      var token = data.result.token;
+      var status = data.status;
 
-      if (error.status === false) {
-        if (metadata.status === true) {
-          window.localStorage.setItem('tokenCookies', token);
-          window.localStorage.setItem(
-            'accessList',
-            JSON.stringify(data1.mem_access),
-          );
-          window.localStorage.setItem('profile', JSON.stringify(data1));
-          //console.log("TOKEN", window.localStorage.getItem('tokenCookies'));
-          //console.log("accessList", window.localStorage.getItem('accessList'));
-
-          if (data1.mem_forcechangepasswordyn === 'Y') {
-            //console.log("FORE CHANGE YES");
-            this.props.history.push({
-              pathname: '/resetpassword',
-              state: { ok: true },
-            });
-          } else {
-            //console.log("FORE CHANGE NO");
-            // this.props.history.push({
-            //   pathname: '/Dashboard',
-            //   state: { profile: data.result }
-            // })
-            window.location.replace('/');
-          }
-        } else {
-          this.showNotification(metadata.message, 'error');
-          //console.log(metadata.message);
-        }
+      if (status === 1) {
+        this.showNotification(message, 'info');
+        window.localStorage.setItem('tokenCookies', token);
+        window.localStorage.setItem('profile', JSON.stringify(profile));
+        window.location.replace('/');
       } else {
-        this.showNotification(error.msg, 'error');
-        //console.log(error.msg);
+        this.showNotification(message, 'error');
       }
     } else {
-      //console.log("FETCHING DONE");
       this.showNotification('Koneksi ke server gagal', 'error');
     }
-
     return true;
   };
 

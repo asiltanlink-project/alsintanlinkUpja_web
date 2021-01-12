@@ -75,18 +75,12 @@ class AuthForm extends React.Component {
   }
 
   nextStep = async () => {
-    const filter = /^(?:(([+])?\d{10,13})|(^\w+([.-]?\w+)*@\w+([.-]?\w+)*(.\w{2,3})+$))$/;
-    const { inputEmailNumber, username, password } = this.state;
+    const { username, password } = this.state;
     const { buttonText } = this.props;
 
-    var result = inputEmailNumber.match(filter);
-    this.setState({ enterButton: true });
-    this.fetchData();
+    this.setState({ enterButton: true, loading: true });
 
-    //console.log("AAA")
-    if (!buttonText && this.isLogin) {
-      //console.log("TERSERAH KATA NICO" + this.state.username + "   " + this.state.password);
-
+    if (!buttonText) {
       if (true) {
         console.log(await this.props.onButtonClick(username, password));
         setTimeout(() => {
@@ -94,58 +88,6 @@ class AuthForm extends React.Component {
         }, 500);
       }
     }
-
-    if (!buttonText && this.isForgetPass) {
-      //console.log(this.fetchData())
-      //console.log(this.state.loading)
-      //menetukan email atau phone
-      if (result !== null) {
-        if (result[1] !== undefined) {
-          //console.log(this.state.loading);
-          this.setState({
-            emailOrPhone: false,
-            enterButton: false,
-            // loading: false
-          });
-
-          //inputan nomor handphone
-          var phonenum = this.state.inputEmailNumber;
-          if (result[2] === undefined) {
-            //console.log(this.state.loading);
-
-            //angka dimulai 0
-            this.changeForgottenPassword(phonenum, '');
-            this.setState({
-              emailOrPhone: false,
-              enterButton: false,
-              // loading:false
-            });
-          } else {
-            //console.log(this.state.loading);
-            //angka dimulai +62
-            phonenum = phonenum.replace('+62', '0');
-            this.changeForgottenPassword(phonenum, '');
-            this.setState({
-              emailOrPhone: false,
-              enterButton: false,
-              loading: false,
-            });
-          }
-        } else if (result[3] !== undefined) {
-          console.log('MASUK EMAIL');
-          //inputan email
-          this.setState({
-            emailOrPhone: true,
-            enterButton: false,
-            loading: false,
-          });
-          //console.log("EMAIL GO");
-          this.changeForgottenPassword('', this.state.inputEmailNumber);
-        }
-      }
-    }
-    //console.log(this.state.loading);
-    //console.log("NEXT STEP DONE");
   };
 
   fetchData = () => {
@@ -877,6 +819,7 @@ class AuthForm extends React.Component {
                 textDecoration: 'underline',
                 cursor: 'pointer',
               }}
+              onClick={() => window.location.replace('/registrasi')}
             >
               Registrasi
             </Label>
@@ -941,10 +884,10 @@ AuthForm.propTypes = {
 AuthForm.defaultProps = {
   authState: 'LOGIN',
   showLogo: true,
-  usernameLabel: 'Username',
+  usernameLabel: 'Email',
   usernameInputProps: {
     type: 'input',
-    placeholder: 'Username...',
+    placeholder: 'Email...',
     name: 'username',
   },
   passwordLabel: 'Password',

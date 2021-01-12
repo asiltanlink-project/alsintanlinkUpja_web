@@ -4,11 +4,12 @@ import { EmptyLayout, LayoutRoute, MainLayout } from 'components/Layout';
 import PrivateRoute from 'components/Layout/PrivateRoute';
 import PageSpinner from 'components/PageSpinner';
 import CheckGudang from 'pages/Order/CheckGudang';
+import Registrasi from 'pages/Registrasi';
 import AuthPage from 'pages/template/AuthPage';
 import ResetPasswordForm from 'components/ResetPasswordForm';
 import React from 'react';
 import componentQueries from 'react-component-queries';
-import { BrowserRouter, Redirect, Switch } from 'react-router-dom';
+import { BrowserRouter, Redirect, Switch, Route } from 'react-router-dom';
 import './styles/reduction.scss';
 import * as firebase from 'firebase/app';
 import EkspedisiIntegra from 'pages/ExternalEkspedisi/L1_EkspedisiIntegra';
@@ -28,6 +29,7 @@ const firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const Dashboard = React.lazy(() => import('pages/template/DashboardPage'));
+
 // Montoring
 const OrderPageMalam = React.lazy(() =>
   import('pages/Pelapak/L1_OrderPageMalam'),
@@ -131,11 +133,15 @@ const AddSPHODetail = React.lazy(() => import('pages/spAddHO/AddSPHODetail'));
 const spdoPage = React.lazy(() => import('pages/spdo/SpdoPage'));
 
 //Laporan SP
-const laporanSPHome = React.lazy(()=>import('pages/LaporanSP/LaporanSPHome'));
-const LaporanSPManual = React.lazy(()=>import('pages/LaporanSP/LaporanSPManual'));
+const laporanSPHome = React.lazy(() => import('pages/LaporanSP/LaporanSPHome'));
+const LaporanSPManual = React.lazy(() =>
+  import('pages/LaporanSP/LaporanSPManual'),
+);
 
 //Eksternal Ekspedisi
-const ExternalEkspedisi = React.lazy(()=>import('pages/ExternalEkspedisi/L1_EkspedisiIntegra'));
+const ExternalEkspedisi = React.lazy(() =>
+  import('pages/ExternalEkspedisi/L1_EkspedisiIntegra'),
+);
 
 const getBasename = () => {
   return `/${process.env.PUBLIC_URL.split('/').pop()}`;
@@ -146,37 +152,35 @@ class App extends React.Component {
     title: '',
     color: '',
     menuID: '',
-    reqData:[]
+    reqData: [],
   };
 
   setTitle = (title, color) => {
     this.setState({ title: title, color: color });
   };
 
-  passData = (type,data) =>{
-    var tempArr = this.state.reqData
-    if(type === 'SPManual'){
-      var newObj= {
-        selectedTipeLaporan:data.selectedTipeLaporan,
-        selectedJenisLaporan:data.selectedJenisLaporan,
-        inputDate:data.inputDate,
-        spNotPrintChecked:data.spNotPrintChecked,
-        notFound:data.notFound,
-        hasilSP:data.hasilSP
-      }
-      tempArr.push(newObj)
+  passData = (type, data) => {
+    var tempArr = this.state.reqData;
+    if (type === 'SPManual') {
+      var newObj = {
+        selectedTipeLaporan: data.selectedTipeLaporan,
+        selectedJenisLaporan: data.selectedJenisLaporan,
+        inputDate: data.inputDate,
+        spNotPrintChecked: data.spNotPrintChecked,
+        notFound: data.notFound,
+        hasilSP: data.hasilSP,
+      };
+      tempArr.push(newObj);
       this.setState({
-        reqData:tempArr
-      })
+        reqData: tempArr,
+      });
     }
-    if(type === 'clear'){
+    if (type === 'clear') {
       this.setState({
-        reqData:[]
-      })
+        reqData: [],
+      });
     }
-  }
-
- 
+  };
 
   getAccess() {
     var accessList = JSON.parse(window.localStorage.getItem('accessList'));
@@ -235,12 +239,18 @@ class App extends React.Component {
                 <ResetPasswordForm {...props} />
               )}
             />
-            <PrivateRoute
+            <Route
               exact
               menuID={this.state.menuID}
               path="/"
               layout={EmptyLayout}
               component={props => <CheckGudang {...props} />}
+            />
+            <Route
+              exact
+              path="/registrasi"
+              layout={EmptyLayout}
+              component={props => <Registrasi {...props} />}
             />
             {/* {console.log('ISI MENU ID: ', this.state.menuID)} */}
 
@@ -556,7 +566,7 @@ class App extends React.Component {
                   passData={this.passData}
                 />
 
-                 <PrivateRoute
+                <PrivateRoute
                   setTitle={this.setTitle}
                   exact
                   menuID="23"
@@ -568,13 +578,12 @@ class App extends React.Component {
 
                 {/* Eksternal Ekspedisi */}
                 <PrivateRoute
-                setTitle = {this.setTitle}
-                exact
-                menuID="5"
-                path="/Ekspedisi-Integra"
-                component={ExternalEkspedisi}
+                  setTitle={this.setTitle}
+                  exact
+                  menuID="5"
+                  path="/Ekspedisi-Integra"
+                  component={ExternalEkspedisi}
                 />
-
               </React.Suspense>
             </MainLayout>
             <Redirect to="/" />
