@@ -16,6 +16,7 @@ import {
   Modal,
   ModalHeader,
   ModalBody,
+  ModalFooter,
   Table,
 } from 'reactstrap';
 import { MdExitToApp, MdLoyalty, MdList, MdAutorenew } from 'react-icons/md';
@@ -79,6 +80,33 @@ class Registrasi extends React.Component {
   };
 
   toggle = modalType => () => {
+    if (!modalType) {
+      return this.setState(
+        {
+          modal: !this.state.modal,
+          keywordList: '',
+          realCurrentPages: 1,
+          maxPages: 1,
+          currentPages: 1,
+          ecommerceIDtemp: this.state.ecommerceID,
+        },
+        // () => this.getProvinsi(1, this.state.todosPerPages),
+      );
+    }
+
+    this.setState(
+      {
+        [`modal_${modalType}`]: !this.state[`modal_${modalType}`],
+        keywordList: '',
+        realCurrentPages: 1,
+        maxPages: 1,
+        currentPages: 1,
+      },
+      // () => this.getProvinsi(1, this.state.todosPerPages),
+    );
+  };
+
+  toggleVerifikasi = modalType => {
     if (!modalType) {
       return this.setState(
         {
@@ -219,9 +247,8 @@ class Registrasi extends React.Component {
           this.setState({ loading: false });
         } else {
           this.showNotification(data.result.message, 'info');
-          this.setState({ loading: false }, () =>
-            window.location.replace('/login'),
-          );
+          this.setState({ loading: false, modal_nested: false });
+          this.toggleVerifikasi('nested_parent_list_verifikasi');
         }
       });
   }
@@ -357,48 +384,18 @@ class Registrasi extends React.Component {
     isNotificationConfirmed: false,
     isOpenUserCardPopover: false,
     redirect: false,
-    pilihGudang: '',
-    namaGudang: '',
   };
 
-  signOut = () => {
+  redirectOut() {
     window.localStorage.removeItem('token');
     window.localStorage.removeItem('accessList');
-    this.setState({
-      redirect: true,
-    });
-  };
-
-  renderRedirect = () => {
-    if (this.state.redirect) {
-      return <Redirect to="/login" />;
-    }
-  };
-
-  Masuk = () => {
-    window.localStorage.setItem('gID', this.state.pilihGudang);
-    window.localStorage.setItem('gName', this.state.namaGudang);
-    if (this.state.pilihGudang !== '' || this.state.pilihGudang !== null) {
-      this.props.history.push('/Dashboard');
-    } else {
-      this.props.history.push('/login');
-    }
-  };
-
-  setGroup = event => {
-    var nama = this.state.result.find(function (element) {
-      return element.Out_Code === event.target.value;
-    });
-    this.setState({
-      pilihGudang: event.target.value,
-      namaGudang: nama.Out_Name,
-    });
-  };
+    this.setState({ loading: true }, () => window.location.replace('/login'));
+  }
 
   updateInputValue(value, field, fill) {
     let input = this.state[fill];
     input[field] = value;
-    this.setState({ input }, () => console.log('INPUT', this.state.input));
+    this.setState({ input });
   }
 
   onPassChange = e => {
@@ -650,7 +647,6 @@ class Registrasi extends React.Component {
     return (
       <Page>
         {/* untuk redirect keluar/masuk dalam kondisi boolean */}
-        {this.renderRedirect()}
         <NotificationSystem
           dismissible={false}
           ref={notificationSystem =>
@@ -925,14 +921,42 @@ class Registrasi extends React.Component {
                           marginLeft: '1%',
                           width: '200px',
                         }}
-                        disabled={!isEnabledRegis || loading}
+                        disabled={!isEnabledRegis}
                         color="primary"
-                        onClick={() => this.registrasiUpja()}
+                        onClick={this.toggle('nested')}
+                        // onClick={this.toggle('nested_parent_list_verifikasi')}
                       >
-                        {!loading && 'Registrasi UPJA'}
-                        {loading && <MdAutorenew />}
-                        {loading && 'Sedang diproses'}
+                        Registrasi UPJA
                       </Button>
+                      <Modal
+                        onExit={this.handleClose}
+                        isOpen={this.state.modal_nested}
+                        toggle={this.toggle('nested')}
+                      >
+                        <ModalHeader>Konfirmasi Registrasi</ModalHeader>
+                        <ModalBody>
+                          Apakah Anda yakin ingin meregistrasi data ini?
+                        </ModalBody>
+                        <ModalFooter>
+                          <Button
+                            disabled={loading}
+                            color="primary"
+                            onClick={() => this.registrasiUpja()}
+                          >
+                            {!loading && 'Registrasi UPJA'}
+                            {loading && <MdAutorenew />}
+                            {loading && 'Sedang diproses'}
+                          </Button>{' '}
+                          {!loading && (
+                            <Button
+                              color="secondary"
+                              onClick={this.toggle('nested')}
+                            >
+                              Tidak
+                            </Button>
+                          )}
+                        </ModalFooter>
+                      </Modal>
                       <Button
                         style={{ float: 'right', width: '200px' }}
                         outline
@@ -1088,6 +1112,34 @@ class Registrasi extends React.Component {
           </ModalBody>
         </Modal>
         {/* Modal List Kecamatan */}
+
+        {/* Modal Verifikasi */}
+        <Modal
+          onExit={this.handleClose}
+          isOpen={this.state.modal_nested_parent_list_verifikasi}
+          toggle={this.toggle('nested_parent_list_verifikasi')}
+          className={this.props.className}
+        >
+          <ModalHeader>Registrasi Berhasil</ModalHeader>
+          <ModalBody>
+            <Label>
+              Terima kasih telah melakukan proses registrasi, cek email Anda
+              untuk Verifikasi!
+            </Label>
+          </ModalBody>
+          <ModalFooter style={{ textAlign: 'center' }}>
+            <Button
+              style={{ textAlign: 'center' }}
+              disabled={loading}
+              onClick={() => this.redirectOut()}
+            >
+              {!loading && 'Oke'}
+              {loading && <MdAutorenew />}
+              {loading && 'Sedang diproses'}
+            </Button>
+          </ModalFooter>
+        </Modal>
+        {/* Modal Verifikasi */}
         {/* KHUSUS MODAL */}
       </Page>
     );
