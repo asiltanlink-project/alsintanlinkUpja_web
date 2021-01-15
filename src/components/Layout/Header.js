@@ -74,10 +74,6 @@ class Header extends React.Component {
   renderRedirect = () => {
     if (this.state.redirect) {
       return <Redirect to="/login" />;
-    } else if (this.state.redirectGudang) {
-      const { title } = this.props;
-      this.setState({ title: '' });
-      return <Redirect to="/" />;
     }
   };
 
@@ -87,8 +83,7 @@ class Header extends React.Component {
       return;
     } else {
       this.setState({
-        nip: profileName.mem_nip,
-        nama: profileName.mem_username,
+        nama: profileName.email,
       });
     }
   }
@@ -146,14 +141,6 @@ class Header extends React.Component {
               className="border-light"
             >
               <ListGroup flush>
-                <ListGroupItem
-                  tag="button"
-                  action
-                  onClick={this.keluarGudang}
-                  className="border-light"
-                >
-                  <MdEditLocation /> Pilih Domisili
-                </ListGroupItem>
                 <ListGroupItem
                   tag="button"
                   action

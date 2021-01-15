@@ -26,6 +26,23 @@ const sidebarBackground = {
   backgroundRepeat: 'no-repeat',
 };
 
+const alsintanlink = [
+  {
+    to: '/profile',
+    id: '5',
+    name: 'Profile',
+    exact: false,
+    Icon: MdHdrStrong,
+  },
+  {
+    to: '/alsin',
+    id: '5',
+    name: 'Alsin',
+    exact: false,
+    Icon: MdHdrStrong,
+  },
+];
+
 const Pelapak = [
   {
     to: '/OrderMalamIni',
@@ -197,7 +214,13 @@ const navTN = [
 ];
 
 const navMasterDataSPAddHO = [
-  { to: '/spaddho', id: '23', name: 'SP Add HO', exact: false, Icon: MdRadioButtonChecked }
+  {
+    to: '/spaddho',
+    id: '23',
+    name: 'SP Add HO',
+    exact: false,
+    Icon: MdRadioButtonChecked,
+  },
 ];
 
 const spdoGroup = [
@@ -205,13 +228,24 @@ const spdoGroup = [
 ];
 
 const laporanSP = [
-  { to: '/laporansphome', id: '23', name: 'Laporan SP Home', exact: false, Icon: MdRadioButtonChecked },
+  {
+    to: '/laporansphome',
+    id: '23',
+    name: 'Laporan SP Home',
+    exact: false,
+    Icon: MdRadioButtonChecked,
+  },
 ];
 
 const EkspedisiExternal = [
-  {to:'/Ekspedisi-Integra', id:'5', name:'Ekspedisi-Integra', exact:false, Icon:MdHdrStrong}
-]
-
+  {
+    to: '/Ekspedisi-Integra',
+    id: '5',
+    name: 'Ekspedisi-Integra',
+    exact: false,
+    Icon: MdHdrStrong,
+  },
+];
 
 const bem = bn.create('sidebar');
 
@@ -221,18 +255,18 @@ class Sidebar extends React.Component {
 
     if (window.localStorage.getItem('accessList')) {
       accessList = JSON.parse(window.localStorage.getItem('accessList'));
-    } else {
     }
   }
 
   state = {
+    isOpenAlsintanlinkAdmin: false,
     isOpenPelapak: false,
     isOpenMasterB2B: false,
     isOpenReceiving: false,
     isOpenStock: false,
     isOpenExternal: true,
     isOpenMasterSPAddHO: false,
-    isOpenEkspedisiExternal:false,
+    isOpenEkspedisiExternal: false,
   };
 
   handleClick = name => () => {
@@ -278,178 +312,12 @@ class Sidebar extends React.Component {
                 className="pr-2"
                 alt=""
               />
-              <span className="text-white">Logistic</span>
             </SourceLink>
           </Navbar>
 
-          {/* PELAPAK */}
           <Nav vertical>
-            {this.allFound(Pelapak) && (
-              <NavItem
-                className={bem.e('nav-item')}
-                onClick={this.handleClick('Pelapak')}
-              >
-                <BSNavLink className={bem.e('nav-item-collapse')}>
-                  <div className="d-flex">
-                    <MdFormatListBulleted className={bem.e('nav-item-icon')} />
-                    <span className="">PELAPAK</span>
-                  </div>
-                  <MdKeyboardArrowDown
-                    className={bem.e('nav-item-icon')}
-                    style={{
-                      padding: 0,
-                      transform: this.state.isOpenPelapak
-                        ? 'rotate(0deg)'
-                        : 'rotate(-90deg)',
-                      transitionDuration: '0.3s',
-                      transitionProperty: 'transform',
-                    }}
-                  />
-                </BSNavLink>
-              </NavItem>
-            )}
-            {this.allFound(Pelapak) && (
-              <Collapse isOpen={this.state.isOpenPelapak}>
-                {Pelapak.map(
-                  ({ to, id, name, exact, Icon }, index) =>
-                    Object.keys(accessList).includes(id) && (
-                      <NavItem key={index} className={bem.e('nav-item')}>
-                        <BSNavLink
-                          id={`navItem-${name}-${index}`}
-                          className="text-uppercase"
-                          tag={NavLink}
-                          to={to}
-                          activeClassName="active"
-                          exact={exact}
-                          onClick={this.handleSidebarControlButton}
-                        >
-                          <Icon className={bem.e('nav-item-icon')} />
-                          <span className="">{name}</span>
-                        </BSNavLink>
-                      </NavItem>
-                    ),
-                )}
-              </Collapse>
-            )}
-
-            {/* B2B */}
-            {this.allFound(navB2B) && (
-              <NavItem
-                className={bem.e('nav-item')}
-                onClick={this.handleClick('MasterB2B')}
-              >
-                <BSNavLink className={bem.e('nav-item-collapse')}>
-                  <div className="d-flex">
-                    <MdFormatListBulleted className={bem.e('nav-item-icon')} />
-                    <span className="">B2B</span>
-                  </div>
-                  <MdKeyboardArrowDown
-                    className={bem.e('nav-item-icon')}
-                    style={{
-                      padding: 0,
-                      transform: this.state.isOpenMasterB2B
-                        ? 'rotate(0deg)'
-                        : 'rotate(-90deg)',
-                      transitionDuration: '0.3s',
-                      transitionProperty: 'transform',
-                    }}
-                  />
-                </BSNavLink>
-              </NavItem>
-            )}
-            {this.allFound(navB2B) && (
-              <Collapse isOpen={this.state.isOpenMasterB2B}>
-                {navB2B.map(
-                  ({ to, id, name, exact, Icon }, index) =>
-                    Object.keys(accessList).includes(id) && (
-                      <NavItem key={index} className={bem.e('nav-item')}>
-                        <BSNavLink
-                          id={`navItem-${name}-${index}`}
-                          className="text-uppercase"
-                          tag={NavLink}
-                          to={to}
-                          activeClassName="active"
-                          exact={exact}
-                          onClick={this.handleSidebarControlButton}
-                        >
-                          <Icon className={bem.e('nav-item-icon')} />
-                          <span className="">{name}</span>
-                        </BSNavLink>
-                      </NavItem>
-                    ),
-                )}
-              </Collapse>
-            )}
-
-            {/* RECEIVING */}
-            {this.allFound(navReceiving) && (
-              <NavItem
-                className={bem.e('nav-item')}
-                onClick={this.handleClick('Receiving')}
-              >
-                <BSNavLink className={bem.e('nav-item-collapse')}>
-                  <div className="d-flex">
-                    <MdFormatListBulleted className={bem.e('nav-item-icon')} />
-                    <span className="">RECEIVING</span>
-                  </div>
-                  <MdKeyboardArrowDown
-                    className={bem.e('nav-item-icon')}
-                    style={{
-                      padding: 0,
-                      transform: this.state.isOpenReceiving
-                        ? 'rotate(0deg)'
-                        : 'rotate(-90deg)',
-                      transitionDuration: '0.3s',
-                      transitionProperty: 'transform',
-                    }}
-                  />
-                </BSNavLink>
-              </NavItem>
-            )}
-            {this.allFound(navReceiving) && (
-              <Collapse isOpen={this.state.isOpenReceiving}>
-                {navReceiving.map(
-                  ({ to, id, name, exact, Icon }, index) =>
-                    Object.keys(accessList).includes(id) && (
-                      <NavItem key={index} className={bem.e('nav-item')}>
-                        <BSNavLink
-                          id={`navItem-${name}-${index}`}
-                          className="text-uppercase"
-                          tag={NavLink}
-                          to={to}
-                          activeClassName="active"
-                          exact={exact}
-                          onClick={this.handleSidebarControlButton}
-                        >
-                          <Icon className={bem.e('nav-item-icon')} />
-                          <span className="">{name}</span>
-                        </BSNavLink>
-                      </NavItem>
-                    ),
-                )}
-              </Collapse>
-            )}
-            {/* Master SP Add HO   */}
-            {this.allFound(navMasterDataSPAddHO) &&
-            navMasterDataSPAddHO.map(({ to, name, exact }, index) => (
-              <NavItem key={index} className={bem.e('nav-item')}>
-                <BSNavLink
-                  id={`navItem-${name}-${index}`}
-                  className="text-uppercase"
-                  tag={NavLink}
-                  to={to}
-                  activeClassName="active"
-                  exact={exact}
-                  onClick={this.handleSidebarControlButton}
-                >
-                  <span className="">{name}</span>
-                </BSNavLink>
-              </NavItem>
-            ))}
-
-            {/* STOCK */}
-            {this.allFound(navStock) &&
-              navStock.map(({ to, name, exact }, index) => (
+            {alsintanlink &&
+              alsintanlink.map(({ to, name, exact }, index) => (
                 <NavItem key={index} className={bem.e('nav-item')}>
                   <BSNavLink
                     id={`navItem-${name}-${index}`}
@@ -464,128 +332,6 @@ class Sidebar extends React.Component {
                   </BSNavLink>
                 </NavItem>
               ))}
-
-            {/* TN Gudang */}
-            {this.allFound(navTN) &&
-              navTN.map(({ to, name, exact }, index) => (
-                <NavItem key={index} className={bem.e('nav-item')}>
-                  <BSNavLink
-                    id={`navItem-${name}-${index}`}
-                    className="text-uppercase"
-                    tag={NavLink}
-                    to={to}
-                    activeClassName="active"
-                    exact={exact}
-                    onClick={this.handleSidebarControlButton}
-                  >
-                    <span className="">{name}</span>
-                  </BSNavLink>
-                </NavItem>
-              ))}
-
-            {/* SP DO */}
-            {this.allFound(spdoGroup) &&
-              spdoGroup.map(({ to, name, exact }, index) => (
-                <NavItem key={index} className={bem.e('nav-item')}>
-                  <BSNavLink
-                    id={`navItem-${name}-${index}`}
-                    className="text-uppercase"
-                    tag={NavLink}
-                    to={to}
-                    activeClassName="active"
-                    exact={exact}
-                    onClick={this.handleSidebarControlButton}
-                  >
-                    <span className="">{name}</span>
-                  </BSNavLink>
-                </NavItem>
-              ))}
-
-            {/* EXTERNAL */}
-            {this.allFound(navItems2) &&
-              navItems2.map(({ to, name, exact }, index) => (
-                <NavItem key={index} className={bem.e('nav-item')}>
-                  <BSNavLink
-                    id={`navItem-${name}-${index}`}
-                    className="text-uppercase"
-                    tag={NavLink}
-                    to={to}
-                    activeClassName="active"
-                    exact={exact}
-                    onClick={this.handleSidebarControlButton}
-                  >
-                    <span className="">{name}</span>
-                  </BSNavLink>
-                </NavItem>
-              ))}
-
-              {/* Laporan SP */}
-              {this.allFound(laporanSP) &&
-              laporanSP.map(({ to, name, exact }, index) => (
-                <NavItem key={index} className={bem.e('nav-item')}>
-                  <BSNavLink
-                    id={`navItem-${name}-${index}`}
-                    className="text-uppercase"
-                    tag={NavLink}
-                    to={to}
-                    activeClassName="active"
-                    exact={exact}
-                    onClick={this.handleSidebarControlButton}
-                  >
-                    <span className="">{name}</span>
-                  </BSNavLink>
-                </NavItem>
-              ))}
-
-              {/* EXTERNAL EKSPEDISI */}
-              {this.allFound(EkspedisiExternal) && (
-              <NavItem
-                className={bem.e('nav-item')}
-                onClick={this.handleClick('EkspedisiExternal')}
-              >
-                <BSNavLink className={bem.e('nav-item-collapse')}>
-                  <div className="d-flex">
-                    <MdFormatListBulleted className={bem.e('nav-item-icon')} />
-                    <span className="">EKSPEDISI EXTERNAL</span>
-                  </div>
-                  <MdKeyboardArrowDown
-                    className={bem.e('nav-item-icon')}
-                    style={{
-                      padding: 0,
-                      transform: this.state.isOpenEkspedisiExternal
-                        ? 'rotate(0deg)'
-                        : 'rotate(-90deg)',
-                      transitionDuration: '0.3s',
-                      transitionProperty: 'transform',
-                    }}
-                  />
-                </BSNavLink>
-              </NavItem>
-            )}
-            {this.allFound(EkspedisiExternal) && (
-              <Collapse isOpen={this.state.isOpenEkspedisiExternal}>
-                {EkspedisiExternal.map(
-                  ({ to, id, name, exact, Icon }, index) =>
-                    Object.keys(accessList).includes(id) && (
-                      <NavItem key={index} className={bem.e('nav-item')}>
-                        <BSNavLink
-                          id={`navItem-${name}-${index}`}
-                          className="text-uppercase"
-                          tag={NavLink}
-                          to={to}
-                          activeClassName="active"
-                          exact={exact}
-                          onClick={this.handleSidebarControlButton}
-                        >
-                          <Icon className={bem.e('nav-item-icon')} />
-                          <span className="">{name}</span>
-                        </BSNavLink>
-                      </NavItem>
-                    ),
-                )}
-              </Collapse>
-            )}
-              
           </Nav>
         </div>
       </aside>

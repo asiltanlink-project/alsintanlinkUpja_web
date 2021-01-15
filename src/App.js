@@ -242,10 +242,11 @@ class App extends React.Component {
             <Route
               exact
               menuID={this.state.menuID}
-              path="/"
+              path="/Gudang"
               layout={EmptyLayout}
               component={props => <CheckGudang {...props} />}
             />
+
             <Route
               exact
               path="/registrasi"
@@ -261,6 +262,24 @@ class App extends React.Component {
             >
               <React.Suspense fallback={<PageSpinner />}>
                 {/* RECEIVING */}
+                <Route
+                  exact
+                  setTitle={this.setTitle}
+                  path="/"
+                  component={Dashboard}
+                />
+                 <Route
+                  exact
+                  setTitle={this.setTitle}
+                  path="/profile"
+                  component={Dashboard}
+                />
+                 <Route
+                  exact
+                  setTitle={this.setTitle}
+                  path="/alsin"
+                  component={Dashboard}
+                />
                 <PrivateRoute
                   exact
                   menuID="18"
@@ -341,13 +360,7 @@ class App extends React.Component {
                   component={MutasiBookDetail}
                 />
                 {/* GUDANG MONITORING */}
-                <PrivateRoute
-                  exact
-                  setTitle={this.setTitle}
-                  menuID={this.state.menuID}
-                  path="/Dashboard"
-                  component={Dashboard}
-                />
+
                 <PrivateRoute
                   exact
                   menuID="5"

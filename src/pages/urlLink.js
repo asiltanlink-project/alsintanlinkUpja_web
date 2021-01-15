@@ -282,6 +282,7 @@ var url_registarsiUpja = 'http://alsintanlink.com/api/upja/register';
 var url_getProvince = 'http://alsintanlink.com/api/location/province';
 var url_getCity = 'http://alsintanlink.com/api/location/city';
 var url_getDistrict = 'http://alsintanlink.com/api/location/district';
+var url_login = 'https://alsintanlink.com/api/upja/login';
 
 export {
   url_getProvince,
