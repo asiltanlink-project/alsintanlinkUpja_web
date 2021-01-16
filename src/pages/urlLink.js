@@ -276,7 +276,9 @@ if (window.location.hostname.includes('staging-logistic')) {
     'https://staging-api.cfu.pharmalink.id/monitoring-gudang/GetOutstanding?type=all&gudangID=';
 }
 
+// UPJA
 var url_registarsiUpja = 'http://alsintanlink.com/api/upja/register';
+var url_showDetailUPJA = 'http://alsintanlink.com/api/upja/show_detail_upja';
 
 // Show Domisili
 var url_getProvince = 'http://alsintanlink.com/api/location/province';
@@ -289,7 +291,9 @@ export {
   url_getCity,
   url_getDistrict,
   url_registarsiUpja,
+  url_showDetailUPJA,
   url_login,
+  // BEDA LAGI
   url_allGudang,
   url_changeForgottenPassword,
   url_verifyOTP,

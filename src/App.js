@@ -29,6 +29,8 @@ const firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const Dashboard = React.lazy(() => import('pages/template/DashboardPage'));
+const profileUPJA = React.lazy(() => import('pages/UPJA/Profile'));
+// const alsinUPJA = React.lazy(() => import('pages/UPJA/alsin'));
 
 // Montoring
 const OrderPageMalam = React.lazy(() =>
@@ -247,12 +249,6 @@ class App extends React.Component {
               component={props => <CheckGudang {...props} />}
             />
 
-            <Route
-              exact
-              path="/registrasi"
-              layout={EmptyLayout}
-              component={props => <Registrasi {...props} />}
-            />
             {/* {console.log('ISI MENU ID: ', this.state.menuID)} */}
 
             <MainLayout
@@ -261,23 +257,25 @@ class App extends React.Component {
               color={this.state.color}
             >
               <React.Suspense fallback={<PageSpinner />}>
+                <Route
+                  exact
+                  path="/registrasi"
+                  layout={EmptyLayout}
+                  component={props => <Registrasi {...props} />}
+                />
+                <Route exact path="/profile" component={profileUPJA} />
+                {/* <Route
+                  exact
+                  path="/alsin"
+                  layout={EmptyLayout}
+                  component={alsinUPJA}
+                /> */}
+
                 {/* RECEIVING */}
                 <Route
                   exact
                   setTitle={this.setTitle}
                   path="/"
-                  component={Dashboard}
-                />
-                 <Route
-                  exact
-                  setTitle={this.setTitle}
-                  path="/profile"
-                  component={Dashboard}
-                />
-                 <Route
-                  exact
-                  setTitle={this.setTitle}
-                  path="/alsin"
                   component={Dashboard}
                 />
                 <PrivateRoute
