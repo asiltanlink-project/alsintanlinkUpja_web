@@ -41,7 +41,7 @@ class Profile extends React.Component {
       dataAvailable: false,
       loading: false,
       loadingPage: true,
-      input: {},
+      input: [],
       password: '',
       confirm: '',
       progress: 0,
@@ -458,7 +458,9 @@ class Profile extends React.Component {
   updateInputValue(value, field, fill) {
     let input = this.state[fill];
     input[field] = value;
-    this.setState({ input });
+    this.setState({ input }, () =>
+      console.log('INPUT ISINYA', this.state.input),
+    );
   }
 
   onPassChange = e => {
@@ -482,6 +484,10 @@ class Profile extends React.Component {
     const { progress } = this.state;
     return progress >= 25;
   }
+
+  handleClose = () => {
+    this.setState({ input: [] });
+  };
 
   canBeSubmittedRegis() {
     const {
@@ -614,6 +620,24 @@ class Profile extends React.Component {
     }
   };
 
+  setModalEdit(todo) {
+    this.setState(
+      {
+        input: todo,
+      },
+      this.toggle('nested_parent_editUpja'),
+    );
+  }
+
+  setModalBatal() {
+    this.setState(
+      {
+        input: [],
+      },
+      this.toggle('nested_parent_editUpja'),
+    );
+  }
+
   render() {
     const { suggestions, loading, loadingPage } = this.state;
 
@@ -740,17 +764,31 @@ class Profile extends React.Component {
                   <Row>
                     <Col
                       style={{
-                        textAlign: 'center',
+                        textAlign: 'left',
                         fontSize: '1.3em',
                         fontWeight: 'bold',
                       }}
                     >
                       <Label>Profile UPJA</Label>
-                      <hr></hr>
                     </Col>
+                    <Col
+                      style={{
+                        textAlign: 'right',
+                        fontSize: '1.3em',
+                        fontWeight: 'bold',
+                      }}
+                    >
+                      <Button
+                        color="primary"
+                        // onClick={this.toggle('nested_parent_editUpja')}
+                        onClick={() => this.setModalEdit(currentTodos)}
+                      >
+                        Edit UPJA
+                      </Button>
+                    </Col>
+                    <hr></hr>
                   </Row>
                   {/* untuk isi nama */}
-                  {console.log('ISI CURRENT TODOS', currentTodos)}
                   <FormGroup>
                     <Label style={{ textAlign: 'center' }}>Nama Lengkap:</Label>
                     <Input
@@ -950,18 +988,6 @@ class Profile extends React.Component {
           <ModalBody>
             <Table responsive striped>
               <tbody>
-                {/* {renderProvinsi}
-                {!provinsiTodos && (
-                  <tr>
-                    <td
-                      style={{ backgroundColor: 'white' }}
-                      colSpan="11"
-                      className="text-center"
-                    >
-                      TIDAK ADA DATA
-                    </td>
-                  </tr>
-                )} */}
                 {provinsiTodos ? (
                   renderProvinsi || <LoadingSpinner status={4}></LoadingSpinner>
                 ) : this.state.dataAvailable ? (
@@ -1044,6 +1070,246 @@ class Profile extends React.Component {
           </ModalBody>
         </Modal>
         {/* Modal List Kecamatan */}
+
+        {/* Modal List Edit Upja */}
+        <Modal
+          size="xl"
+          onExit={this.handleCloseDomisili}
+          isOpen={this.state.modal_nested_parent_editUpja}
+          toggle={this.toggle('nested_parent_editUpja')}
+          className={this.props.className}
+        >
+          <ModalHeader toggle={this.toggle('nested_parent_editUpja')}>
+            Edit UPJA
+          </ModalHeader>
+          <ModalBody>
+            <Row
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <Col>
+                <Card>
+                  <CardBody>
+                    <Form onSubmit={this.handleSubmit}>
+                      {/* untuk isi nama */}
+                      <FormGroup>
+                        <Label style={{ textAlign: 'center' }}>
+                          Nama Lengkap:
+                        </Label>
+                        <Input
+                          type="text"
+                          autoComplete="off"
+                          name="name"
+                          placeholder="Nama Lengkap..."
+                          onChange={evt =>
+                            this.updateInputValue(
+                              evt.target.value,
+                              evt.target.name,
+                              'input',
+                            )
+                          }
+                          value={this.state.input && this.state.input.name}
+                        ></Input>
+                      </FormGroup>
+
+                      {/* untuk pilh provinsi */}
+                      <FormGroup>
+                        <Label style={{ textAlign: 'center' }}>
+                          Nama Provinsi:
+                        </Label>
+                        <InputGroup style={{ float: 'right' }}>
+                          <Input
+                            disabled
+                            placeholder="Pilih Provinsi"
+                            style={{ fontWeight: 'bold' }}
+                            value={
+                              this.state.input && this.state.input.province
+                            }
+                          />
+                          {/* {console.log('ISINYA:', this.state.namaProvinsi)} */}
+                          <InputGroupAddon addonType="append">
+                            <Button
+                              onClick={this.toggle(
+                                'nested_parent_list_provinsi',
+                              )}
+                            >
+                              <MdList />
+                            </Button>
+                          </InputGroupAddon>
+                        </InputGroup>
+                      </FormGroup>
+                      <br></br>
+                      <br></br>
+                      {/* untuk pilih kota/kabupaten */}
+                      <FormGroup>
+                        <Label style={{ textAlign: 'center' }}>
+                          Nama Kota/Kab:
+                        </Label>
+                        <InputGroup style={{ float: 'right' }}>
+                          <Input
+                            disabled
+                            placeholder="Pilih Kota/Kab"
+                            style={{ fontWeight: 'bold' }}
+                            value={this.state.input && this.state.input.city}
+                          />
+                          <InputGroupAddon addonType="append">
+                            <Button
+                              onClick={this.toggle(
+                                'nested_parent_list_kotakab',
+                              )}
+                            >
+                              <MdList />
+                            </Button>
+                          </InputGroupAddon>
+                        </InputGroup>
+                      </FormGroup>
+                      <br></br>
+                      <br></br>
+                      {/* untuk pilih kecamatan */}
+                      <FormGroup>
+                        <Label style={{ textAlign: 'center' }}>
+                          Nama Kecamatan:
+                        </Label>
+                        <InputGroup style={{ float: 'right' }}>
+                          <Input
+                            disabled
+                            placeholder="Pilih Kecamatan"
+                            style={{ fontWeight: 'bold' }}
+                            value={
+                              this.state.input && this.state.input.district
+                            }
+                          />
+                          <InputGroupAddon addonType="append">
+                            <Button
+                              onClick={this.toggle(
+                                'nested_parent_list_kecamatan',
+                              )}
+                            >
+                              <MdList />
+                            </Button>
+                          </InputGroupAddon>
+                        </InputGroup>
+                      </FormGroup>
+                      <br></br>
+                      <br></br>
+
+                      {/* untuk isi kepala desa */}
+                      <FormGroup>
+                        <Label style={{ textAlign: 'center' }}>
+                          Nama Kepala Desa:
+                        </Label>
+                        <Input
+                          autoComplete="off"
+                          type="text"
+                          name="leader_name"
+                          placeholder="Nama Kepala Desa..."
+                          onChange={evt =>
+                            this.updateInputValue(
+                              evt.target.value,
+                              evt.target.name,
+                              'input',
+                            )
+                          }
+                          value={
+                            this.state.input && this.state.input.leader_name
+                          }
+                        ></Input>
+                      </FormGroup>
+
+                      {/* untuk isi desa */}
+                      <FormGroup>
+                        <Label style={{ textAlign: 'center' }}>
+                          Nama Desa:
+                        </Label>
+                        <Input
+                          autoComplete="off"
+                          type="text"
+                          name="village"
+                          placeholder="Nama Desa..."
+                          onChange={evt =>
+                            this.updateInputValue(
+                              evt.target.value,
+                              evt.target.name,
+                              'input',
+                            )
+                          }
+                          value={this.state.input && this.state.input.village}
+                        ></Input>
+                      </FormGroup>
+
+                      {/* untuk isi class */}
+                      <FormGroup>
+                        <Label style={{ textAlign: 'center' }}>Kelas:</Label>
+                        <InputGroup style={{ float: 'right' }}>
+                          <Input
+                            disabled
+                            placeholder="Pilih Kelas"
+                            style={{ fontWeight: 'bold' }}
+                            value={currentTodos && currentTodos.class}
+                          />
+                          <InputGroupAddon addonType="append">
+                            <Button
+                              disabled={this.state.typeDisabled}
+                              onClick={this.toggle('nested_parent_list')}
+                            >
+                              <MdList />
+                            </Button>
+                          </InputGroupAddon>
+                        </InputGroup>
+                      </FormGroup>
+                    </Form>
+                  </CardBody>
+                </Card>
+              </Col>
+            </Row>
+          </ModalBody>
+          <ModalFooter>
+            {/* untuk tampilan masuk/keluar */}
+            <Button
+              // block
+              style={{
+                float: 'right',
+              }}
+              // disabled={!isEnabledRegis}
+              color="primary"
+              onClick={this.toggle('nested_editUpja')}
+              // onClick={this.toggle('nested_parent_list_verifikasi')}
+            >
+              Simpan
+            </Button>
+            <Modal
+              onExit={this.handleClose}
+              isOpen={this.state.modal_nested_editUpja}
+              toggle={this.toggle('nested_editUpja')}
+            >
+              <ModalHeader>Konfirmasi Pengubahan Data</ModalHeader>
+              <ModalBody>Apakah Anda yakin ingin Mengubah data ini?</ModalBody>
+              <ModalFooter>
+                <Button
+                  disabled={loading}
+                  color="primary"
+                  onClick={() => this.registrasiUpja()}
+                >
+                  {!loading && 'Ya'}
+                  {loading && <MdAutorenew />}
+                  {loading && 'Sedang diproses'}
+                </Button>{' '}
+                {!loading && (
+                  <Button
+                    color="secondary"
+                    onClick={this.toggle('nested_editUpja')}
+                  >
+                    Tidak
+                  </Button>
+                )}
+              </ModalFooter>
+            </Modal>
+            <Button onClick={() => this.setModalBatal()}>Batal</Button>
+          </ModalFooter>
+        </Modal>
+        {/* Modal List Edit Upja */}
 
         {/* Modal Verifikasi */}
         <Modal

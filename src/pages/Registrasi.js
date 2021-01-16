@@ -51,15 +51,15 @@ class Registrasi extends React.Component {
       email: '',
       resultClass: [
         {
-          class_id: 'pemula',
+          class_id: 1,
           class_name: 'Pemula',
         },
         {
-          class_id: 'berkembang',
+          class_id: 2,
           class_name: 'Berkembang',
         },
         {
-          class_id: 'profesional',
+          class_id: 3,
           class_name: 'Profesional',
         },
       ],
@@ -136,7 +136,7 @@ class Registrasi extends React.Component {
   // untuk pilih Class
   setClass = event => {
     var nama = this.state.resultClass.find(function (element) {
-      return element.class_id === event.target.value;
+      return element.class_id === parseInt(event.target.value);
     });
     this.setState({
       pilihClass: event.target.value,
@@ -210,12 +210,12 @@ class Registrasi extends React.Component {
     var payload = {
       name: input.namaLengkap,
       email: this.state.email,
-      province: this.state.namaProvinsi,
-      city: this.state.namaKotaKab,
-      district: this.state.namaKecamatan,
+      province: parseInt(this.state.pilihProvinsi),
+      city: parseInt(this.state.pilihKotaKab),
+      district: parseInt(this.state.pilihKecamatan),
       leader_name: input.namaKepalaDesa,
       village: input.namaDesa,
-      class: this.state.namaClass,
+      class: parseInt(this.state.pilihClass),
       password: this.state.password,
     };
 
@@ -241,7 +241,7 @@ class Registrasi extends React.Component {
         }
       })
       .then(data => {
-        console.log('data Provinsi', data.result);
+        console.log('data Registrasi', data);
         if (data.status === 0) {
           this.showNotification(data.result.message, 'error');
           this.setState({ loading: false });

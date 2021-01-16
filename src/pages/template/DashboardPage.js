@@ -13,7 +13,7 @@ class DashboardPage extends React.Component {
     console.log('PROFILE', profileName);
 
     if (profileName === null) {
-      return profileName;
+      window.location.replace('/login');
     } else {
       this.setState(
         {
@@ -27,6 +27,12 @@ class DashboardPage extends React.Component {
   dashboardValidation() {
     var token = window.localStorage.getItem('tokenCookies');
     var nama = this.state.nama;
+    console.log("DATA", token === '' ||
+    token === null ||
+    token === undefined ||
+    nama === '' ||
+    nama === null ||
+    nama === undefined);
     if (
       token === '' ||
       token === null ||
