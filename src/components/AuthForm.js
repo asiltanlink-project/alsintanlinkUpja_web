@@ -613,7 +613,7 @@ class AuthForm extends React.Component {
               onChange={this.updateValue}
               autoComplete="off"
             />
-            <div id="recaptcha-container"></div>
+            <div style={{display:'none'}} id="recaptcha-container"></div>
           </FormGroup>
         )}
         <br />
