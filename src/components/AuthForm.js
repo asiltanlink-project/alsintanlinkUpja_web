@@ -75,18 +75,32 @@ class AuthForm extends React.Component {
   }
 
   nextStep = async () => {
-    const { username, password } = this.state;
+    const { username, password, inputEmailNumber } = this.state;
+    const filter = /^(?:(([+])?\d{10,13})|(^\w+([.-]?\w+)*@\w+([.-]?\w+)*(.\w{2,3})+$))$/;
     const { buttonText } = this.props;
 
+    var result = inputEmailNumber.match(filter);
     this.setState({ enterButton: true, loading: true });
-
-    if (!buttonText) {
+    this.fetchData();
+    if (!buttonText && this.isLogin) {
+      //login
       if (true) {
         console.log(await this.props.onButtonClick(username, password));
         setTimeout(() => {
           this.setState({ loading: false, enterButton: false });
         }, 500);
       }
+    }
+
+    if (!buttonText && this.isForgetPass) {
+      //inputan email
+      this.setState({
+        emailOrPhone: true,
+        enterButton: false,
+        loading: false,
+      });
+      // console.log("EMAIL GO");
+      this.changeForgottenPassword(this.state.inputEmailNumber);
     }
   };
 
@@ -95,13 +109,13 @@ class AuthForm extends React.Component {
     this.setState({ loading: true });
   };
 
-  async changeForgottenPassword(phonenum = '', email = '') {
-    const urlA = myUrl.url_changeForgottenPassword;
-
+  async changeForgottenPassword() {
+    const urlA = myUrl.url_forgetPassword;
     var payload = {
-      mobile_no: phonenum,
-      email: email,
+      email: this.state.inputEmailNumber,
     };
+
+    console.log('payload', payload);
 
     const option = {
       method: 'POST',
@@ -113,60 +127,52 @@ class AuthForm extends React.Component {
       body: JSON.stringify(payload),
     };
     //console.log(option);
+
     let data = await fetch(urlA, option)
       .then(response => {
         if (response.ok) {
-          //console.log("CHECK FORGET");
           return response;
         } else {
-          this.props.showNotification('Koneksi ke server gagal!', 'error');
+          if (response.status === 401) {
+            this.showNotification('Username/Password salah!', 'error');
+          } else if (response.status === 500) {
+            this.showNotification('Internal Server Error', 'error');
+          } else {
+            this.showNotification('Koneksi ke server gagal 1', 'error');
+          }
+          return true;
         }
       })
       .catch(err => {
-        //console.log(err);
-        this.props.showNotification('Koneksi ke server gagal!', 'error');
+        // this.showNotification('Koneksi ke server gagal!', 'error');
+        console.log('ERROR', err);
+        return true;
       });
-    if (data) {
-      var token = data.headers.get('Authorization');
-      data = await data.json();
-      var error = data.error;
-      var metadata = data.metadata;
 
-      //console.log(error);
-      //console.log(metadata);
-
-      if (error.status === false) {
-        if (metadata.status === true) {
-          window.localStorage.setItem('tokenOTP', token);
-          if (phonenum !== '') {
-            window.localStorage.setItem('tokenResetPwd', token);
-            phonenum = phonenum.replace('+62', '0');
-            this.sendVerificationCode(phonenum);
-          } else {
-            //EMAIL
-            window.localStorage.setItem('tokenOTP', token);
-            this.props.showNotification(metadata.message, 'info');
-
-            this.setState({ OTP: true }, () =>
-              this.setState(
-                {
-                  showNewOTP: false,
-                  timerMinute: 1,
-                  timerSecond: 0,
-                  timeUpMessage: 'Waktu Habis! Tolong request ulang OTP',
-                  resetTimer: true,
-                },
-                () => this.setState({ resetTimer: false }),
-              ),
-            );
-          }
-        } else {
-          this.props.showNotification(metadata.message, 'error');
-        }
-      } else {
-        this.props.showNotification(error.msg, 'error');
-      }
+    if (data === true) {
+      return true;
     }
+    if (data) {
+      data = await data.json();
+
+      console.log('DATA LOGIN', data);
+      var message = data.result.message;
+      var profile = data.result.upja;
+      var token = data.result.token;
+      var status = data.status;
+
+      if (status === 1) {
+        this.showNotification(message, 'info');
+        window.localStorage.setItem('tokenCookies', token);
+        window.localStorage.setItem('profile', JSON.stringify(profile));
+        window.location.replace('/');
+      } else {
+        this.showNotification(message, 'error');
+      }
+    } else {
+      this.showNotification('Koneksi ke server gagal', 'error');
+    }
+    return true;
   }
 
   sendVerificationCode = INPUTTED_PHONENUMBER => {
@@ -611,152 +617,6 @@ class AuthForm extends React.Component {
           </FormGroup>
         )}
         <br />
-        {this.isForgetPass && OTP && (
-          <FormGroup>
-            <Timer
-              minutes={this.state.timerMinute}
-              seconds={this.state.timerSecond}
-              timerOff={this.showNewOTP}
-              timeUpMessage={''}
-              resetTimer={this.state.resetTimer}
-            />
-            <CardBody hidden={this.state.showNewOTP}>
-              <Col>
-                <Row>
-                  <Input
-                    id="input1"
-                    disabled={false}
-                    onKeyDown={this.autoDel}
-                    onKeyUp={this.autoTab}
-                    onWheel={this.blur}
-                    maxLength={1}
-                    autoComplete="off"
-                    style={{
-                      width: '15%',
-                      height: '100%',
-                      textAlign: 'center',
-                      fontSize: '20px',
-                      fontWeight: 'bold',
-                      textTransform: 'uppercase',
-                      marginRight: 'auto',
-                      marginLeft: 'auto',
-                    }}
-                  ></Input>
-                  <Input
-                    id="input2"
-                    disabled={true}
-                    onKeyDown={this.autoDel}
-                    onKeyUp={this.autoTab}
-                    type="tel"
-                    maxLength={1}
-                    autoComplete="off"
-                    style={{
-                      width: '15%',
-                      height: '100%',
-                      textAlign: 'center',
-                      fontSize: '20px',
-                      fontWeight: 'bold',
-                      textTransform: 'uppercase',
-                      marginRight: 'auto',
-                      marginLeft: 'auto',
-                    }}
-                  ></Input>
-                  <Input
-                    id="input3"
-                    disabled={true}
-                    onKeyDown={this.autoDel}
-                    onKeyUp={this.autoTab}
-                    maxLength={1}
-                    autoComplete="off"
-                    style={{
-                      width: '15%',
-                      height: '100%',
-                      textAlign: 'center',
-                      fontSize: '20px',
-                      fontWeight: 'bold',
-                      textTransform: 'uppercase',
-                      marginRight: 'auto',
-                      marginLeft: 'auto',
-                    }}
-                  ></Input>
-                  <Input
-                    id="input4"
-                    disabled={true}
-                    onKeyDown={this.autoDel}
-                    onKeyUp={this.autoTab}
-                    maxLength={1}
-                    autoComplete="off"
-                    style={{
-                      width: '15%',
-                      height: '100%',
-                      textAlign: 'center',
-                      fontSize: '20px',
-                      fontWeight: 'bold',
-                      textTransform: 'uppercase',
-                      marginRight: 'auto',
-                      marginLeft: 'auto',
-                    }}
-                  ></Input>
-                  <Input
-                    id="input5"
-                    disabled={true}
-                    onKeyDown={this.autoDel}
-                    onKeyUp={this.autoTab}
-                    maxLength={1}
-                    autoComplete="off"
-                    style={{
-                      width: '15%',
-                      height: '100%',
-                      textAlign: 'center',
-                      fontSize: '20px',
-                      fontWeight: 'bold',
-                      textTransform: 'uppercase',
-                      marginRight: 'auto',
-                      marginLeft: 'auto',
-                    }}
-                  ></Input>
-                  <Input
-                    id="input6"
-                    disabled={true}
-                    onKeyDown={this.autoDel}
-                    onKeyUp={this.autoTab}
-                    maxLength={1}
-                    autoComplete="off"
-                    style={{
-                      width: '15%',
-                      height: '100%',
-                      textAlign: 'center',
-                      fontSize: '20px',
-                      fontWeight: 'bold',
-                      textTransform: 'uppercase',
-                      marginRight: 'auto',
-                      marginLeft: 'auto',
-                    }}
-                  ></Input>
-                </Row>
-              </Col>
-            </CardBody>
-            <div className="text-center pt-1">
-              <Button
-                onClick={
-                  this.state.emailOrPhone
-                    ? this.signInWithEmail
-                    : this.signInWithPhone
-                }
-                hidden={this.state.showNewOTP}
-                disabled={!this.state.isEnabledOTP}
-              >
-                Verifikasi
-              </Button>
-              <Button
-                onClick={this.requestNewOTP}
-                hidden={!this.state.showNewOTP}
-              >
-                Minta Kode Baru
-              </Button>
-            </div>
-          </FormGroup>
-        )}
 
         <hr />
 
@@ -902,10 +762,10 @@ AuthForm.defaultProps = {
     placeholder: 'confirm your password',
     name: 'confirm',
   },
-  emailNumberLabel: 'E-Mail/Phone Number',
+  emailNumberLabel: 'E-Mail',
   emailNumberInputProps: {
     type: 'text',
-    placeholder: 'Email/phone number...',
+    placeholder: 'Email...',
     name: 'inputEmailNumber',
   },
   onLogoClick: () => {},

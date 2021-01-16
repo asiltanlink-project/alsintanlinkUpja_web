@@ -29,6 +29,8 @@ import zxcvbn from 'zxcvbn';
 import NotificationSystem from 'react-notification-system';
 import { NOTIFICATION_SYSTEM_STYLE } from 'utils/constants';
 import CardBody from 'reactstrap/lib/CardBody';
+import { doc } from 'prettier';
+import CardFooter from 'reactstrap/lib/CardFooter';
 
 const colors = getThemeColors();
 
@@ -53,15 +55,15 @@ class Profile extends React.Component {
       email: '',
       resultClass: [
         {
-          class_id: 'pemula',
+          class_id: 'Pemula',
           class_name: 'Pemula',
         },
         {
-          class_id: 'berkembang',
+          class_id: 'Berkembang',
           class_name: 'Berkembang',
         },
         {
-          class_id: 'profesional',
+          class_id: 'Profesional',
           class_name: 'Profesional',
         },
       ],
@@ -136,7 +138,7 @@ class Profile extends React.Component {
   };
 
   // untuk pilih Class
-  setClass = event => {
+  setClass(event, todo) {
     var nama = this.state.resultClass.find(function (element) {
       return element.class_id === event.target.value;
     });
@@ -146,13 +148,17 @@ class Profile extends React.Component {
       namaClassTemp: nama.class_name,
       modal_nested_parent_list: false,
     });
-  };
+    this.state.result.class = nama.class_name;
+    this.state.result.class_id = this.state.pilihClass;
+  }
 
   // untuk pilih Provinsi
-  setProvinsi = event => {
+  setProvinsi(event, todo) {
     var nama = this.state.resultProvinsi.find(function (element) {
       return element.id === parseInt(event.target.value);
     });
+
+    console.log('TODO SET PROVINSI', todo);
 
     this.setState(
       {
@@ -162,13 +168,14 @@ class Profile extends React.Component {
         keywordList: '',
         domisiliDisabled: false,
       },
-      // () => console.log('PILIH PROVINSI', this.state.pilihProvinsi),
       () => this.getKotaKab(this.state.currentPages, this.state.todosPerPages),
     );
-  };
+    this.state.result.province = nama.name;
+    this.state.result.province_id = this.state.pilihProvinsi;
+  }
 
   // untuk pilih Kota/Kabupaten
-  setKotakab = event => {
+  setKotakab(event, todo) {
     var nama = this.state.resultKotaKab.find(function (element) {
       return element.id === parseInt(event.target.value);
     });
@@ -184,10 +191,12 @@ class Profile extends React.Component {
       () =>
         this.getKecamatan(this.state.currentPages, this.state.todosPerPages),
     );
-  };
+    this.state.result.city = nama.name;
+    this.state.result.city_id = this.state.pilihKotaKab;
+  }
 
   // untuk pilih Kecamatan
-  setKecamatan = event => {
+  setKecamatan(event, todo) {
     var nama = this.state.resultKecamatan.find(function (element) {
       return element.id === parseInt(event.target.value);
     });
@@ -202,7 +211,80 @@ class Profile extends React.Component {
       },
       () => this.getProvinsi(this.state.currentPages, this.state.todosPerPages),
     );
-  };
+    this.state.result.district = nama.name;
+    this.state.result.district_id = this.state.pilihKecamatan;
+  }
+
+  updateProfileUpja() {
+    var url = myUrl.url_updateUpja;
+    var input = this.state.result;
+    var token = window.localStorage.getItem('tokenCookies');
+    var namaLengkap = document.getElementById('namaLengkap');
+    var namaProvinsi = document.getElementById('namaProvinsi');
+    var namaKotaKab = document.getElementById('namaKotaKab');
+    var namaKecamatan = document.getElementById('namaKecamatan');
+    var namaKepalaDesa = document.getElementById('namaKepalaDesa');
+    var namaDesa = document.getElementById('namaDesa');
+    var namaKelas = document.getElementById('namaKelas');
+    var simpan = document.getElementById('simpan');
+    var batalsimpan = document.getElementById('batalsimpan');
+    console.log('ISI INPUT', input);
+
+    this.setState({ loading: true });
+
+    var payload = {
+      name: input.name,
+      province: input.province_id || parseInt(this.state.pilihProvinsi),
+      city: input.city_id || parseInt(this.state.pilihKotaKab),
+      district: input.district_id || parseInt(this.state.pilihKecamatan),
+      leader_name: input.leader_name,
+      village: input.village,
+      class: input.class || this.state.pilihClass,
+    };
+
+    console.log('PAYLOAD SAVE', payload);
+
+    const option = {
+      method: 'PUT',
+      json: true,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+        Authorization: `${'Bearer'} ${token}`,
+      },
+      body: JSON.stringify(payload),
+    };
+    fetch(url, option)
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          this.showNotification('Koneksi ke server gagal!', 'error');
+          this.setState({ loading: false });
+        }
+      })
+      .then(data => {
+        console.log('data Registrasi', data);
+        if (data.status === 0) {
+          this.showNotification(data.result.message, 'error');
+          this.setState({ loading: false });
+        } else {
+          this.showNotification(data.result.message, 'info');
+          this.setState({
+            loading: false,
+            modal_nested_parent_list_verifikasi: false,
+          });
+          namaLengkap.disabled = true;
+          namaProvinsi.style.display = 'none';
+          namaKotaKab.style.display = 'none';
+          namaKecamatan.style.display = 'none';
+          namaKepalaDesa.disabled = true;
+          namaDesa.disabled = true;
+          namaKelas.style.display = 'none';
+          simpan.style.display = 'none';
+          batalsimpan.style.display = 'none';
+        }
+      });
+  }
 
   registrasiUpja() {
     var url = myUrl.url_registarsiUpja;
@@ -439,7 +521,7 @@ class Profile extends React.Component {
 
   componentDidMount() {
     this.getListbyPaging();
-    // this.getProvinsi();
+    this.getProvinsi();
   }
 
   state = {
@@ -457,10 +539,9 @@ class Profile extends React.Component {
 
   updateInputValue(value, field, fill) {
     let input = this.state[fill];
+    console.log('INPUT', value, field, fill);
     input[field] = value;
-    this.setState({ input }, () =>
-      console.log('INPUT ISINYA', this.state.input),
-    );
+    this.setState({ input });
   }
 
   onPassChange = e => {
@@ -620,12 +701,55 @@ class Profile extends React.Component {
     }
   };
 
+  setEdit() {
+    var namaLengkap = document.getElementById('namaLengkap');
+    var namaProvinsi = document.getElementById('namaProvinsi');
+    var namaKotaKab = document.getElementById('namaKotaKab');
+    var namaKecamatan = document.getElementById('namaKecamatan');
+    var namaKepalaDesa = document.getElementById('namaKepalaDesa');
+    var namaDesa = document.getElementById('namaDesa');
+    var namaKelas = document.getElementById('namaKelas');
+    var simpan = document.getElementById('simpan');
+    var batalsimpan = document.getElementById('batalsimpan');
+
+    namaLengkap.disabled = false;
+    namaProvinsi.style.display = 'block';
+    namaKotaKab.style.display = 'block';
+    namaKecamatan.style.display = 'block';
+    namaKepalaDesa.disabled = false;
+    namaDesa.disabled = false;
+    namaKelas.style.display = 'block';
+    simpan.style = 'block';
+    batalsimpan.style = 'block';
+  }
+  disetEdit() {
+    var namaLengkap = document.getElementById('namaLengkap');
+    var namaProvinsi = document.getElementById('namaProvinsi');
+    var namaKotaKab = document.getElementById('namaKotaKab');
+    var namaKecamatan = document.getElementById('namaKecamatan');
+    var namaKepalaDesa = document.getElementById('namaKepalaDesa');
+    var namaDesa = document.getElementById('namaDesa');
+    var namaKelas = document.getElementById('namaKelas');
+    var simpan = document.getElementById('simpan');
+    var batalsimpan = document.getElementById('batalsimpan');
+
+    namaLengkap.disabled = true;
+    namaProvinsi.style.display = 'none';
+    namaKotaKab.style.display = 'none';
+    namaKecamatan.style.display = 'none';
+    namaKepalaDesa.disabled = true;
+    namaDesa.disabled = true;
+    namaKelas.style.display = 'none';
+    simpan.style.display = 'none';
+    batalsimpan.style.display = 'none';
+  }
+
   setModalEdit(todo) {
     this.setState(
       {
         input: todo,
       },
-      this.toggle('nested_parent_editUpja'),
+      this.toggle('nested_parent_list_verifikasi'),
     );
   }
 
@@ -651,6 +775,7 @@ class Profile extends React.Component {
     const kotakabTodos = this.state.resultKotaKab;
     const kecamatanTodos = this.state.resultKecamatan;
     const classTodos = this.state.resultClass;
+    var buttonSimpan = document.getElementById('simpan');
 
     const renderClass =
       classTodos &&
@@ -663,7 +788,9 @@ class Profile extends React.Component {
                 color="primary"
                 style={{ margin: '0px', fontSize: '15px' }}
                 value={todo.class_id}
-                onClick={this.setClass}
+                onClick={e => {
+                  this.setClass(e, todo);
+                }}
               >
                 Pilih
               </Button>
@@ -683,7 +810,9 @@ class Profile extends React.Component {
                 color="primary"
                 style={{ margin: '0px', fontSize: '15px' }}
                 value={todo.id}
-                onClick={this.setProvinsi}
+                onClick={e => {
+                  this.setProvinsi(e, todo);
+                }}
               >
                 Pilih
               </Button>
@@ -703,7 +832,9 @@ class Profile extends React.Component {
                 color="primary"
                 style={{ margin: '0px', fontSize: '15px' }}
                 value={todo.id}
-                onClick={this.setKotakab}
+                onClick={e => {
+                  this.setKotakab(e, todo);
+                }}
               >
                 Pilih
               </Button>
@@ -723,7 +854,9 @@ class Profile extends React.Component {
                 color="primary"
                 style={{ margin: '0px', fontSize: '15px' }}
                 value={todo.id}
-                onClick={this.setKecamatan}
+                onClick={e => {
+                  this.setKecamatan(e, todo);
+                }}
               >
                 Pilih
               </Button>
@@ -733,7 +866,11 @@ class Profile extends React.Component {
       });
 
     return (
-      <Page>
+      <Page
+        title="Profile"
+        breadcrumbs={[{ name: 'Profile', active: true }]}
+        className="Profile"
+      >
         {/* untuk redirect keluar/masuk dalam kondisi boolean */}
         <NotificationSystem
           dismissible={false}
@@ -752,25 +889,7 @@ class Profile extends React.Component {
             <Card>
               <CardBody>
                 <Form onSubmit={this.handleSubmit}>
-                  {/* untuk tampilan logo */}
-                  <div className="text-center pb-4">
-                    <img
-                      src={logo200Image}
-                      className="rounded"
-                      style={{ width: 320, height: 80 }}
-                      alt="logo"
-                    />
-                  </div>
                   <Row>
-                    <Col
-                      style={{
-                        textAlign: 'left',
-                        fontSize: '1.3em',
-                        fontWeight: 'bold',
-                      }}
-                    >
-                      <Label>Profile UPJA</Label>
-                    </Col>
                     <Col
                       style={{
                         textAlign: 'right',
@@ -780,8 +899,9 @@ class Profile extends React.Component {
                     >
                       <Button
                         color="primary"
+                        style={{ marginLeft: '1%' }}
                         // onClick={this.toggle('nested_parent_editUpja')}
-                        onClick={() => this.setModalEdit(currentTodos)}
+                        onClick={() => this.setEdit()}
                       >
                         Edit UPJA
                       </Button>
@@ -793,18 +913,19 @@ class Profile extends React.Component {
                     <Label style={{ textAlign: 'center' }}>Nama Lengkap:</Label>
                     <Input
                       disabled
+                      id="namaLengkap"
                       type="text"
                       autoComplete="off"
-                      name="namaLengkap"
+                      name="name"
                       placeholder="Nama Lengkap..."
                       onChange={evt =>
                         this.updateInputValue(
                           evt.target.value,
                           evt.target.name,
-                          'input',
+                          'result',
                         )
                       }
-                      value={currentTodos && currentTodos.name}
+                      value={this.state.result && this.state.result.name}
                     ></Input>
                   </FormGroup>
 
@@ -814,7 +935,7 @@ class Profile extends React.Component {
                     <Input
                       disabled
                       type="email"
-                      value={currentTodos && currentTodos.email}
+                      value={this.state.result && this.state.result.email}
                       // value={this.state.email.trim()}
                       placeholder="Email.."
                       onChange={this.onEmailChange}
@@ -839,9 +960,28 @@ class Profile extends React.Component {
                         disabled
                         placeholder="Pilih Provinsi"
                         style={{ fontWeight: 'bold' }}
+                        name="province"
                         // value={this.state.namaProvinsi}
-                        value={currentTodos && currentTodos.province}
+                        onChange={evt =>
+                          this.updateInputValue(
+                            evt.target.value,
+                            evt.target.name,
+                            'result',
+                          )
+                        }
+                        value={this.state.result && this.state.result.province}
                       />
+                      <InputGroupAddon
+                        addonType="append"
+                        id="namaProvinsi"
+                        style={{ display: 'none' }}
+                      >
+                        <Button
+                          onClick={this.toggle('nested_parent_list_provinsi')}
+                        >
+                          <MdList />
+                        </Button>
+                      </InputGroupAddon>
                     </InputGroup>
                   </FormGroup>
                   <br></br>
@@ -857,8 +997,19 @@ class Profile extends React.Component {
                         placeholder="Pilih Kota/Kab"
                         style={{ fontWeight: 'bold' }}
                         // value={this.state.namaKotaKab}
-                        value={currentTodos && currentTodos.city}
+                        value={this.state.result && this.state.result.city}
                       />
+                      <InputGroupAddon
+                        addonType="append"
+                        id="namaKotaKab"
+                        style={{ display: 'none' }}
+                      >
+                        <Button
+                          onClick={this.toggle('nested_parent_list_kotakab')}
+                        >
+                          <MdList />
+                        </Button>
+                      </InputGroupAddon>
                     </InputGroup>
                   </FormGroup>
                   <br></br>
@@ -873,8 +1024,19 @@ class Profile extends React.Component {
                         disabled
                         placeholder="Pilih Kecamatan"
                         style={{ fontWeight: 'bold' }}
-                        value={currentTodos && currentTodos.district}
+                        value={this.state.result && this.state.result.district}
                       />
+                      <InputGroupAddon
+                        addonType="append"
+                        id="namaKecamatan"
+                        style={{ display: 'none' }}
+                      >
+                        <Button
+                          onClick={this.toggle('nested_parent_list_kecamatan')}
+                        >
+                          <MdList />
+                        </Button>
+                      </InputGroupAddon>
                     </InputGroup>
                   </FormGroup>
                   <br></br>
@@ -887,19 +1049,20 @@ class Profile extends React.Component {
                     </Label>
                     <Input
                       disabled
+                      id="namaKepalaDesa"
                       autoComplete="off"
                       type="text"
-                      name="namaKepalaDesa"
+                      name="leader_name"
                       placeholder="Nama Kepala Desa..."
                       onChange={evt =>
                         this.updateInputValue(
                           evt.target.value,
                           evt.target.name,
-                          'input',
+                          'result',
                         )
                       }
                       // value={this.state.namaKepalaDesa}
-                      value={currentTodos && currentTodos.leader_name}
+                      value={this.state.result && this.state.result.leader_name}
                     ></Input>
                   </FormGroup>
 
@@ -908,19 +1071,20 @@ class Profile extends React.Component {
                     <Label style={{ textAlign: 'center' }}>Nama Desa:</Label>
                     <Input
                       disabled
+                      id="namaDesa"
                       autoComplete="off"
                       type="text"
-                      name="namaDesa"
+                      name="village"
                       placeholder="Nama Desa..."
                       onChange={evt =>
                         this.updateInputValue(
                           evt.target.value,
                           evt.target.name,
-                          'input',
+                          'result',
                         )
                       }
                       // value={this.state.namaDesa}
-                      value={currentTodos && currentTodos.village}
+                      value={this.state.result && this.state.result.village}
                     ></Input>
                   </FormGroup>
 
@@ -933,12 +1097,50 @@ class Profile extends React.Component {
                         placeholder="Pilih Kelas"
                         style={{ fontWeight: 'bold' }}
                         // value={this.state.namaClass}
-                        value={currentTodos && currentTodos.class}
+                        value={this.state.result && this.state.result.class}
                       />
+                      <InputGroupAddon
+                        addonType="append"
+                        style={{ display: 'none' }}
+                        id="namaKelas"
+                      >
+                        <Button
+                          disabled={this.state.typeDisabled}
+                          onClick={this.toggle('nested_parent_list')}
+                        >
+                          <MdList />
+                        </Button>
+                      </InputGroupAddon>
                     </InputGroup>
                   </FormGroup>
                 </Form>
               </CardBody>
+              <CardFooter style={{ textAlign: 'right' }}>
+                <Button
+                  // block
+                  color="secondary"
+                  id="simpan"
+                  style={{ display: 'none' }}
+                  // onClick={this.toggle('nested_parent_editUpja')}
+                  onClick={this.toggle('nested_parent_list_verifikasi')}
+                >
+                  Simpan Upja
+                </Button>
+                <Button
+                  // block
+                  color="danger"
+                  id="batalsimpan"
+                  style={{
+                    display: 'none',
+                    marginleft: '1%',
+                    paddingLeft: '1%',
+                  }}
+                  // onClick={this.toggle('nested_parent_editUpja')}
+                  onClick={() => this.disetEdit()}
+                >
+                  Batal
+                </Button>
+              </CardFooter>
             </Card>
           </Col>
         </Row>
@@ -1071,246 +1273,6 @@ class Profile extends React.Component {
         </Modal>
         {/* Modal List Kecamatan */}
 
-        {/* Modal List Edit Upja */}
-        <Modal
-          size="xl"
-          onExit={this.handleCloseDomisili}
-          isOpen={this.state.modal_nested_parent_editUpja}
-          toggle={this.toggle('nested_parent_editUpja')}
-          className={this.props.className}
-        >
-          <ModalHeader toggle={this.toggle('nested_parent_editUpja')}>
-            Edit UPJA
-          </ModalHeader>
-          <ModalBody>
-            <Row
-              style={{
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            >
-              <Col>
-                <Card>
-                  <CardBody>
-                    <Form onSubmit={this.handleSubmit}>
-                      {/* untuk isi nama */}
-                      <FormGroup>
-                        <Label style={{ textAlign: 'center' }}>
-                          Nama Lengkap:
-                        </Label>
-                        <Input
-                          type="text"
-                          autoComplete="off"
-                          name="name"
-                          placeholder="Nama Lengkap..."
-                          onChange={evt =>
-                            this.updateInputValue(
-                              evt.target.value,
-                              evt.target.name,
-                              'input',
-                            )
-                          }
-                          value={this.state.input && this.state.input.name}
-                        ></Input>
-                      </FormGroup>
-
-                      {/* untuk pilh provinsi */}
-                      <FormGroup>
-                        <Label style={{ textAlign: 'center' }}>
-                          Nama Provinsi:
-                        </Label>
-                        <InputGroup style={{ float: 'right' }}>
-                          <Input
-                            disabled
-                            placeholder="Pilih Provinsi"
-                            style={{ fontWeight: 'bold' }}
-                            value={
-                              this.state.input && this.state.input.province
-                            }
-                          />
-                          {/* {console.log('ISINYA:', this.state.namaProvinsi)} */}
-                          <InputGroupAddon addonType="append">
-                            <Button
-                              onClick={this.toggle(
-                                'nested_parent_list_provinsi',
-                              )}
-                            >
-                              <MdList />
-                            </Button>
-                          </InputGroupAddon>
-                        </InputGroup>
-                      </FormGroup>
-                      <br></br>
-                      <br></br>
-                      {/* untuk pilih kota/kabupaten */}
-                      <FormGroup>
-                        <Label style={{ textAlign: 'center' }}>
-                          Nama Kota/Kab:
-                        </Label>
-                        <InputGroup style={{ float: 'right' }}>
-                          <Input
-                            disabled
-                            placeholder="Pilih Kota/Kab"
-                            style={{ fontWeight: 'bold' }}
-                            value={this.state.input && this.state.input.city}
-                          />
-                          <InputGroupAddon addonType="append">
-                            <Button
-                              onClick={this.toggle(
-                                'nested_parent_list_kotakab',
-                              )}
-                            >
-                              <MdList />
-                            </Button>
-                          </InputGroupAddon>
-                        </InputGroup>
-                      </FormGroup>
-                      <br></br>
-                      <br></br>
-                      {/* untuk pilih kecamatan */}
-                      <FormGroup>
-                        <Label style={{ textAlign: 'center' }}>
-                          Nama Kecamatan:
-                        </Label>
-                        <InputGroup style={{ float: 'right' }}>
-                          <Input
-                            disabled
-                            placeholder="Pilih Kecamatan"
-                            style={{ fontWeight: 'bold' }}
-                            value={
-                              this.state.input && this.state.input.district
-                            }
-                          />
-                          <InputGroupAddon addonType="append">
-                            <Button
-                              onClick={this.toggle(
-                                'nested_parent_list_kecamatan',
-                              )}
-                            >
-                              <MdList />
-                            </Button>
-                          </InputGroupAddon>
-                        </InputGroup>
-                      </FormGroup>
-                      <br></br>
-                      <br></br>
-
-                      {/* untuk isi kepala desa */}
-                      <FormGroup>
-                        <Label style={{ textAlign: 'center' }}>
-                          Nama Kepala Desa:
-                        </Label>
-                        <Input
-                          autoComplete="off"
-                          type="text"
-                          name="leader_name"
-                          placeholder="Nama Kepala Desa..."
-                          onChange={evt =>
-                            this.updateInputValue(
-                              evt.target.value,
-                              evt.target.name,
-                              'input',
-                            )
-                          }
-                          value={
-                            this.state.input && this.state.input.leader_name
-                          }
-                        ></Input>
-                      </FormGroup>
-
-                      {/* untuk isi desa */}
-                      <FormGroup>
-                        <Label style={{ textAlign: 'center' }}>
-                          Nama Desa:
-                        </Label>
-                        <Input
-                          autoComplete="off"
-                          type="text"
-                          name="village"
-                          placeholder="Nama Desa..."
-                          onChange={evt =>
-                            this.updateInputValue(
-                              evt.target.value,
-                              evt.target.name,
-                              'input',
-                            )
-                          }
-                          value={this.state.input && this.state.input.village}
-                        ></Input>
-                      </FormGroup>
-
-                      {/* untuk isi class */}
-                      <FormGroup>
-                        <Label style={{ textAlign: 'center' }}>Kelas:</Label>
-                        <InputGroup style={{ float: 'right' }}>
-                          <Input
-                            disabled
-                            placeholder="Pilih Kelas"
-                            style={{ fontWeight: 'bold' }}
-                            value={currentTodos && currentTodos.class}
-                          />
-                          <InputGroupAddon addonType="append">
-                            <Button
-                              disabled={this.state.typeDisabled}
-                              onClick={this.toggle('nested_parent_list')}
-                            >
-                              <MdList />
-                            </Button>
-                          </InputGroupAddon>
-                        </InputGroup>
-                      </FormGroup>
-                    </Form>
-                  </CardBody>
-                </Card>
-              </Col>
-            </Row>
-          </ModalBody>
-          <ModalFooter>
-            {/* untuk tampilan masuk/keluar */}
-            <Button
-              // block
-              style={{
-                float: 'right',
-              }}
-              // disabled={!isEnabledRegis}
-              color="primary"
-              onClick={this.toggle('nested_editUpja')}
-              // onClick={this.toggle('nested_parent_list_verifikasi')}
-            >
-              Simpan
-            </Button>
-            <Modal
-              onExit={this.handleClose}
-              isOpen={this.state.modal_nested_editUpja}
-              toggle={this.toggle('nested_editUpja')}
-            >
-              <ModalHeader>Konfirmasi Pengubahan Data</ModalHeader>
-              <ModalBody>Apakah Anda yakin ingin Mengubah data ini?</ModalBody>
-              <ModalFooter>
-                <Button
-                  disabled={loading}
-                  color="primary"
-                  onClick={() => this.registrasiUpja()}
-                >
-                  {!loading && 'Ya'}
-                  {loading && <MdAutorenew />}
-                  {loading && 'Sedang diproses'}
-                </Button>{' '}
-                {!loading && (
-                  <Button
-                    color="secondary"
-                    onClick={this.toggle('nested_editUpja')}
-                  >
-                    Tidak
-                  </Button>
-                )}
-              </ModalFooter>
-            </Modal>
-            <Button onClick={() => this.setModalBatal()}>Batal</Button>
-          </ModalFooter>
-        </Modal>
-        {/* Modal List Edit Upja */}
-
         {/* Modal Verifikasi */}
         <Modal
           onExit={this.handleClose}
@@ -1318,22 +1280,25 @@ class Profile extends React.Component {
           toggle={this.toggle('nested_parent_list_verifikasi')}
           className={this.props.className}
         >
-          <ModalHeader>Registrasi Berhasil</ModalHeader>
+          <ModalHeader>Konfirmasi Simpan Data</ModalHeader>
           <ModalBody>
-            <Label>
-              Terima kasih telah melakukan proses registrasi, cek email Anda
-              untuk Verifikasi!
-            </Label>
+            <Label>Apakah Anda yakin untuk menyimpan data ini?</Label>
           </ModalBody>
           <ModalFooter style={{ textAlign: 'center' }}>
             <Button
               style={{ textAlign: 'center' }}
               disabled={loading}
-              onClick={() => this.redirectOut()}
+              onClick={() => this.updateProfileUpja()}
             >
-              {!loading && 'Oke'}
+              {!loading && 'Ya'}
               {loading && <MdAutorenew />}
               {loading && 'Sedang diproses'}
+            </Button>
+            <Button
+              color="primary"
+              onClick={this.toggle('nested_parent_list_verifikasi')}
+            >
+              Tidak
             </Button>
           </ModalFooter>
         </Modal>

@@ -30,7 +30,8 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const Dashboard = React.lazy(() => import('pages/template/DashboardPage'));
 const profileUPJA = React.lazy(() => import('pages/UPJA/Profile'));
-// const alsinUPJA = React.lazy(() => import('pages/UPJA/alsin'));
+const alsinUPJA = React.lazy(() => import('pages/UPJA/Alsin'));
+const alsinUPJADetail = React.lazy(() => import('pages/UPJA/AlsinDetail'));
 
 // Montoring
 const OrderPageMalam = React.lazy(() =>
@@ -264,12 +265,18 @@ class App extends React.Component {
                   component={props => <Registrasi {...props} />}
                 />
                 <Route exact path="/profile" component={profileUPJA} />
-                {/* <Route
+                <Route
                   exact
-                  path="/alsin"
+                  path="/Alsin"
                   layout={EmptyLayout}
                   component={alsinUPJA}
-                /> */}
+                />
+                <Route
+                  exact
+                  path="/Alsin/detail/:alsin_type_id"
+                  layout={EmptyLayout}
+                  component={alsinUPJADetail}
+                />
 
                 {/* RECEIVING */}
                 <Route

@@ -277,6 +277,8 @@ if (window.location.hostname.includes('staging-logistic')) {
 }
 
 // UPJA
+var url_login = 'https://alsintanlink.com/api/upja/login';
+var url_forgetPassword = 'https://alsintalink.com/api/upja/forget_password';
 var url_registarsiUpja = 'http://alsintanlink.com/api/upja/register';
 var url_showDetailUPJA = 'http://alsintanlink.com/api/upja/show_detail_upja';
 
@@ -284,15 +286,26 @@ var url_showDetailUPJA = 'http://alsintanlink.com/api/upja/show_detail_upja';
 var url_getProvince = 'http://alsintanlink.com/api/location/province';
 var url_getCity = 'http://alsintanlink.com/api/location/city';
 var url_getDistrict = 'http://alsintanlink.com/api/location/district';
-var url_login = 'https://alsintanlink.com/api/upja/login';
+var url_updateUpja = 'http://alsintanlink.com/api/upja/update_upja';
+var url_getAllAlsin = 'http://alsintanlink.com/api/upja/show_all_alsin';
+var url_getAllAlsinDetail =
+  'http://alsintanlink.com/api/upja/show_detail_alsin';
+var url_insertAlsin = 'http://alsintanlink.com/api/upja/insert_alsin';
+var url_deleteAlsin = 'http://alsintanlink.com/api/upja/delete_alsin';
 
 export {
   url_getProvince,
   url_getCity,
+  url_forgetPassword,
   url_getDistrict,
   url_registarsiUpja,
   url_showDetailUPJA,
+  url_updateUpja,
   url_login,
+  url_getAllAlsin,
+  url_getAllAlsinDetail,
+  url_insertAlsin,
+  url_deleteAlsin,
   // BEDA LAGI
   url_allGudang,
   url_changeForgottenPassword,
