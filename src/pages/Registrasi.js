@@ -48,6 +48,7 @@ class Registrasi extends React.Component {
       resultProvinsi: [],
       resultKotaKab: [],
       resultKecamatan: [],
+      loadingPage: true,
       email: '',
       resultClass: [
         {
@@ -215,6 +216,7 @@ class Registrasi extends React.Component {
       district: parseInt(this.state.pilihKecamatan),
       leader_name: input.namaKepalaDesa,
       village: input.namaDesa,
+      badanHukum: input.badanHukum,
       class: parseInt(this.state.pilihClass),
       password: this.state.password,
     };
@@ -265,12 +267,13 @@ class Registrasi extends React.Component {
     }
   }
 
-  // Get Provinsi
+  // get provinsi data
   getProvinsi(currPage, currLimit) {
     var offset = (currPage - 1) * currLimit;
     var keyword = this.state.keywordList;
     const urlA = myUrl.url_getProvince;
-    console.log('jalan', urlA);
+    // console.log('jalan', urlA);
+    this.setState({ loadingPage: true });
     const option = {
       method: 'GET',
       json: true,
@@ -286,18 +289,16 @@ class Registrasi extends React.Component {
         }
       })
       .then(data => {
-        console.log('data Provinsi', data.result);
+        // console.log('data Provinsi', data.result);
         if (data.status === 0) {
           this.showNotification('Data tidak ditemukan!', 'error');
         } else {
-          this.setState(
-            {
-              resultProvinsi: data.result.provinces,
-              // maxPages: data.metadata.pages ? data.metadata.pages : 1,
-              loading: false,
-            },
-            () => this.setDataStatus(),
-          );
+          this.setState({
+            resultProvinsi: data.result.provinces,
+            // maxPages: data.metadata.pages ? data.metadata.pages : 1,
+            loading: false,
+            loadingPage: false,
+          });
         }
       });
   }
@@ -306,7 +307,8 @@ class Registrasi extends React.Component {
     var offset = (currPage - 1) * currLimit;
     var keyword = this.state.keywordList;
     const urlA = myUrl.url_getCity + '?province_id=' + this.state.pilihProvinsi;
-    console.log('jalan kota', urlA);
+    // console.log('jalan kota', urlA);
+    this.setState({ loadingPage: true });
     const option = {
       method: 'GET',
       json: true,
@@ -322,18 +324,16 @@ class Registrasi extends React.Component {
         }
       })
       .then(data => {
-        console.log('data Kota/Kabupaten', data.result);
+        // console.log('data Kota/Kabupaten', data.result);
         if (data.status === 0) {
           this.showNotification('Data tidak ditemukan!', 'error');
         } else {
-          this.setState(
-            {
-              resultKotaKab: data.result.citys,
-              // maxPages: data.metadata.pages ? data.metadata.pages : 1,
-              loading: false,
-            },
-            () => this.setDataStatus(),
-          );
+          this.setState({
+            resultKotaKab: data.result.citys,
+            // maxPages: data.metadata.pages ? data.metadata.pages : 1,
+            loading: false,
+            loadingPage: false,
+          });
         }
       });
   }
@@ -343,7 +343,8 @@ class Registrasi extends React.Component {
     var offset = (currPage - 1) * currLimit;
     var keyword = this.state.keywordList;
     const urlA = myUrl.url_getDistrict + '?city_id=' + this.state.pilihKotaKab;
-    console.log('jalan kecamatan', urlA);
+    // console.log('jalan kecamatan', urlA);
+    this.setState({ loadingPage: true });
     const option = {
       method: 'GET',
       json: true,
@@ -359,18 +360,16 @@ class Registrasi extends React.Component {
         }
       })
       .then(data => {
-        console.log('data Kecamatan', data.result);
+        // console.log('data Kecamatan', data.result);
         if (data.status === 0) {
           this.showNotification('Data tidak ditemukan!', 'error');
         } else {
-          this.setState(
-            {
-              resultKecamatan: data.result.districts,
-              // maxPages: data.metadata.pages ? data.metadata.pages : 1,
-              loading: false,
-            },
-            () => this.setDataStatus(),
-          );
+          this.setState({
+            resultKecamatan: data.result.districts,
+            // maxPages: data.metadata.pages ? data.metadata.pages : 1,
+            loading: false,
+            loadingPage: false,
+          });
         }
       });
   }
@@ -390,6 +389,14 @@ class Registrasi extends React.Component {
     window.localStorage.removeItem('token');
     window.localStorage.removeItem('accessList');
     this.setState({ loading: true }, () => window.location.replace('/login'));
+  }
+
+  redirectVerifikasi() {
+    window.localStorage.removeItem('token');
+    window.localStorage.removeItem('accessList');
+    this.setState({ loading: true }, () =>
+      window.location.replace('/verifikasi'),
+    );
   }
 
   updateInputValue(value, field, fill) {
@@ -436,6 +443,7 @@ class Registrasi extends React.Component {
       input.namaLengkap !== '' &&
       input.namaKepalaDesa !== '' &&
       input.namaDesa !== '' &&
+      input.badanHukum !== '' &&
       email !== '' &&
       namaProvinsi !== '' &&
       namaKotaKab !== '' &&
@@ -536,7 +544,10 @@ class Registrasi extends React.Component {
   checkEmail = () => {
     var emailMessages = document.getElementById('emailMessages');
     const { email } = this.state;
-    var emailMatch = email.includes('@');
+    var emailMatch =
+      (email.includes('@') && email.includes('.')) ||
+      email.includes('0') ||
+      email.includes('+62');
 
     if (this.state.email.length === 0) {
       emailMessages.innerHTML = '';
@@ -544,15 +555,15 @@ class Registrasi extends React.Component {
     }
     if (emailMatch === false) {
       emailMessages.style.color = 'red';
-      emailMessages.innerHTML = 'Tidak memenuhi format Email';
+      emailMessages.innerHTML = 'Tidak memenuhi format Email/No. Handphone';
     } else {
       emailMessages.style.color = 'green';
-      emailMessages.innerHTML = 'Email memenuhi format Email';
+      emailMessages.innerHTML = 'Email memenuhi format Email/No. Handphone';
     }
   };
 
   render() {
-    const { suggestions, loading } = this.state;
+    const { suggestions, loading, loadingPage } = this.state;
 
     const colorProgress = this.colorProgress();
     const strengthProgress = this.strengthProgress();
@@ -685,14 +696,34 @@ class Registrasi extends React.Component {
                       <hr></hr>
                     </Col>
                   </Row>
+                  {/* untuk isi kepala desa */}
+                  <FormGroup>
+                    <Label style={{ textAlign: 'center' }}>
+                      Nama Ketua UPJA:
+                    </Label>
+                    <Input
+                      autoComplete="off"
+                      type="text"
+                      name="namaKepalaDesa"
+                      placeholder="Nama Ketua UPJA..."
+                      onChange={evt =>
+                        this.updateInputValue(
+                          evt.target.value,
+                          evt.target.name,
+                          'input',
+                        )
+                      }
+                      value={this.state.namaKepalaDesa}
+                    ></Input>
+                  </FormGroup>
                   {/* untuk isi nama */}
                   <FormGroup>
-                    <Label style={{ textAlign: 'center' }}>Nama Lengkap:</Label>
+                    <Label style={{ textAlign: 'center' }}>Nama UPJA:</Label>
                     <Input
                       type="text"
                       autoComplete="off"
                       name="namaLengkap"
-                      placeholder="Nama Lengkap..."
+                      placeholder="Nama UPJA..."
                       onChange={evt =>
                         this.updateInputValue(
                           evt.target.value,
@@ -706,11 +737,13 @@ class Registrasi extends React.Component {
 
                   {/* untuk isi email */}
                   <FormGroup style={{ marginBottom: 0 }}>
-                    <Label style={{ textAlign: 'center' }}>Email:</Label>
+                    <Label style={{ textAlign: 'center' }}>
+                      Email/No. Handphone:
+                    </Label>
                     <Input
                       type="email"
                       value={this.state.email.trim()}
-                      placeholder="Email.."
+                      placeholder="Email/No. Handphone.."
                       onChange={this.onEmailChange}
                       id="email"
                       name="email"
@@ -794,27 +827,6 @@ class Registrasi extends React.Component {
                   <br></br>
                   <br></br>
 
-                  {/* untuk isi kepala desa */}
-                  <FormGroup>
-                    <Label style={{ textAlign: 'center' }}>
-                      Nama Kepala Desa:
-                    </Label>
-                    <Input
-                      autoComplete="off"
-                      type="text"
-                      name="namaKepalaDesa"
-                      placeholder="Nama Kepala Desa..."
-                      onChange={evt =>
-                        this.updateInputValue(
-                          evt.target.value,
-                          evt.target.name,
-                          'input',
-                        )
-                      }
-                      value={this.state.namaKepalaDesa}
-                    ></Input>
-                  </FormGroup>
-
                   {/* untuk isi desa */}
                   <FormGroup>
                     <Label style={{ textAlign: 'center' }}>Nama Desa:</Label>
@@ -831,6 +843,25 @@ class Registrasi extends React.Component {
                         )
                       }
                       value={this.state.namaDesa}
+                    ></Input>
+                  </FormGroup>
+
+                  {/* untuk isi Badan Hukum */}
+                  <FormGroup>
+                    <Label style={{ textAlign: 'center' }}>Badan Hukum:</Label>
+                    <Input
+                      autoComplete="off"
+                      type="text"
+                      name="badanHukum"
+                      placeholder="Badan Hukum..."
+                      onChange={evt =>
+                        this.updateInputValue(
+                          evt.target.value,
+                          evt.target.name,
+                          'input',
+                        )
+                      }
+                      value={this.state.badanHukum}
                     ></Input>
                   </FormGroup>
 
@@ -915,16 +946,14 @@ class Registrasi extends React.Component {
                   >
                     <Col>
                       <Button
-                        // block
                         style={{
                           float: 'right',
                           marginLeft: '1%',
                           width: '200px',
                         }}
-                        disabled={!isEnabledRegis}
+                        // disabled={!isEnabledRegis}
                         color="primary"
                         onClick={this.toggle('nested')}
-                        // onClick={this.toggle('nested_parent_list_verifikasi')}
                       >
                         Registrasi UPJA
                       </Button>
@@ -1018,32 +1047,24 @@ class Registrasi extends React.Component {
           <ModalBody>
             <Table responsive striped>
               <tbody>
-                {/* {renderProvinsi}
-                {!provinsiTodos && (
-                  <tr>
-                    <td
-                      style={{ backgroundColor: 'white' }}
-                      colSpan="11"
-                      className="text-center"
-                    >
-                      TIDAK ADA DATA
-                    </td>
-                  </tr>
-                )} */}
-                {provinsiTodos ? (
-                  renderProvinsi || <LoadingSpinner status={4}></LoadingSpinner>
-                ) : this.state.dataAvailable ? (
-                  <tr>
-                    <td
-                      style={{ backgroundColor: 'white' }}
-                      colSpan="17"
-                      className="text-center"
-                    >
-                      TIDAK ADA DATA
-                    </td>
-                  </tr>
-                ) : (
+                {provinsiTodos.length === 0 && loadingPage === true ? (
                   <LoadingSpinner status={4} />
+                ) : loadingPage === false && provinsiTodos.length === 0 ? (
+                  (
+                    <tr>
+                      <td
+                        style={{ backgroundColor: 'white' }}
+                        colSpan="17"
+                        className="text-center"
+                      >
+                        TIDAK ADA DATA
+                      </td>
+                    </tr>
+                  ) || <LoadingSpinner status={4} />
+                ) : loadingPage === true && provinsiTodos.length !== 0 ? (
+                  <LoadingSpinner status={4} />
+                ) : (
+                  renderProvinsi
                 )}
               </tbody>
             </Table>
@@ -1064,17 +1085,24 @@ class Registrasi extends React.Component {
           <ModalBody>
             <Table responsive striped>
               <tbody>
-                {renderKotakab}
-                {!kotakabTodos && (
-                  <tr>
-                    <td
-                      style={{ backgroundColor: 'white' }}
-                      colSpan="11"
-                      className="text-center"
-                    >
-                      TIDAK ADA DATA
-                    </td>
-                  </tr>
+                {kotakabTodos.length === 0 && loadingPage === true ? (
+                  <LoadingSpinner status={4} />
+                ) : loadingPage === false && kotakabTodos.length === 0 ? (
+                  (
+                    <tr>
+                      <td
+                        style={{ backgroundColor: 'white' }}
+                        colSpan="17"
+                        className="text-center"
+                      >
+                        TIDAK ADA DATA
+                      </td>
+                    </tr>
+                  ) || <LoadingSpinner status={4} />
+                ) : loadingPage === true && kotakabTodos.length !== 0 ? (
+                  <LoadingSpinner status={4} />
+                ) : (
+                  renderKotakab
                 )}
               </tbody>
             </Table>
@@ -1095,17 +1123,24 @@ class Registrasi extends React.Component {
           <ModalBody>
             <Table responsive striped>
               <tbody>
-                {renderKecamatan}
-                {!kecamatanTodos && (
-                  <tr>
-                    <td
-                      style={{ backgroundColor: 'white' }}
-                      colSpan="11"
-                      className="text-center"
-                    >
-                      TIDAK ADA DATA
-                    </td>
-                  </tr>
+                {kecamatanTodos.length === 0 && loadingPage === true ? (
+                  <LoadingSpinner status={4} />
+                ) : loadingPage === false && kecamatanTodos.length === 0 ? (
+                  (
+                    <tr>
+                      <td
+                        style={{ backgroundColor: 'white' }}
+                        colSpan="17"
+                        className="text-center"
+                      >
+                        TIDAK ADA DATA
+                      </td>
+                    </tr>
+                  ) || <LoadingSpinner status={4} />
+                ) : loadingPage === true && kecamatanTodos.length !== 0 ? (
+                  <LoadingSpinner status={4} />
+                ) : (
+                  renderKecamatan
                 )}
               </tbody>
             </Table>
@@ -1121,23 +1156,52 @@ class Registrasi extends React.Component {
           className={this.props.className}
         >
           <ModalHeader>Registrasi Berhasil</ModalHeader>
-          <ModalBody>
-            <Label>
-              Terima kasih telah melakukan proses registrasi, cek email Anda
-              untuk Verifikasi!
-            </Label>
-          </ModalBody>
-          <ModalFooter style={{ textAlign: 'center' }}>
-            <Button
-              style={{ textAlign: 'center' }}
-              disabled={loading}
-              onClick={() => this.redirectOut()}
-            >
-              {!loading && 'Oke'}
-              {loading && <MdAutorenew />}
-              {loading && 'Sedang diproses'}
-            </Button>
-          </ModalFooter>
+          {(this.state.email.includes('0') ||
+            this.state.email.includes('+62')) && (
+            <ModalBody>
+              <Label>
+                Terima kasih telah melakukan proses registrasi, cek Handphone
+                anda untuk OTP!
+              </Label>
+            </ModalBody>
+          )}
+          {(this.state.email.includes('0') ||
+            this.state.email.includes('+62')) && (
+            <ModalFooter style={{ textAlign: 'center' }}>
+              <Button
+                style={{ textAlign: 'center' }}
+                disabled={loading}
+                onClick={() => this.redirectVerifikasi()}
+              >
+                {!loading && 'Oke'}
+                {loading && <MdAutorenew />}
+                {loading && 'Sedang diproses'}
+              </Button>
+            </ModalFooter>
+          )}
+          {(this.state.email.includes('@') ||
+            this.state.email.includes('.')) && (
+            <ModalBody>
+              <Label>
+                Terima kasih telah melakukan proses registrasi, cek email Anda
+                untuk Verifikasi!
+              </Label>
+            </ModalBody>
+          )}
+          {(this.state.email.includes('@') ||
+            this.state.email.includes('.')) && (
+            <ModalFooter style={{ textAlign: 'center' }}>
+              <Button
+                style={{ textAlign: 'center' }}
+                disabled={loading}
+                onClick={() => this.redirectOut()}
+              >
+                {!loading && 'Oke'}
+                {loading && <MdAutorenew />}
+                {loading && 'Sedang diproses'}
+              </Button>
+            </ModalFooter>
+          )}
         </Modal>
         {/* Modal Verifikasi */}
         {/* KHUSUS MODAL */}

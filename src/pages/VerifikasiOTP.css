@@ -1,0 +1,62 @@
+.otpInput .ReactInputVerificationCode__container {
+  --ReactInputVerificationCode-itemWidth: 2.5rem;
+  --ReactInputVerificationCode-itemHeight: 3.5rem;
+}
+
+.otpInput
+  .ReactInputVerificationCode__container
+  .ReactInputVerificationCode__item {
+  position: relative;
+  /* color      : #262626; */
+  color: #009688;
+  font-weight: 500;
+}
+
+.otpInput
+  .ReactInputVerificationCode__container
+  .ReactInputVerificationCode__item {
+  box-shadow: none;
+}
+
+.otpInput
+  .ReactInputVerificationCode__container
+  .ReactInputVerificationCode__item:after {
+  content: '';
+  display: block;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  height: 2px;
+  background-color: #ebebeb;
+  /* transition      : background-color 0.2s ease-out; */
+  /* background-color   : #26A68E; */
+}
+
+.otpInput
+  .ReactInputVerificationCode__container
+  .ReactInputVerificationCode__item.is-active:after {
+  background-color: #26a68e;
+}
+
+.otpInput .ReactInputVerificationCode__container {
+  width: auto;
+  /* height: auto; */
+}
+
+.otpInput
+  .ReactInputVerificationCode__container
+  .ReactInputVerificationCode__item {
+  margin-left: 1%;
+  margin-right: 1%;
+}
+
+/* .otpInput .ReactInputVerificationCode__container .ReactInputVerificationCode__input #one-time-code {
+  padding: 50%;
+} */
+
+#one-time-code {
+  padding: 0%;
+  width: 0;
+  height: 0;
+}

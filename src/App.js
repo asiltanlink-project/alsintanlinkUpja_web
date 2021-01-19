@@ -5,6 +5,7 @@ import PrivateRoute from 'components/Layout/PrivateRoute';
 import PageSpinner from 'components/PageSpinner';
 import CheckGudang from 'pages/Order/CheckGudang';
 import Registrasi from 'pages/Registrasi';
+import Verifikasi from 'pages/Verifikasi';
 import AuthPage from 'pages/template/AuthPage';
 import ResetPasswordForm from 'components/ResetPasswordForm';
 import React from 'react';
@@ -17,13 +18,13 @@ import EkspedisiIntegra from 'pages/ExternalEkspedisi/L1_EkspedisiIntegra';
 // import 'firebase/auth';
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyDPJxUKdofUnKhDCFOgZnQFjTqMWqqw56g',
-  authDomain: 'neo-genesis-ordermonitoring.firebaseapp.com',
-  databaseURL: 'https://neo-genesis-ordermonitoring.firebaseio.com',
-  projectId: 'neo-genesis-ordermonitoring',
-  storageBucket: 'neo-genesis-ordermonitoring.appspot.com',
-  messagingSenderId: '937266444089',
-  appId: '1:937266444089:web:b54f43bda668efd1199ae8',
+  apiKey: 'AIzaSyDcFIDIdLSPUTGFiKvAq59ZMkwa_ldf3Mw',
+  authDomain: 'alsintanlinkupja.firebaseapp.com',
+  projectId: 'alsintanlinkupja',
+  storageBucket: 'alsintanlinkupja.appspot.com',
+  messagingSenderId: '1042721526157',
+  appId: '1:1042721526157:web:f471a9cb2dfc7c3d416dc4',
+  measurementId: 'G-SPG8NWRXVY',
 };
 
 // Initialize Firebase
@@ -250,6 +251,18 @@ class App extends React.Component {
               component={props => <CheckGudang {...props} />}
             />
 
+            <Route
+              exact
+              path="/registrasi"
+              layout={EmptyLayout}
+              component={props => <Registrasi {...props} />}
+            />
+            <Route
+              exact
+              path="/verifikasi"
+              layout={EmptyLayout}
+              component={props => <Verifikasi {...props} />}
+            />
             {/* {console.log('ISI MENU ID: ', this.state.menuID)} */}
 
             <MainLayout
@@ -258,12 +271,6 @@ class App extends React.Component {
               color={this.state.color}
             >
               <React.Suspense fallback={<PageSpinner />}>
-                <Route
-                  exact
-                  path="/registrasi"
-                  layout={EmptyLayout}
-                  component={props => <Registrasi {...props} />}
-                />
                 <Route exact path="/profile" component={profileUPJA} />
                 <Route
                   exact
