@@ -23,8 +23,8 @@ const firebaseConfig = {
   projectId: 'alsintanlinkupja',
   storageBucket: 'alsintanlinkupja.appspot.com',
   messagingSenderId: '1042721526157',
-  appId: '1:1042721526157:web:f471a9cb2dfc7c3d416dc4',
-  measurementId: 'G-SPG8NWRXVY',
+  appId: '1:1042721526157:web:959ff6579d5f6ad1416dc4',
+  measurementId: 'G-5XPEMS1LLR',
 };
 
 // Initialize Firebase
