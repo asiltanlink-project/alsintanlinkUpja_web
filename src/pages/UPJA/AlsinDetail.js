@@ -1462,7 +1462,7 @@ class AlsinDetail extends React.Component {
                 <Table responsive striped id="tableUtama">
                   <thead>
                     <tr>
-                      <th>Kode Kendaraan</th>
+                      <th>No. Reg Alsin</th>
                       <th>Status</th>
                       <th>Edit</th>
                       <th>Hapus</th>
@@ -1541,7 +1541,7 @@ class AlsinDetail extends React.Component {
             <Form>
               {console.log('EDIT ALSIN', this.state.editAlsin)}
               <FormGroup>
-                <Label>Kode Kendaraan</Label>
+                <Label>No. Reg Alsin</Label>
                 <Input
                   type="text"
                   disabled={true}
@@ -1800,7 +1800,7 @@ class AlsinDetail extends React.Component {
               <thead>
                 <tr>
                   {/* <th>Alsin ID</th> */}
-                  <th>Kode Kendaraan</th>
+                  <th>No. Reg Alsin</th>
                   <th>Status</th>
                 </tr>
               </thead>
@@ -1908,7 +1908,7 @@ class AlsinDetail extends React.Component {
                   <Row>
                     <Col sm={4}>
                       <Label style={{ marginTop: '8px', fontWeight: 'bold' }}>
-                        Kode Kendaraan
+                        No. Reg Alsin
                       </Label>
                     </Col>
                     <Col sm={8}>
@@ -2069,7 +2069,7 @@ class AlsinDetail extends React.Component {
             <Table responsive striped>
               <thead>
                 <tr>
-                  <th>Kode Kendaraan</th>
+                  <th>No. Reg Alsin</th>
                   <th>Harga</th>
                   <th>Status</th>
                 </tr>
