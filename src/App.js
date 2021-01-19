@@ -233,7 +233,7 @@ class App extends React.Component {
                 <AuthPage {...props} authState={STATE_FORGETPASS} />
               )}
             />
-            <PrivateRoute
+            {/* <PrivateRoute
               exact
               menuID="1"
               path="/resetpassword"
@@ -249,7 +249,7 @@ class App extends React.Component {
               path="/Gudang"
               layout={EmptyLayout}
               component={props => <CheckGudang {...props} />}
-            />
+            /> */}
 
             <Route
               exact
@@ -275,13 +275,11 @@ class App extends React.Component {
                 <Route
                   exact
                   path="/Alsin"
-                  layout={EmptyLayout}
                   component={alsinUPJA}
                 />
                 <Route
                   exact
                   path="/Alsin/detail/:alsin_type_id"
-                  layout={EmptyLayout}
                   component={alsinUPJADetail}
                 />
 
