@@ -3,7 +3,7 @@
 if (window.location.hostname.includes('staging-logistic')) {
   console.log('STAGING-logistic');
   //URL LOGIN
-  var url_login = 'http://alsintanlink.com/api/upja/login';
+  var url_login = 'https://alsintanlink.com/api/upja/login';
   var url_changeForgottenPassword =
     'https://staging-api.cfu.pharmalink.id/auth/forgotpassword';
   var url_verifyOTP = 'https://staging-api.cfu.pharmalink.id/auth/verifyotp';
@@ -92,7 +92,7 @@ if (window.location.hostname.includes('staging-logistic')) {
   console.log('logistic');
 
   //URL LOGIN
-  var url_login = 'http://alsintanlink.com/api/upja/login';
+  var url_login = 'https://alsintanlink.com/api/upja/login';
   var url_changeForgottenPassword =
     'https://api.cfu.pharmalink.id/auth/forgotpassword';
   var url_verifyOTP = 'https://api.cfu.pharmalink.id/auth/verifyotp';
@@ -179,7 +179,7 @@ if (window.location.hostname.includes('staging-logistic')) {
   console.log('LOCALHOST-logistic');
 
   //URL LOGIN
-  var url_login = 'http://alsintanlink.com/api/upja/login';
+  var url_login = 'https://alsintanlink.com/api/upja/login';
   var url_changeForgottenPassword =
     'https://staging-api.cfu.pharmalink.id/auth/forgotpassword';
   var url_verifyOTP = 'https://staging-api.cfu.pharmalink.id/auth/verifyotp';
@@ -279,19 +279,19 @@ if (window.location.hostname.includes('staging-logistic')) {
 // UPJA
 var url_login = 'https://alsintanlink.com/api/upja/login';
 var url_forgetPassword = 'https://alsintalink.com/api/upja/forget_password';
-var url_registarsiUpja = 'http://alsintanlink.com/api/upja/register';
-var url_showDetailUPJA = 'http://alsintanlink.com/api/upja/show_detail_upja';
+var url_registarsiUpja = 'https://alsintanlink.com/api/upja/register';
+var url_showDetailUPJA = 'https://alsintanlink.com/api/upja/show_detail_upja';
 
 // Show Domisili
-var url_getProvince = 'http://alsintanlink.com/api/location/province';
-var url_getCity = 'http://alsintanlink.com/api/location/city';
-var url_getDistrict = 'http://alsintanlink.com/api/location/district';
-var url_updateUpja = 'http://alsintanlink.com/api/upja/update_upja';
-var url_getAllAlsin = 'http://alsintanlink.com/api/upja/show_all_alsin';
+var url_getProvince = 'https://alsintanlink.com/api/location/province';
+var url_getCity = 'https://alsintanlink.com/api/location/city';
+var url_getDistrict = 'httsp://alsintanlink.com/api/location/district';
+var url_updateUpja = 'https://alsintanlink.com/api/upja/update_upja';
+var url_getAllAlsin = 'https://alsintanlink.com/api/upja/show_all_alsin';
 var url_getAllAlsinDetail =
-  'http://alsintanlink.com/api/upja/show_detail_alsin';
-var url_insertAlsin = 'http://alsintanlink.com/api/upja/insert_alsin';
-var url_deleteAlsin = 'http://alsintanlink.com/api/upja/delete_alsin';
+  'https://alsintanlink.com/api/upja/show_detail_alsin';
+var url_insertAlsin = 'https://alsintanlink.com/api/upja/insert_alsin';
+var url_deleteAlsin = 'https://alsintanlink.com/api/upja/delete_alsin';
 
 export {
   url_getProvince,
