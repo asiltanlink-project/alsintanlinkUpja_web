@@ -1722,7 +1722,7 @@ class Alsin extends React.Component {
         var status = data.status;
         var result = data.result.alsins;
         var message = data.result.message;
-        console.log('ALSIN DATA', data);
+        // console.log('ALSIN DATA', data);
         if (status === 0) {
           this.showNotification(message, 'error');
         } else {
@@ -1791,8 +1791,8 @@ class Alsin extends React.Component {
               resultAllAlsinType: result,
               loadingAlsin: false,
             },
-            () =>
-              console.log('RESULT ALSIN ITEM', this.state.resultAllAlsinType),
+            // () =>
+            //   console.log('RESULT ALSIN ITEM', this.state.resultAllAlsinType),
           );
         }
       })
@@ -1994,7 +1994,7 @@ class Alsin extends React.Component {
       });
     }
 
-    console.log('MODAL TYPEE', modalType);
+    // console.log('MODAL TYPEE', modalType);
     if (modalType === 'nested_parent_editAlsin') {
       // console.log('LOG 1');
       this.setState({
@@ -2344,8 +2344,10 @@ class Alsin extends React.Component {
   updateInputValue(value, field, fill) {
     let input = this.state[fill];
     input[field] = value;
-    this.setState({ input }, () =>
-      console.log('EDIT ALSIN ', this.state.editAlsin),
+    this.setState(
+      { input },
+      // () =>
+      // console.log('EDIT ALSIN ', this.state.editAlsin),
     );
   }
 
@@ -2709,8 +2711,8 @@ class Alsin extends React.Component {
                 style={NOTIFICATION_SYSTEM_STYLE}
               />
 
-              <CardHeader className="d-flex justify-content-between">
-                {/* <Col sm={5} style={{ paddingLeft: 0 }}>
+              {/* <CardHeader className="d-flex justify-content-between">
+                <Col sm={5} style={{ paddingLeft: 0 }}>
                   <Form
                     inline
                     className="cr-search-form"
@@ -2730,45 +2732,9 @@ class Alsin extends React.Component {
                       onKeyPress={event => this.enterPressedSearch(event, true)}
                     />
                   </Form>
-                </Col> */}
-                {/* <Col sm={7} style={{ textAlign: 'right', paddingRight: 0 }}></Col> */}
-                <Col
-                  style={{
-                    textAlign: 'right',
-                    paddingRight: 0,
-                    paddingBottom: 0,
-                    marginBottom: 0,
-                  }}
-                >
-                  {this.state.menuID === 61 && (
-                    <Button
-                      onClick={this.toggle('nested_parent')}
-                      id="61"
-                      style={{ marginLeft: '1%' }}
-                    >
-                      Batas Standar
-                    </Button>
-                  )}
-                  {this.state.menuID === 61 && (
-                    <Button
-                      id="61"
-                      onClick={this.toggle('nested_parent_batasPerPelapak')}
-                      style={{ marginLeft: '1%' }}
-                    >
-                      Batas per Pelapak
-                    </Button>
-                  )}
-                  {this.state.menuID === 61 && (
-                    <Button
-                      id="61"
-                      onClick={this.toggle('nested_parent_editMassal')}
-                      style={{ marginLeft: '1%' }}
-                    >
-                      Tambah Batas Bawah
-                    </Button>
-                  )}
                 </Col>
-              </CardHeader>
+                <Col sm={7} style={{ textAlign: 'right', paddingRight: 0 }}></Col>
+              </CardHeader> */}
               <CardBody>
                 <Row>
                   <Col style={{ textAlign: 'right' }}>
@@ -2885,9 +2851,7 @@ class Alsin extends React.Component {
             {!loading && (
               <Button
                 color="secondary"
-                onClick={() =>
-                  this.toggleDeleteData('nested_parent_nonaktifAlsin')
-                }
+                onClick={this.toggle('nested_parent_nonaktifAlsin')}
               >
                 Tidak
               </Button>
@@ -2906,7 +2870,6 @@ class Alsin extends React.Component {
           <ModalHeader>Edit Alsin</ModalHeader>
           <ModalBody>
             <Form>
-              {console.log('EDIT ALSIN', this.state.editAlsin)}
               <FormGroup>
                 <Label>Gambar</Label>
                 <br></br>
