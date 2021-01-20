@@ -284,7 +284,6 @@ var url_resendOTP = 'https://alsintanlink.com/api/upja/resend_otp';
 var url_submitOTP = 'https://alsintanlink.com/api/upja/submit_otp';
 var url_showDetailUPJA = 'https://alsintanlink.com/api/upja/show_detail_upja';
 
-
 // Show Domisili
 var url_getProvince = 'https://alsintanlink.com/api/location/province';
 var url_getCity = 'https://alsintanlink.com/api/location/city';
@@ -296,6 +295,9 @@ var url_getAllAlsinDetail =
 var url_insertAlsin = 'https://alsintanlink.com/api/upja/insert_alsin';
 var url_deleteAlsin = 'https://alsintanlink.com/api/upja/delete_alsin';
 var url_updateAlsin = 'https://alsintanlink.com/api/upja/update_alsin';
+var url_deleteAlsinItem = 'https://alsintanlink.com/api/upja/delete_alsin_item';
+var url_updateAlsinItem = 'https://alsintanlink.com/api/upja/update_alsin_item';
+var url_allAlsinType = 'http://alsintanlink.com/api/upja/show_all_alsin_type';
 
 export {
   url_resendOTP,
@@ -308,11 +310,14 @@ export {
   url_showDetailUPJA,
   url_updateUpja,
   url_updateAlsin,
+  url_allAlsinType,
   url_login,
   url_getAllAlsin,
   url_getAllAlsinDetail,
   url_insertAlsin,
   url_deleteAlsin,
+  url_deleteAlsinItem,
+  url_updateAlsinItem,
   // BEDA LAGI
   url_allGudang,
   url_changeForgottenPassword,

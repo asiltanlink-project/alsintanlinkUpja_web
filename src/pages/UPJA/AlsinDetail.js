@@ -97,14 +97,18 @@ class AlsinDetail extends React.Component {
       startDate: '',
       endDate: '',
       resetInfo: false,
-      resultType: [
+      resultStatus: [
         {
-          type_id: 'show_farmer',
-          type_name: 'Farmer',
+          status_id: 'Tersedia',
+          status_name: 'Tersedia',
         },
         {
-          type_id: 'show_upja',
-          type_name: 'UPJA',
+          status_id: 'Sedang Digunakan',
+          status_name: 'Sedang Digunakan',
+        },
+        {
+          status_id: 'Rusak',
+          status_name: 'Rusak',
         },
       ],
 
@@ -297,7 +301,7 @@ class AlsinDetail extends React.Component {
         }
       })
       .then(data => {
-        console.log('DATA ALSIN DETAIL', data);
+        // console.log('DATA ALSIN DETAIL', data);
         var status = data.status;
         var resultAlsin = data.result.alsin;
         var resultAlsinItem = data.result.alsin_items;
@@ -728,23 +732,33 @@ class AlsinDetail extends React.Component {
           maxPages: 1,
           currentPages: 1,
           ecommerceIDtemp: this.state.ecommerceID,
-          editAlsin: todo,
         },
         // () => this.getProvinsi(1, this.state.todosPerPages),
       );
     }
 
-    this.setState(
-      {
+    console.log('MODAL TYPEE', modalType);
+    if (modalType === 'nested_parent_editAlsin') {
+      // console.log('LOG 1');
+      this.setState({
+        [`modal_${modalType}`]: !this.state[`modal_${modalType}`],
+        editAlsin: todo,
+      });
+    } else if (modalType === 'nested_parent_nonaktifAlsin') {
+      // console.log('LOG 1');
+      this.setState({
+        [`modal_${modalType}`]: !this.state[`modal_${modalType}`],
+        deleteAlsin: todo,
+      });
+    } else {
+      this.setState({
         [`modal_${modalType}`]: !this.state[`modal_${modalType}`],
         keywordList: '',
         realCurrentPages: 1,
         maxPages: 1,
         currentPages: 1,
-        editAlsin: todo,
-      },
-      // () => this.getProvinsi(1, this.state.todosPerPages),
-    );
+      });
+    }
   };
 
   handleCloseDomisili = () => {
@@ -882,12 +896,12 @@ class AlsinDetail extends React.Component {
   }
 
   deleteHeaderData = first_param => {
-    var url = myUrl.url_deleteAlsin;
+    var url = myUrl.url_deleteAlsinItem;
     const deleteDataHeader = first_param;
     var token = window.localStorage.getItem('tokenCookies');
     console.log('DATA HEADER', deleteDataHeader);
 
-    this.setState({loading:true})
+    this.setState({ loading: true });
     var payload = {
       alsin_item_id: deleteDataHeader.alsin_item_id,
     };
@@ -941,7 +955,7 @@ class AlsinDetail extends React.Component {
               modal_nested_parent_nonaktifAlsin: false,
               nested_parent_nonaktifAlsin: false,
             },
-            () => this.getListbyPaging(),
+            () => this.getListbypagingAlsin(),
           );
         }
       })
@@ -955,6 +969,103 @@ class AlsinDetail extends React.Component {
       });
   };
 
+  updateHeaderData = first_param => {
+    // const trace = perf.trace('updateHeaderData');
+    var url = myUrl.url_updateAlsinItem;
+    const updateHeaderData = first_param;
+    var token = window.localStorage.getItem('tokenCookies');
+    console.log('DATA HEADER', updateHeaderData);
+    console.log('DATA HEADER', this.state.editAlsin);
+
+    this.setState({ loading: true });
+    var payload = {
+      alsin_item_id: updateHeaderData.alsin_item_id,
+      vechile_code: updateHeaderData.vechile_code,
+      status: updateHeaderData.status || this.state.pilihStatus,
+    };
+
+    console.log('PAYLOAD EDIT ALSIN ITEM', payload);
+
+    const option = {
+      method: 'PUT',
+      json: true,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+        Authorization: `${'Bearer'} ${token}`,
+      },
+      body: JSON.stringify(payload),
+    };
+    fetch(url, option)
+      .then(response => {
+        // trace.stop();
+        if (response.ok) {
+          return response.json();
+        } else {
+          if (response.status === 401) {
+            this.showNotification('Username/Password salah!', 'error');
+          } else if (response.status === 500) {
+            this.showNotification('Internal Server Error', 'error');
+          } else {
+            this.showNotification('Response ke server gagal!', 'error');
+          }
+          this.setState({
+            loadingPage: false,
+            loading: false,
+          });
+        }
+      })
+      .then(data => {
+        console.log('DATA EDIT', data);
+        var status = data.status;
+        var message = data.result.message;
+        if (status === 0) {
+          this.showNotification(message, 'error');
+          this.setState({
+            loadingPage: false,
+            loading: false,
+          });
+        } else {
+          this.showNotification(message, 'info');
+          this.setState(
+            {
+              loadingPage: false,
+              loading: false,
+              modal_nested_parent_editAlsin: false,
+              modal_nested_editAlsin: false,
+            },
+            () => this.getListbypagingAlsin(),
+          );
+        }
+      })
+      .catch(err => {
+        // console.log('ERRORNYA', err);
+        this.showNotification('Error ke server!', 'error');
+        this.setState({
+          loadingPage: false,
+          loading: false,
+        });
+      });
+  };
+
+  updateInputValue(value, field, fill) {
+    let input = this.state[fill];
+    input[field] = value;
+    this.setState({ input }, () =>
+      console.log('EDIT ALSIN ', this.state.editAlsin),
+    );
+  }
+
+  setStatus = event => {
+    var nama = this.state.resultStatus.find(function (element) {
+      return element.status_id === event.target.value;
+    });
+    this.setState({
+      pilihStatus: event.target.value,
+      namaStatus: nama.status_name,
+    });
+    this.state.editAlsin.status = '';
+  };
+
   render() {
     const {
       loading,
@@ -964,6 +1075,8 @@ class AlsinDetail extends React.Component {
       loadingPageTransaction,
       loadingPageTransactionAlsinItem,
     } = this.state;
+    const statusTodos = this.state.resultStatus;
+
     const currentTodosFarmer = this.state.resultFarmer;
     const currentTodosUpja = this.state.resultUpja;
     const currentTodosFarmerTransaction = this.state.resultFarmerTransaction;
@@ -978,13 +1091,19 @@ class AlsinDetail extends React.Component {
     const provinsiTodos = this.state.resultProvinsi;
     const kotakabTodos = this.state.resultKotaKab;
     const kecamatanTodos = this.state.resultKecamatan;
-    const typeTodos = this.state.resultType;
+
     const isEnabledSaveDomisili = this.canBeSubmittedDomisili();
     const isSearch = this.SearchAllList();
 
     var formatter = new Intl.NumberFormat('id-ID', {
       currency: 'IDR',
     });
+
+    const renderStatus =
+      statusTodos &&
+      statusTodos.map((todo, i) => {
+        return <option value={todo.status_id}>{todo.status_name}</option>;
+      });
 
     const renderTodosFarmer =
       currentTodosFarmerTransaction &&
@@ -1045,7 +1164,7 @@ class AlsinDetail extends React.Component {
       });
 
     {
-      console.log('render alsin', currentTodosAlsin);
+      // console.log('render alsin', currentTodosAlsin);
     }
     const renderTodosAlsin =
       currentTodosAlsin &&
@@ -1580,7 +1699,7 @@ class AlsinDetail extends React.Component {
           <ModalFooter>
             <Button
               color="primary"
-              onClick={() => this.deleteHeaderData(this.state.deleteDataHeader)}
+              onClick={() => this.deleteHeaderData(this.state.deleteAlsin)}
               disabled={loading}
             >
               {!loading && 'Ya'}
@@ -1608,33 +1727,66 @@ class AlsinDetail extends React.Component {
           <ModalHeader>Edit Alsin Item</ModalHeader>
           <ModalBody>
             <Form>
-              {console.log('EDIT ALSIN', this.state.editAlsin)}
               <FormGroup>
                 <Label>No. Reg Alsin</Label>
                 <Input
+                  autoComplete="off"
                   type="text"
-                  disabled={true}
+                  name="vechile_code"
+                  placeholder="No. Reg Alsin..."
+                  onChange={evt =>
+                    this.updateInputValue(
+                      evt.target.value,
+                      evt.target.name,
+                      'editAlsin',
+                    )
+                  }
                   value={
                     this.state.editAlsin && this.state.editAlsin.vechile_code
                   }
                 />
+                {/* <Label>Status</Label>
+                <Input
+                  autoComplete="off"
+                  type="text"
+                  name="status"
+                  placeholder="Status..."
+                  onChange={evt =>
+                    this.updateInputValue(
+                      evt.target.value,
+                      evt.target.name,
+                      'editAlsin',
+                    )
+                  }
+                  value={this.state.editAlsin && this.state.editAlsin.status}
+                /> */}
                 <Label>Status</Label>
-                {this.state.editAlsin && this.state.editAlsin.status === 0 && (
-                  <Input
-                    type="text"
+                <Input
+                  type="select"
+                  autoComplete="off"
+                  name="select"
+                  color="primary"
+                  style={{ marginRight: '1px' }}
+                  onChange={this.setStatus}
+                >
+                  <option
+                    value={this.state.editAlsin && this.state.editAlsin.status}
                     disabled
-                    name="nama"
-                    value={'Tidak Tersedia'}
-                  />
-                )}
-                {this.state.editAlsin && this.state.editAlsin.status === 1 && (
-                  <Input type="text" disabled name="nama" value={'Tersedia'} />
-                )}
+                    selected
+                    hidden
+                    id="pilih"
+                  >
+                    {this.state.editAlsin && this.state.editAlsin.status}
+                  </option>
+                  {renderStatus}
+                </Input>
               </FormGroup>
             </Form>
           </ModalBody>
           <ModalFooter>
-            <Button color="primary">Simpan Edit Alsin</Button>
+            <Button color="primary" onClick={this.toggle('nested_editAlsin')}>
+              Simpan Edit Alsin
+            </Button>
             <Modal
               onExit={this.handleClose}
               isOpen={this.state.modal_nested_editAlsin}
@@ -1646,7 +1798,7 @@ class AlsinDetail extends React.Component {
                 <Button
                   id="btnEdit"
                   color="primary"
-                  // onClick={() => this.updateDataHeader(this.state.editDimen)}
+                  onClick={() => this.updateHeaderData(this.state.editAlsin)}
                   disabled={loading}
                 >
                   {!loading && 'Ya'}

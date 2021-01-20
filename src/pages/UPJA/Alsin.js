@@ -90,6 +90,7 @@ class Alsin extends React.Component {
       resetInfo: false,
       namaOutlet: '',
       result: [],
+      resultAllAlsinType: [],
       resultDataProcod: [],
       currentDimenBatasStandar: [],
       currentDimenBatasStandarLama: [],
@@ -577,7 +578,7 @@ class Alsin extends React.Component {
               modal_nested_parent_nonaktifAlsin: false,
               nested_parent_nonaktifAlsin: false,
             },
-            () => this.getListbyPaging(),
+            () => this.getAllAlsin(),
           );
         }
       })
@@ -592,7 +593,7 @@ class Alsin extends React.Component {
   };
 
   updateHeaderData = first_param => {
-    const trace = perf.trace('deleteHeaderData');
+    const trace = perf.trace('updateHeaderData');
     trace.start();
     var url = myUrl.url_updateAlsin;
     const updateHeaderData = first_param;
@@ -609,7 +610,7 @@ class Alsin extends React.Component {
     console.log('PAYLOAD EDIT', payload);
 
     const option = {
-      method: 'DELETE',
+      method: 'PUT',
       json: true,
       headers: {
         'Content-Type': 'application/json;charset=UTF-8',
@@ -655,7 +656,7 @@ class Alsin extends React.Component {
               modal_nested_parent_editAlsin: false,
               modal_nested_editAlsin: false,
             },
-            () => this.getListbyPaging(),
+            () => this.getAllAlsin(),
           );
         }
       })
@@ -959,27 +960,14 @@ class Alsin extends React.Component {
   };
 
   // untuk pilih Pelapak
-  setPelapak = event => {
-    var nama = this.state.resultPelapak.find(function (element) {
-      return element.out_code === event.target.value;
+  setAlsinItem = event => {
+    var nama = this.state.resultAllAlsinType.find(function (element) {
+      return element.id === parseInt(event.target.value);
     });
 
-    var list = this.state.namaPelapak2;
-    var listPelapak = this.state.idPelapak;
-
     this.setState({
-      pilihPelapak: event.target.value,
-      namaPelapak: nama.out_name,
-      modal_nested_parent_list: false,
-      keywordList: '',
-      ecommerceDisabled: false,
-      // periodeDisabled:false,
-
-      pelapak: nama.outletname,
-      pelapakid: nama.outletid,
-      outletid: nama.outletid,
-      namaPelapak2: list,
-      idPelapak: listPelapak,
+      pilihAlsin: event.target.value,
+      namaAlsin: nama.name,
     });
   };
   // untuk pilih Outlet
@@ -1056,9 +1044,10 @@ class Alsin extends React.Component {
       },
       () => {
         var newlistEditMasal = {
-          alsin_type_id: parseInt(this.state.currentDimen.alsin_type_id),
+          alsin_type_id: parseInt(this.state.pilihAlsin),
           cost: parseInt(this.state.currentDimen.cost),
           total_item: parseInt(this.state.currentDimen.total_item),
+          nama: this.state.namaAlsin,
         };
 
         var newArr = listDetail.filter(
@@ -1328,10 +1317,8 @@ class Alsin extends React.Component {
       })
       .then(data => {
         var status = data.status;
-        var resultFarmer = data.result.farmer;
-        var resultTransaction = data.result.transactions.transactions;
         var message = data.result.message;
-        console.log('data Insert', data);
+        console.log('data Insert isinya:', data);
         if (status === 0) {
           this.showNotification(message, 'error');
           this.setState({
@@ -1341,19 +1328,20 @@ class Alsin extends React.Component {
             modal_nested_editMassal: false,
           });
         } else {
-          this.showNotification('Data ditemukan!', 'info');
-          this.setState({
-            resultFarmer: [resultFarmer],
-            resultFarmerTransaction: resultTransaction,
-            loadingPage: false,
-            loading: false,
-            modal_nested_parent_editMassal: false,
-            modal_nested_editMassal: false,
-          });
+          this.showNotification(message, 'info');
+          this.setState(
+            {
+              loadingPage: false,
+              loading: false,
+              modal_nested_parent_editMassal: false,
+              modal_nested_editMassal: false,
+            },
+            () => this.getAllAlsin(),
+          );
         }
       })
       .catch(err => {
-        // console.log('ERRORNYA', err);
+        console.log('ERRORNYA', err);
         this.showNotification('Error ke server!', 'error');
         this.setState({
           loadingPage: false,
@@ -1754,6 +1742,69 @@ class Alsin extends React.Component {
       });
   }
 
+  getAllAlsinType() {
+    const url = myUrl.url_allAlsinType;
+    var token = window.localStorage.getItem('tokenCookies');
+    // console.log('URL GET LIST', url);
+
+    this.setState({ loadingAlsin: true });
+    // console.log("offset", offset, "currLimit", currLimit);
+
+    const option = {
+      method: 'GET',
+      json: true,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+        Authorization: `${'Bearer'} ${token}`,
+      },
+    };
+    // console.log('option', option);
+    fetch(url, option)
+      .then(response => {
+        // trace.stop();
+        if (response.ok) {
+          return response.json();
+        } else {
+          if (response.status === 401) {
+            this.showNotification('Username/Password salah!', 'error');
+          } else if (response.status === 500) {
+            this.showNotification('Internal Server Error', 'error');
+          } else {
+            this.showNotification('Response ke server gagal!', 'error');
+          }
+          this.setState({
+            loadingAlsin: false,
+          });
+        }
+      })
+      .then(data => {
+        var status = data.status;
+        var result = data.result.alsins;
+        var message = data.result.message;
+        // console.log('ALSIN TYPE DATA', data);
+        if (status === 0) {
+          this.showNotification(message, 'error');
+        } else {
+          this.showNotification('Data ditemukan!', 'info');
+          this.setState(
+            {
+              resultAllAlsinType: result,
+              loadingAlsin: false,
+            },
+            () =>
+              console.log('RESULT ALSIN ITEM', this.state.resultAllAlsinType),
+          );
+        }
+      })
+      .catch(err => {
+        // console.log('ERRORNYA', err);
+        this.showNotification('Error ke server!', 'error');
+        this.setState({
+          loadingAlsin: false,
+        });
+      });
+  }
+
   componentDidMount() {
     this.getAccess();
     this.setProfileData();
@@ -1762,6 +1813,7 @@ class Alsin extends React.Component {
     // this.getListDefault();
     // this.getListPerOutlet(this.state.currentPage, this.state.todosPerPage);
     // this.getPelapak(this.state.currentPages, this.state.todosPerPages);
+    this.getAllAlsinType();
     this.getAllAlsin();
   }
 
@@ -1860,7 +1912,7 @@ class Alsin extends React.Component {
     if (modalType === 'nested_parent_editMassal_edit') {
       this.setState({
         [`modal_${modalType}`]: !this.state[`modal_${modalType}`],
-        editBatasBawah: todo,
+        editAlsinList: todo,
       });
     }
     if (modalType === 'nested_parent_editBatasPerPelapak') {
@@ -1939,7 +1991,6 @@ class Alsin extends React.Component {
         maxPages: 1,
         currentPages: 1,
         ecommerceIDtemp: this.state.ecommerceID,
-        editAlsin: todo,
       });
     }
 
@@ -1954,18 +2005,16 @@ class Alsin extends React.Component {
       // console.log('LOG 1');
       this.setState({
         [`modal_${modalType}`]: !this.state[`modal_${modalType}`],
-        delteAlsin: todo,
+        deleteAlsin: todo,
       });
     } else {
-      this.setState(
-        {
-          [`modal_${modalType}`]: !this.state[`modal_${modalType}`],
-          keywordList: '',
-          realCurrentPages: 1,
-          maxPages: 1,
-          currentPages: 1,
-        },
-      );
+      this.setState({
+        [`modal_${modalType}`]: !this.state[`modal_${modalType}`],
+        keywordList: '',
+        realCurrentPages: 1,
+        maxPages: 1,
+        currentPages: 1,
+      });
     }
   };
 
@@ -2303,7 +2352,7 @@ class Alsin extends React.Component {
   render() {
     const { loading, loadingPage, loadingAlsin } = this.state;
     const currentTodos = this.state.result.data;
-    const pelapakTodos = this.state.resultPelapak;
+    const alsintItemTodos = this.state.resultAllAlsinType;
     const alsinTodos = this.state.resultAlsin;
     const pelapakEcommerceTodos = this.state.resultPelapakEcommerce;
     const periodeTodos = this.state.resultPeriode;
@@ -2457,25 +2506,10 @@ class Alsin extends React.Component {
         );
       });
 
-    const renderPelapak =
-      pelapakTodos &&
-      pelapakTodos.map((todo, i) => {
-        return (
-          <tr key={i}>
-            <td>{todo.out_code}</td>
-            <td>{todo.out_name}</td>
-            <td style={{ textAlign: 'right' }}>
-              <Button
-                color="info"
-                style={{ margin: '0px', fontSize: '15px' }}
-                value={todo.out_code}
-                onClick={this.setPelapak}
-              >
-                Pilih
-              </Button>
-            </td>
-          </tr>
-        );
+    const renderAlsinItem =
+      alsintItemTodos &&
+      alsintItemTodos.map((todo, i) => {
+        return <option value={todo.id}>{todo.name}</option>;
       });
 
     const renderPelapakEditMasal =
@@ -2624,7 +2658,7 @@ class Alsin extends React.Component {
       this.state.listEditMasal.map((todo, i) => {
         return (
           <tr key={i}>
-            <td style={{ textAlign: 'right' }}>{todo.alsin_type_id}</td>
+            <td style={{ textAlign: 'left' }}>{todo.nama}</td>
             <td style={{ textAlign: 'right' }}>
               {formatter.format(todo.cost)}
             </td>
@@ -2648,7 +2682,7 @@ class Alsin extends React.Component {
               <Button
                 color="danger"
                 size="sm"
-                value={todo.qtybatasbawah}
+                value={todo.nama}
                 onClick={() => this.deleteListEditMassal({ ...todo })}
               >
                 <MdDelete />
@@ -2841,7 +2875,7 @@ class Alsin extends React.Component {
           <ModalFooter>
             <Button
               color="primary"
-              onClick={() => this.deleteHeaderData(this.state.editAlsin)}
+              onClick={() => this.deleteHeaderData(this.state.deleteAlsin)}
               disabled={loading}
             >
               {!loading && 'Ya'}
@@ -3574,7 +3608,7 @@ class Alsin extends React.Component {
             <Form onSubmit={e => e.preventDefault()}>
               <FormGroup>
                 <Label>Alsin Type ID</Label>
-                <Input
+                {/* <Input
                   type="number"
                   min={0}
                   name="alsin_type_id"
@@ -3589,7 +3623,20 @@ class Alsin extends React.Component {
                     )
                   }
                   value={this.state.alsin_type_id}
-                />
+                /> */}
+                <Input
+                  type="select"
+                  autoComplete="off"
+                  name="select"
+                  color="primary"
+                  style={{ marginRight: '1px' }}
+                  onChange={this.setAlsinItem}
+                >
+                  <option value={''} disabled selected hidden id="pilih">
+                    Pilih Alsin Item
+                  </option>
+                  {renderAlsinItem}
+                </Input>
                 <Label>Harga</Label>
                 <Input
                   type="number"
@@ -3691,35 +3738,25 @@ class Alsin extends React.Component {
           className={this.props.className}
         >
           <ModalHeader toggle={this.toggle('nested_parent_editMassal_edit')}>
-            Edit Batas Bawah Produk
+            Edit Alsin Item
           </ModalHeader>
           <ModalBody>
             <Form onSubmit={e => e.preventDefault()}>
               <FormGroup>
-                <Label>Procod</Label>
+                <Label>Alsin</Label>
                 <Input
                   type="text"
                   disabled
                   value={
-                    this.state.editBatasBawah &&
-                    this.state.editBatasBawah.procod
+                    this.state.editAlsinList && this.state.editAlsinList.nama
                   }
                 />
-                <Label>Nama</Label>
-                <Input
-                  type="text"
-                  disabled
-                  value={
-                    this.state.editBatasBawah &&
-                    this.state.editBatasBawah.prodes
-                  }
-                />
-                <Label>Batas Bawah</Label>
+                <Label>Harga</Label>
                 <Input
                   type="number"
-                  name="qtybatasbawah"
+                  name="cost"
                   autoComplete="off"
-                  placeholder="Qty Batas Bawah"
+                  placeholder="Harga..."
                   min={0}
                   style={{ textAlign: 'right' }}
                   onKeyPress={e => this.numValidate(e)}
@@ -3727,18 +3764,39 @@ class Alsin extends React.Component {
                     this.updateInputValue(
                       parseInt(evt.target.value),
                       evt.target.name,
-                      'editBatasBawah',
+                      'editAlsinList',
                     )
                   }
                   value={
-                    this.state.editBatasBawah &&
-                    parseInt(this.state.editBatasBawah.qtybatasbawah)
+                    this.state.editAlsinList &&
+                    parseInt(this.state.editAlsinList.cost)
+                  }
+                />
+                <Label>Total Item</Label>
+                <Input
+                  type="number"
+                  name="total_item"
+                  autoComplete="off"
+                  placeholder="Total item..."
+                  min={0}
+                  style={{ textAlign: 'right' }}
+                  onKeyPress={e => this.numValidate(e)}
+                  onChange={evt =>
+                    this.updateInputValue(
+                      parseInt(evt.target.value),
+                      evt.target.name,
+                      'editAlsinList',
+                    )
+                  }
+                  value={
+                    this.state.editAlsinList &&
+                    parseInt(this.state.editAlsinList.total_item)
                   }
                 />
                 <Label
                   style={{ fontSize: '0.8em', marginBottom: 0, color: 'red' }}
                 >
-                  *Input nilai batas bawah dalam satuan sellpack (non bundling)
+                  *Input nilai batas bawah dalam satuan angka
                 </Label>
               </FormGroup>
             </Form>
@@ -3746,11 +3804,11 @@ class Alsin extends React.Component {
           </ModalBody>
           <ModalFooter>
             <Button
-              disabled={!isEnabledEditMassalEdit}
+              // disabled={!isEnabledEditMassalEdit}
               color="primary"
               onClick={this.toggle('nested_editMassal_edit')}
             >
-              Simpan Edit Batas Bawah
+              Simpan Edit Alsin Item
             </Button>
             <Modal
               onExit={this.handleClose}
@@ -3763,8 +3821,8 @@ class Alsin extends React.Component {
                 <Button
                   color="primary"
                   onClick={() =>
-                    this.setListEditMassalEdit(this.state.editBatasBawah, {
-                      ...this.state.editBatasBawah,
+                    this.setListEditMassalEdit(this.state.editAlsinList, {
+                      ...this.state.editAlsinList,
                     })
                   }
                   disabled={loading}
@@ -3828,7 +3886,7 @@ class Alsin extends React.Component {
           className={this.props.className}
         >
           <ModalHeader toggle={this.toggle('nested_parent_list')}>
-            List Pelapak
+            List Alsin
           </ModalHeader>
           <ModalBody>
             <Form
@@ -3858,13 +3916,13 @@ class Alsin extends React.Component {
                     <Label style={{ textAlign: 'left' }}>Kode</Label>
                   </th>
                   <th style={{ border: 'none' }}>
-                    <Label style={{ textAlign: 'left' }}>Nama Pelapak</Label>
+                    <Label style={{ textAlign: 'left' }}>Alsin</Label>
                   </th>
                 </tr>
               </thead>
               <tbody>
-                {renderPelapak}
-                {!pelapakTodos && (
+                {renderAlsinItem}
+                {!alsintItemTodos && (
                   <tr>
                     <td
                       style={{ backgroundColor: 'white' }}
@@ -4199,7 +4257,7 @@ class Alsin extends React.Component {
     const { currentDimen, editDimen, tempEditDimen } = this.state;
     const nilaiLama = currentDimen && currentDimen.limitpriceecommerce;
     const nilaiBaru = editDimen && editDimen.limitpriceecommerce;
-    const nilaiTemp = tempEditDimen && tempEditDimen[0].toString();
+    const nilaiTemp = tempEditDimen && tempEditDimen[0];
 
     return (
       nilaiLama === nilaiBaru && nilaiBaru !== '' && nilaiBaru !== nilaiTemp
