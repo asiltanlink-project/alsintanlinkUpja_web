@@ -525,7 +525,7 @@ class Alsin extends React.Component {
 
     this.fetchData();
     var payload = {
-      alsin_type_id: deleteDataHeader.alsin_type_id,
+      alsin_id: deleteDataHeader.alsin_id,
     };
 
     console.log('PAYLOAD', payload);
@@ -559,23 +559,104 @@ class Alsin extends React.Component {
         }
       })
       .then(data => {
+        console.log('DATA DELETE', data);
         var status = data.status;
-        var resultFarmer = data.result.farmer;
-        var resultTransaction = data.result.transactions.transactions;
         var message = data.result.message;
         if (status === 0) {
           this.showNotification(message, 'error');
           this.setState({
             loadingPage: false,
+            loading: false,
           });
         } else {
-          this.showNotification('Data ditemukan!', 'info');
+          this.showNotification(message, 'info');
+          this.setState(
+            {
+              loadingPage: false,
+              loading: false,
+              modal_nested_parent_nonaktifAlsin: false,
+              nested_parent_nonaktifAlsin: false,
+            },
+            () => this.getListbyPaging(),
+          );
+        }
+      })
+      .catch(err => {
+        // console.log('ERRORNYA', err);
+        this.showNotification('Error ke server!', 'error');
+        this.setState({
+          loadingPage: false,
+          loading: false,
+        });
+      });
+  };
+
+  updateHeaderData = first_param => {
+    const trace = perf.trace('deleteHeaderData');
+    trace.start();
+    var url = myUrl.url_updateAlsin;
+    const updateHeaderData = first_param;
+    var token = window.localStorage.getItem('tokenCookies');
+    console.log('DATA HEADER', updateHeaderData);
+    console.log('DATA HEADER', this.state.editAlsin);
+
+    this.fetchData();
+    var payload = {
+      alsin_id: updateHeaderData.alsin_id,
+      cost: parseInt(updateHeaderData.cost),
+    };
+
+    console.log('PAYLOAD EDIT', payload);
+
+    const option = {
+      method: 'DELETE',
+      json: true,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+        Authorization: `${'Bearer'} ${token}`,
+      },
+      body: JSON.stringify(payload),
+    };
+    fetch(url, option)
+      .then(response => {
+        // trace.stop();
+        if (response.ok) {
+          return response.json();
+        } else {
+          if (response.status === 401) {
+            this.showNotification('Username/Password salah!', 'error');
+          } else if (response.status === 500) {
+            this.showNotification('Internal Server Error', 'error');
+          } else {
+            this.showNotification('Response ke server gagal!', 'error');
+          }
           this.setState({
-            resultFarmer: [resultFarmer],
-            resultFarmerTransaction: resultTransaction,
             loadingPage: false,
             loading: false,
           });
+        }
+      })
+      .then(data => {
+        console.log('DATA EDIT', data);
+        var status = data.status;
+        var message = data.result.message;
+        if (status === 0) {
+          this.showNotification(message, 'error');
+          this.setState({
+            loadingPage: false,
+            loading: false,
+          });
+        } else {
+          this.showNotification(message, 'info');
+          this.setState(
+            {
+              loadingPage: false,
+              loading: false,
+              modal_nested_parent_editAlsin: false,
+              modal_nested_editAlsin: false,
+            },
+            () => this.getListbyPaging(),
+          );
         }
       })
       .catch(err => {
@@ -989,6 +1070,8 @@ class Alsin extends React.Component {
           listDetail.push(newlistEditMasal);
         }
 
+        console.log('LIST EDIT MASAL', listDetail);
+
         this.setState({
           modal_tambahProduk: false,
           modal_backdrop_tambahProduk: false,
@@ -1237,6 +1320,7 @@ class Alsin extends React.Component {
           }
           this.setState({
             loadingPage: false,
+            loading: false,
             modal_nested_parent_editMassal: false,
             modal_nested_editMassal: false,
           });
@@ -1252,6 +1336,7 @@ class Alsin extends React.Component {
           this.showNotification(message, 'error');
           this.setState({
             loadingPage: false,
+            loading: false,
             modal_nested_parent_editMassal: false,
             modal_nested_editMassal: false,
           });
@@ -1261,6 +1346,7 @@ class Alsin extends React.Component {
             resultFarmer: [resultFarmer],
             resultFarmerTransaction: resultTransaction,
             loadingPage: false,
+            loading: false,
             modal_nested_parent_editMassal: false,
             modal_nested_editMassal: false,
           });
@@ -1271,96 +1357,85 @@ class Alsin extends React.Component {
         this.showNotification('Error ke server!', 'error');
         this.setState({
           loadingPage: false,
+          loading: false,
           modal_nested_parent_editMassal: false,
           modal_nested_editMassal: false,
         });
       });
   };
 
-  updateDataHeader = first_param => {
-    const trace = perf.trace('updateDataHeader');
-    trace.start();
-    var url = myUrl.url_updateUpja;
-    const editDimen = first_param;
+  // updateDataHeader = first_param => {
+  //   var url = myUrl.url_updateUpja;
+  //   const editAlsin = first_param;
 
-    // Tanggal Awal
-    var tanggalFormatAwal = editDimen.startdate;
-    var strTanggalAwal = tanggalFormatAwal.split('T');
-    var tanggalAwal = strTanggalAwal[0];
+  //   this.fetchData();
+  //   var payload = {
+  //     outletid: editDimen.outletid,
+  //     ecommerceid: editDimen.ecommerceid,
+  //     procod: editDimen.procod,
+  //     limitpriceecommerce: parseInt(editDimen.limitpriceecommerce),
+  //     startdate: tanggalAwal,
+  //     enddate: tanggalAkhir,
+  //     activeyn: editDimen.activeyn,
+  //     updatedby: this.state.nip_user,
+  //     limitid: editDimen.limitid,
+  //   };
 
-    // Tanggal Akhir
-    var tanggalFormatAkhir = editDimen.enddate;
-    var strTanggalAkhir = tanggalFormatAkhir.split('T');
-    var tanggalAkhir = strTanggalAkhir[0];
-
-    this.fetchData();
-    var payload = {
-      outletid: editDimen.outletid,
-      ecommerceid: editDimen.ecommerceid,
-      procod: editDimen.procod,
-      limitpriceecommerce: parseInt(editDimen.limitpriceecommerce),
-      startdate: tanggalAwal,
-      enddate: tanggalAkhir,
-      activeyn: editDimen.activeyn,
-      updatedby: this.state.nip_user,
-      limitid: editDimen.limitid,
-    };
-
-    const option = {
-      method: 'PUT',
-      json: true,
-      headers: {
-        'Content-Type': 'application/json;charset=UTF-8',
-        Authorization: window.localStorage.getItem('tokenCookies'),
-      },
-      body: JSON.stringify(payload),
-    };
-    fetch(url, option)
-      .then(response => {
-        trace.stop();
-        if (response.ok) {
-          // this.getListbyPaging();
-          this.setState({
-            modal_nested_edit: false,
-            modal_nested_parent_edit: false,
-            loading: false,
-            editDimen: {},
-            lastID: 0,
-          });
-          return response.json();
-        } else {
-          this.showNotification('Koneksi ke server gagal!', 'error');
-          this.setState({ loading: false, enterButton: false });
-        }
-      })
-      .then(data => {
-        if (data.responseMessage === 'FALSE') {
-          this.showNotification(data.responseDescription, 'error');
-          if (data.error.code === 401) {
-            this.showNotification(
-              'Token anda sudah expired, silakan login kembali!',
-              'error',
-            );
-            window.localStorage.removeItem('tokenCookies');
-            window.localStorage.removeItem('accessList');
-            this.props.history.push({
-              pathname: '/',
-            });
-          }
-        } else {
-          if (data.data.message.includes('tidak')) {
-            this.showNotification(data.data.message, 'error');
-          } else {
-            this.showNotification(data.data.message, 'info');
-            this.getListbyPaging(1, 5);
-          }
-        }
-      })
-      .catch(err => {
-        this.showNotification('Koneksi ke server gagal!', 'error');
-        this.setState({ loading: false, enterButton: false });
-      });
-  };
+  //   const option = {
+  //     method: 'PUT',
+  //     json: true,
+  //     headers: {
+  //       'Content-Type': 'application/json;charset=UTF-8',
+  //       Authorization: window.localStorage.getItem('tokenCookies'),
+  //     },
+  //     body: JSON.stringify(payload),
+  //   };
+  //   fetch(url, option)
+  //     .then(response => {
+  //       trace.stop();
+  //       if (response.ok) {
+  //         // this.getListbyPaging();
+  //         this.setState({
+  //           modal_nested_edit: false,
+  //           modal_nested_parent_edit: false,
+  //           loading: false,
+  //           editDimen: {},
+  //           lastID: 0,
+  //         });
+  //         return response.json();
+  //       } else {
+  //         this.showNotification('Koneksi ke server gagal!', 'error');
+  //         this.setState({ loading: false, enterButton: false });
+  //       }
+  //     })
+  //     .then(data => {
+  //       if (data.responseMessage === 'FALSE') {
+  //         this.showNotification(data.responseDescription, 'error');
+  //         if (data.error.code === 401) {
+  //           this.showNotification(
+  //             'Token anda sudah expired, silakan login kembali!',
+  //             'error',
+  //           );
+  //           window.localStorage.removeItem('tokenCookies');
+  //           window.localStorage.removeItem('accessList');
+  //           this.props.history.push({
+  //             pathname: '/',
+  //           });
+  //         }
+  //       } else {
+  //         if (data.data.message.includes('tidak')) {
+  //           this.showNotification(data.data.message, 'error');
+  //         } else {
+  //           this.showNotification(data.data.message, 'info');
+  //           this.getListbyPaging(1, 5);
+  //         }
+  //       }
+  //     })
+  //     .catch(err => {
+  //       this.showNotification('Koneksi ke server gagal!', 'error');
+  //       this.setState({ loading: false, enterButton: false });
+  //     });
+  // };
 
   updateBatasStandarDefault = first_param => {
     const trace = perf.trace('updateBatasStandarDefault');
@@ -1868,6 +1943,45 @@ class Alsin extends React.Component {
       });
     }
 
+    console.log('MODAL TYPEE', modalType);
+    if (modalType === 'nested_parent_editAlsin') {
+      // console.log('LOG 1');
+      this.setState({
+        [`modal_${modalType}`]: !this.state[`modal_${modalType}`],
+        editAlsin: todo,
+      });
+    } else if (modalType === 'nested_parent_nonaktifAlsin') {
+      // console.log('LOG 1');
+      this.setState({
+        [`modal_${modalType}`]: !this.state[`modal_${modalType}`],
+        delteAlsin: todo,
+      });
+    } else {
+      this.setState(
+        {
+          [`modal_${modalType}`]: !this.state[`modal_${modalType}`],
+          keywordList: '',
+          realCurrentPages: 1,
+          maxPages: 1,
+          currentPages: 1,
+        },
+      );
+    }
+  };
+
+  toggleDeleteData = (modalType, todo) => () => {
+    if (!modalType) {
+      return this.setState({
+        modal: !this.state.modal,
+        keywordList: '',
+        realCurrentPages: 1,
+        maxPages: 1,
+        currentPages: 1,
+        ecommerceIDtemp: this.state.ecommerceID,
+        editAlsin: todo,
+      });
+    }
+
     this.setState({
       [`modal_${modalType}`]: !this.state[`modal_${modalType}`],
       keywordList: '',
@@ -2176,6 +2290,14 @@ class Alsin extends React.Component {
         () => this.getListbyPaging(),
       );
     }
+  }
+
+  updateInputValue(value, field, fill) {
+    let input = this.state[fill];
+    input[field] = value;
+    this.setState({ input }, () =>
+      console.log('EDIT ALSIN ', this.state.editAlsin),
+    );
   }
 
   render() {
@@ -2753,20 +2875,42 @@ class Alsin extends React.Component {
               {console.log('EDIT ALSIN', this.state.editAlsin)}
               <FormGroup>
                 <Label>Gambar</Label>
-                <Input
-                  type="text"
-                  disabled={true}
-                  value={this.state.editAlsin && this.state.editAlsin.picture}
-                />
+                <br></br>
+                {this.state.editAlsin &&
+                  this.state.editAlsin.picture_detail === null && (
+                    <img
+                      src={imageNotFound}
+                      width="150"
+                      height="70"
+                      className="pr-2"
+                      alt=""
+                    />
+                  )}
+                {this.state.editAlsin &&
+                  this.state.editAlsin.picture_detail !== null && (
+                    <img
+                      src={this.state.editAlsin.picture_detail}
+                      width="150"
+                      height="70"
+                      className="pr-2"
+                      alt=""
+                    />
+                  )}
+                <br></br>
                 <Label>Harga</Label>
                 <Input
+                  autoComplete="off"
                   type="text"
-                  disabled
-                  name="nama"
-                  value={
-                    this.state.editAlsin &&
-                    formatter.format(this.state.editAlsin.cost)
+                  name="cost"
+                  placeholder="Harga..."
+                  onChange={evt =>
+                    this.updateInputValue(
+                      evt.target.value,
+                      evt.target.name,
+                      'editAlsin',
+                    )
                   }
+                  value={this.state.editAlsin && this.state.editAlsin.cost}
                 />
               </FormGroup>
             </Form>
@@ -2780,7 +2924,7 @@ class Alsin extends React.Component {
               Simpan Edit Alsin
             </Button>
             <Modal
-              onExit={this.handleClose}
+              // onExit={this.handleClose}
               isOpen={this.state.modal_nested_editAlsin}
               toggle={this.toggle('nested_editAlsin')}
             >
@@ -2790,7 +2934,7 @@ class Alsin extends React.Component {
                 <Button
                   id="btnEdit"
                   color="primary"
-                  // onClick={() => this.updateDataHeader(this.state.editDimen)}
+                  onClick={() => this.updateHeaderData(this.state.editAlsin)}
                   disabled={loading}
                 >
                   {!loading && 'Ya'}

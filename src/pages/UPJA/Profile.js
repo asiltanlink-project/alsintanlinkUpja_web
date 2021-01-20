@@ -43,6 +43,7 @@ class Profile extends React.Component {
       dataAvailable: false,
       loading: false,
       loadingPage: true,
+      loadingDomisili: true,
       input: [],
       password: '',
       confirm: '',
@@ -225,6 +226,7 @@ class Profile extends React.Component {
     var namaKecamatan = document.getElementById('namaKecamatan');
     var namaKepalaDesa = document.getElementById('namaKepalaDesa');
     var namaDesa = document.getElementById('namaDesa');
+    var badanHukum = document.getElementById('badanHukum');
     var namaKelas = document.getElementById('namaKelas');
     var simpan = document.getElementById('simpan');
     var batalsimpan = document.getElementById('batalsimpan');
@@ -240,6 +242,7 @@ class Profile extends React.Component {
       leader_name: input.leader_name,
       village: input.village,
       class: input.class || this.state.pilihClass,
+      legality: input.legality,
     };
 
     console.log('PAYLOAD SAVE', payload);
@@ -279,60 +282,10 @@ class Profile extends React.Component {
           namaKecamatan.style.display = 'none';
           namaKepalaDesa.disabled = true;
           namaDesa.disabled = true;
+          badanHukum.disabled = true;
           namaKelas.style.display = 'none';
           simpan.style.display = 'none';
           batalsimpan.style.display = 'none';
-        }
-      });
-  }
-
-  registrasiUpja() {
-    var url = myUrl.url_registarsiUpja;
-    var input = this.state.input;
-    this.setState({ loading: true });
-
-    var payload = {
-      name: input.namaLengkap,
-      email: this.state.email,
-      province: this.state.namaProvinsi,
-      city: this.state.namaKotaKab,
-      district: this.state.namaKecamatan,
-      leader_name: input.namaKepalaDesa,
-      village: input.namaDesa,
-      class: this.state.namaClass,
-      password: this.state.password,
-    };
-
-    console.log('ISI PAYLOAD', payload);
-
-    const option = {
-      method: 'POST',
-      json: true,
-      headers: {
-        'Content-Type': 'application/json;charset=UTF-8',
-        // "Authorization": window.localStorage.getItem('tokenLogin')
-      },
-      body: JSON.stringify(payload),
-    };
-
-    fetch(url, option)
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          this.showNotification('Koneksi ke server gagal!', 'error');
-          this.setState({ loading: false });
-        }
-      })
-      .then(data => {
-        console.log('data Provinsi', data.result);
-        if (data.status === 0) {
-          this.showNotification(data.result.message, 'error');
-          this.setState({ loading: false });
-        } else {
-          this.showNotification(data.result.message, 'info');
-          this.setState({ loading: false, modal_nested: false });
-          this.toggleVerifikasi('nested_parent_list_verifikasi');
         }
       });
   }
@@ -349,12 +302,13 @@ class Profile extends React.Component {
     }
   }
 
-  // Get Provinsi
+  // get provinsi data
   getProvinsi(currPage, currLimit) {
     var offset = (currPage - 1) * currLimit;
     var keyword = this.state.keywordList;
     const urlA = myUrl.url_getProvince;
-    console.log('jalan', urlA);
+    // console.log('jalan', urlA);
+    this.setState({ loadingDomisili: true });
     const option = {
       method: 'GET',
       json: true,
@@ -370,18 +324,16 @@ class Profile extends React.Component {
         }
       })
       .then(data => {
-        console.log('data Provinsi', data.result);
+        // console.log('data Provinsi', data.result);
         if (data.status === 0) {
           this.showNotification('Data tidak ditemukan!', 'error');
         } else {
-          this.setState(
-            {
-              resultProvinsi: data.result.provinces,
-              // maxPages: data.metadata.pages ? data.metadata.pages : 1,
-              loading: false,
-            },
-            () => this.setDataStatus(),
-          );
+          this.setState({
+            resultProvinsi: data.result.provinces,
+            // maxPages: data.metadata.pages ? data.metadata.pages : 1,
+            loading: false,
+            loadingDomisili: false,
+          });
         }
       });
   }
@@ -390,7 +342,8 @@ class Profile extends React.Component {
     var offset = (currPage - 1) * currLimit;
     var keyword = this.state.keywordList;
     const urlA = myUrl.url_getCity + '?province_id=' + this.state.pilihProvinsi;
-    console.log('jalan kota', urlA);
+    // console.log('jalan kota', urlA);
+    this.setState({ loadingDomisili: true });
     const option = {
       method: 'GET',
       json: true,
@@ -406,28 +359,25 @@ class Profile extends React.Component {
         }
       })
       .then(data => {
-        console.log('data Kota/Kabupaten', data.result);
+        // console.log('data Kota/Kabupaten', data.result);
         if (data.status === 0) {
           this.showNotification('Data tidak ditemukan!', 'error');
         } else {
-          this.setState(
-            {
-              resultKotaKab: data.result.citys,
-              // maxPages: data.metadata.pages ? data.metadata.pages : 1,
-              loading: false,
-            },
-            () => this.setDataStatus(),
-          );
+          this.setState({
+            resultKotaKab: data.result.citys,
+            // maxPages: data.metadata.pages ? data.metadata.pages : 1,
+            loading: false,
+            loadingDomisili: false,
+          });
         }
       });
   }
 
   // Get Kecamatan
   getKecamatan(currPage, currLimit) {
-    var offset = (currPage - 1) * currLimit;
-    var keyword = this.state.keywordList;
     const urlA = myUrl.url_getDistrict + '?city_id=' + this.state.pilihKotaKab;
     console.log('jalan kecamatan', urlA);
+    this.setState({ loadingDomisili: true });
     const option = {
       method: 'GET',
       json: true,
@@ -443,18 +393,16 @@ class Profile extends React.Component {
         }
       })
       .then(data => {
-        console.log('data Kecamatan', data.result);
+        // console.log('data Kecamatan', data.result);
         if (data.status === 0) {
           this.showNotification('Data tidak ditemukan!', 'error');
         } else {
-          this.setState(
-            {
-              resultKecamatan: data.result.districts,
-              // maxPages: data.metadata.pages ? data.metadata.pages : 1,
-              loading: false,
-            },
-            () => this.setDataStatus(),
-          );
+          this.setState({
+            resultKecamatan: data.result.districts,
+            // maxPages: data.metadata.pages ? data.metadata.pages : 1,
+            loading: false,
+            loadingDomisili: false,
+          });
         }
       });
   }
@@ -586,6 +534,7 @@ class Profile extends React.Component {
       input.namaLengkap !== '' &&
       input.namaKepalaDesa !== '' &&
       input.namaDesa !== '' &&
+      input.badanHukum !== '' &&
       email !== '' &&
       namaProvinsi !== '' &&
       namaKotaKab !== '' &&
@@ -708,6 +657,7 @@ class Profile extends React.Component {
     var namaKecamatan = document.getElementById('namaKecamatan');
     var namaKepalaDesa = document.getElementById('namaKepalaDesa');
     var namaDesa = document.getElementById('namaDesa');
+    var badanHukum = document.getElementById('badanHukum');
     var namaKelas = document.getElementById('namaKelas');
     var simpan = document.getElementById('simpan');
     var batalsimpan = document.getElementById('batalsimpan');
@@ -718,6 +668,7 @@ class Profile extends React.Component {
     namaKecamatan.style.display = 'block';
     namaKepalaDesa.disabled = false;
     namaDesa.disabled = false;
+    badanHukum.disabled = false;
     namaKelas.style.display = 'block';
     simpan.style = 'block';
     batalsimpan.style = 'block';
@@ -729,6 +680,7 @@ class Profile extends React.Component {
     var namaKecamatan = document.getElementById('namaKecamatan');
     var namaKepalaDesa = document.getElementById('namaKepalaDesa');
     var namaDesa = document.getElementById('namaDesa');
+    var badanHukum = document.getElementById('badanHukum');
     var namaKelas = document.getElementById('namaKelas');
     var simpan = document.getElementById('simpan');
     var batalsimpan = document.getElementById('batalsimpan');
@@ -739,6 +691,7 @@ class Profile extends React.Component {
     namaKecamatan.style.display = 'none';
     namaKepalaDesa.disabled = true;
     namaDesa.disabled = true;
+    badanHukum.disabled = true;
     namaKelas.style.display = 'none';
     simpan.style.display = 'none';
     batalsimpan.style.display = 'none';
@@ -763,7 +716,7 @@ class Profile extends React.Component {
   }
 
   render() {
-    const { suggestions, loading, loadingPage } = this.state;
+    const { suggestions, loading, loadingDomisili } = this.state;
 
     const colorProgress = this.colorProgress();
     const strengthProgress = this.strengthProgress();
@@ -908,9 +861,32 @@ class Profile extends React.Component {
                     </Col>
                     <hr></hr>
                   </Row>
+                  {/* untuk isi kepala desa */}
+                  <FormGroup>
+                    <Label style={{ textAlign: 'center' }}>
+                      Nama Kepala UPJA:
+                    </Label>
+                    <Input
+                      disabled
+                      id="namaKepalaDesa"
+                      autoComplete="off"
+                      type="text"
+                      name="leader_name"
+                      placeholder="Nama Kepala Desa..."
+                      onChange={evt =>
+                        this.updateInputValue(
+                          evt.target.value,
+                          evt.target.name,
+                          'result',
+                        )
+                      }
+                      // value={this.state.namaKepalaDesa}
+                      value={this.state.result && this.state.result.leader_name}
+                    ></Input>
+                  </FormGroup>
                   {/* untuk isi nama */}
                   <FormGroup>
-                    <Label style={{ textAlign: 'center' }}>Nama Lengkap:</Label>
+                    <Label style={{ textAlign: 'center' }}>Nama UPJA:</Label>
                     <Input
                       disabled
                       id="namaLengkap"
@@ -1042,30 +1018,6 @@ class Profile extends React.Component {
                   <br></br>
                   <br></br>
 
-                  {/* untuk isi kepala desa */}
-                  <FormGroup>
-                    <Label style={{ textAlign: 'center' }}>
-                      Nama Kepala Desa:
-                    </Label>
-                    <Input
-                      disabled
-                      id="namaKepalaDesa"
-                      autoComplete="off"
-                      type="text"
-                      name="leader_name"
-                      placeholder="Nama Kepala Desa..."
-                      onChange={evt =>
-                        this.updateInputValue(
-                          evt.target.value,
-                          evt.target.name,
-                          'result',
-                        )
-                      }
-                      // value={this.state.namaKepalaDesa}
-                      value={this.state.result && this.state.result.leader_name}
-                    ></Input>
-                  </FormGroup>
-
                   {/* untuk isi desa */}
                   <FormGroup>
                     <Label style={{ textAlign: 'center' }}>Nama Desa:</Label>
@@ -1083,8 +1035,28 @@ class Profile extends React.Component {
                           'result',
                         )
                       }
-                      // value={this.state.namaDesa}
                       value={this.state.result && this.state.result.village}
+                    ></Input>
+                  </FormGroup>
+
+                  {/* untuk isi Badan Hukum */}
+                  <FormGroup>
+                    <Label style={{ textAlign: 'center' }}>Badan Hukum:</Label>
+                    <Input
+                      disabled
+                      id="badanHukum"
+                      autoComplete="off"
+                      type="text"
+                      name="legality"
+                      placeholder="Badan hukum..."
+                      onChange={evt =>
+                        this.updateInputValue(
+                          evt.target.value,
+                          evt.target.name,
+                          'result',
+                        )
+                      }
+                      value={this.state.result && this.state.result.legality}
                     ></Input>
                   </FormGroup>
 
@@ -1190,20 +1162,24 @@ class Profile extends React.Component {
           <ModalBody>
             <Table responsive striped>
               <tbody>
-                {provinsiTodos ? (
-                  renderProvinsi || <LoadingSpinner status={4}></LoadingSpinner>
-                ) : this.state.dataAvailable ? (
-                  <tr>
-                    <td
-                      style={{ backgroundColor: 'white' }}
-                      colSpan="17"
-                      className="text-center"
-                    >
-                      TIDAK ADA DATA
-                    </td>
-                  </tr>
-                ) : (
+                {provinsiTodos.length === 0 && loadingDomisili === true ? (
                   <LoadingSpinner status={4} />
+                ) : loadingDomisili === false && provinsiTodos.length === 0 ? (
+                  (
+                    <tr>
+                      <td
+                        style={{ backgroundColor: 'white' }}
+                        colSpan="17"
+                        className="text-center"
+                      >
+                        TIDAK ADA DATA
+                      </td>
+                    </tr>
+                  ) || <LoadingSpinner status={4} />
+                ) : loadingDomisili === true && provinsiTodos.length !== 0 ? (
+                  <LoadingSpinner status={4} />
+                ) : (
+                  renderProvinsi
                 )}
               </tbody>
             </Table>
@@ -1224,17 +1200,24 @@ class Profile extends React.Component {
           <ModalBody>
             <Table responsive striped>
               <tbody>
-                {renderKotakab}
-                {!kotakabTodos && (
-                  <tr>
-                    <td
-                      style={{ backgroundColor: 'white' }}
-                      colSpan="11"
-                      className="text-center"
-                    >
-                      TIDAK ADA DATA
-                    </td>
-                  </tr>
+                {kotakabTodos.length === 0 && loadingDomisili === true ? (
+                  <LoadingSpinner status={4} />
+                ) : loadingDomisili === false && kotakabTodos.length === 0 ? (
+                  (
+                    <tr>
+                      <td
+                        style={{ backgroundColor: 'white' }}
+                        colSpan="17"
+                        className="text-center"
+                      >
+                        TIDAK ADA DATA
+                      </td>
+                    </tr>
+                  ) || <LoadingSpinner status={4} />
+                ) : loadingDomisili === true && kotakabTodos.length !== 0 ? (
+                  <LoadingSpinner status={4} />
+                ) : (
+                  renderKotakab
                 )}
               </tbody>
             </Table>
@@ -1255,17 +1238,24 @@ class Profile extends React.Component {
           <ModalBody>
             <Table responsive striped>
               <tbody>
-                {renderKecamatan}
-                {!kecamatanTodos && (
-                  <tr>
-                    <td
-                      style={{ backgroundColor: 'white' }}
-                      colSpan="11"
-                      className="text-center"
-                    >
-                      TIDAK ADA DATA
-                    </td>
-                  </tr>
+                {kecamatanTodos.length === 0 && loadingDomisili === true ? (
+                  <LoadingSpinner status={4} />
+                ) : loadingDomisili === false && kecamatanTodos.length === 0 ? (
+                  (
+                    <tr>
+                      <td
+                        style={{ backgroundColor: 'white' }}
+                        colSpan="17"
+                        className="text-center"
+                      >
+                        TIDAK ADA DATA
+                      </td>
+                    </tr>
+                  ) || <LoadingSpinner status={4} />
+                ) : loadingDomisili === true && kecamatanTodos.length !== 0 ? (
+                  <LoadingSpinner status={4} />
+                ) : (
+                  renderKecamatan
                 )}
               </tbody>
             </Table>

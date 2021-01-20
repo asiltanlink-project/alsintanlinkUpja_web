@@ -29,7 +29,6 @@ class AuthForm extends React.Component {
     OTP: false,
     sendCodeId: '',
     emailOrPhone: true,
-    showNewOTP: false,
     timerMinute: 1,
     timerSecond: 0,
     resetTimer: true,
@@ -99,322 +98,112 @@ class AuthForm extends React.Component {
         enterButton: false,
         loading: false,
       });
-      // console.log("EMAIL GO");
-      this.changeForgottenPassword(this.state.inputEmailNumber);
+      console.log('EMAIL GO', this.state.inputEmailNumber);
+      if (
+        this.state.inputEmailNumber.includes('@') &&
+        this.state.inputEmailNumber.includes('.')
+      ) {
+        this.forgetpasswordEmail(this.state.inputEmailNumber);
+      } else {
+        this.forgetpasswordNoHP(this.state.inputEmailNumber);
+      }
     }
   };
 
   fetchData = () => {
-    //console.log("GUY DISABLE LOADING")
     this.setState({ loading: true });
   };
 
-  async changeForgottenPassword() {
-    const urlA = myUrl.url_forgetPassword;
+  forgetpasswordEmail(param) {
+    var url = myUrl.url_forgetPassword;
+    this.setState({ loading: true });
+
     var payload = {
-      email: this.state.inputEmailNumber,
+      email: param,
     };
 
-    console.log('payload', payload);
+    console.log('ISI PAYLOAD LOGIN EMAIL', payload);
 
     const option = {
       method: 'POST',
       json: true,
       headers: {
         'Content-Type': 'application/json;charset=UTF-8',
-        Authorization: '',
+        // "Authorization": window.localStorage.getItem('tokenLogin')
       },
       body: JSON.stringify(payload),
     };
-    //console.log(option);
 
-    let data = await fetch(urlA, option)
+    fetch(url, option)
       .then(response => {
         if (response.ok) {
-          return response;
+          return response.json();
         } else {
-          if (response.status === 401) {
-            this.showNotification('Username/Password salah!', 'error');
-          } else if (response.status === 500) {
-            this.showNotification('Internal Server Error', 'error');
-          } else {
-            this.showNotification('Koneksi ke server gagal 1', 'error');
-          }
-          return true;
+          this.showNotification('Koneksi ke server gagal!', 'error');
+          this.setState({ loading: false });
         }
       })
-      .catch(err => {
-        // this.showNotification('Koneksi ke server gagal!', 'error');
-        console.log('ERROR', err);
-        return true;
+      .then(data => {
+        console.log('data Registrasi', data);
+        if (data.status === 0) {
+          this.showNotification(data.result.message, 'error');
+          this.setState({ loading: false });
+        } else {
+          this.showNotification(data.result.message, 'info');
+
+          // window.location.replace('/login');
+        }
+      })
+      .catch(error => {
+        console.error('Koneksi Ke Server gagal!', error);
+        this.setState({loading:false})
       });
-
-    if (data === true) {
-      return true;
-    }
-    if (data) {
-      data = await data.json();
-
-      console.log('DATA LOGIN', data);
-      var message = data.result.message;
-      var profile = data.result.upja;
-      var token = data.result.token;
-      var status = data.status;
-
-      if (status === 1) {
-        this.showNotification(message, 'info');
-        window.localStorage.setItem('tokenCookies', token);
-        window.localStorage.setItem('profile', JSON.stringify(profile));
-        window.location.replace('/');
-      } else {
-        this.showNotification(message, 'error');
-      }
-    } else {
-      this.showNotification('Koneksi ke server gagal', 'error');
-    }
-    return true;
   }
 
-  sendVerificationCode = INPUTTED_PHONENUMBER => {
-    if (!INPUTTED_PHONENUMBER.includes('+'))
-      INPUTTED_PHONENUMBER = INPUTTED_PHONENUMBER.replace('0', '+62');
-    const phoneNumber = INPUTTED_PHONENUMBER;
-    const appverifier = window.recaptchaVerifier;
-    firebase.auth().languageCode = 'id';
-    firebase
-      .auth()
-      .signInWithPhoneNumber(phoneNumber, appverifier)
-      .then(confirmationResult => {
-        //console.log(confirmationResult);
-        //console.log("KEEP LOOP");
-
-        this.setState({ OTP: true }, () =>
-          this.setState(
-            {
-              sendCodeId: confirmationResult.verificationId,
-              showNewOTP: false,
-              timerMinute: 1,
-              timerSecond: 0,
-              timeUpMessage: 'Waktu Habis! Tolong request ulang OTP',
-              resetTimer: true,
-            },
-            () => this.setState({ resetTimer: false }),
-          ),
-        );
-
-        window.confirmationResult = confirmationResult;
-        this.props.showNotification(
-          'OTP telah dikirimkan ke ' + INPUTTED_PHONENUMBER,
-          'info',
-        );
-      })
-      .catch(error => {
-        this.setState({ loading: false });
-        this.props.showNotification('Fail to send OTP', 'error');
-        console.error(error);
-        // window.recaptchaVerifier.render().then(function (widgetId) {
-        //   grecaptcha.reset(widgetId);
-        // }
-        // )
-      });
-  };
-
-  signInWithPhone = () => {
-    var code = '';
-    for (var i = 0; i < 6; i++) {
-      code = code.concat(document.getElementById('input' + (i + 1)).value);
-    }
-    code = code.toUpperCase();
-    const credential = firebase.auth.PhoneAuthProvider.credential(
-      this.state.sendCodeId,
-      code,
-    );
-    firebase.auth().languageCode = 'id';
-    firebase
-      .auth()
-      .signInWithCredential(credential)
-      .then(() => {
-        //gotoRESET
-        this.props.gotoChangePwd();
-      })
-      .catch(error => {
-        this.setState({ loading: false });
-        this.props.showNotification('Verifikasi gagal', 'info');
-        console.error(error);
-      });
-  };
-
-  //verifyOTP
-  signInWithEmail = async () => {
-    const urlA = myUrl.url_verifyOTP;
-    var code = '';
-
-    for (var i = 0; i < 6; i++) {
-      code = code.concat(document.getElementById('input' + (i + 1)).value);
-    }
-    code = code.toUpperCase();
+  forgetpasswordNoHP(param) {
+    var url = myUrl.url_forgetPassword;
+    this.setState({ loading: true });
 
     var payload = {
-      otp: code,
+      email: param,
     };
 
-    //console.log(payload);
-    const option = {
-      method: 'POST',
-      json: true,
-      headers: {
-        'Content-Type': 'application/json;charset=UTF-8',
-        Authorization: window.localStorage.getItem('tokenOTP'),
-      },
-      body: JSON.stringify(payload),
-    };
-
-    //console.log(option);
-    let data = await fetch(urlA, option)
-      .then(response => {
-        if (response.ok) {
-          return response;
-        } else {
-          this.props.showNotification('Koneksi ke server gagal!', 'error');
-        }
-      })
-      .catch(err => {
-        //console.log(err);
-        this.props.showNotification('Koneksi ke server gagal!', 'error');
-      });
-
-    if (data) {
-      //console.log(data);
-      var token = data.headers.get('Authorization');
-      data = await data.json();
-      //console.log(data)
-      var error = data.error;
-      var metadata = data.metadata;
-
-      if (error.status === false) {
-        if (metadata.status === true) {
-          window.localStorage.setItem('tokenResetPwd', token);
-          //GOTO RESET PWD
-          this.props.showNotification(metadata.message, 'info');
-
-          this.props.gotoChangePwd();
-        } else {
-          this.props.showNotification(metadata.message, 'error');
-          if (metadata.message.toLowerCase().includes('expired')) {
-            window.localStorage.removeItem('tokenOTP');
-            this.props.history.push({
-              pathname: '/login',
-            });
-          }
-        }
-      } else {
-        this.props.showNotification(error.msg, 'error');
-      }
-    }
-  };
-
-  requestNewOTP = async () => {
-    document.getElementById('input1').value = null;
-    document.getElementById('input3').value = null;
-    document.getElementById('input2').value = null;
-    document.getElementById('input4').value = null;
-    document.getElementById('input5').value = null;
-    document.getElementById('input6').value = null;
-
-    var currInput = document.getElementById('input6');
-    var nextInput = document.getElementById('input1');
-
-    nextInput.disabled = false;
-    currInput.disabled = true;
-    currInput.blur();
-    nextInput.focus();
-
-    const filter = /^(?:(([+])?\d{10,13})|(^\w+([.-]?\w+)*@\w+([.-]?\w+)*(.\w{2,3})+$))$/;
-    const { inputEmailNumber } = this.state;
-
-    var result = inputEmailNumber.match(filter);
-
-    //REQUEST NEW PHONE OTP
-    if (result[1] !== undefined) {
-      this.setState({
-        emailOrPhone: false,
-      });
-      //inputan nomor handphone
-      var phonenum = this.state.inputEmailNumber;
-      if (result[2] === undefined) {
-        //angka dimulai 0
-        this.sendVerificationCode(phonenum);
-      } else {
-        //angka dimulai +62
-        phonenum = phonenum.replace('+62', '0');
-        this.sendVerificationCode(phonenum);
-      }
-      return;
-    }
-
-    //REQUEST NEW EMAIL OTP
-    const urlA = myUrl.url_verifyOTP;
-    var payload = {
-      otp: '',
-    };
+    console.log('ISI PAYLOAD HP', payload);
 
     const option = {
       method: 'POST',
       json: true,
       headers: {
         'Content-Type': 'application/json;charset=UTF-8',
-        Authorization: "window.localStorage.getItem('tokenOTP')",
+        // "Authorization": window.localStorage.getItem('tokenLogin')
       },
       body: JSON.stringify(payload),
     };
 
-    //console.log(option);
-    let data = await fetch(urlA, option)
+    fetch(url, option)
       .then(response => {
         if (response.ok) {
-          return response;
+          return response.json();
         } else {
-          this.props.showNotification('Koneksi ke server gagal!', 'error');
+          this.showNotification('Koneksi ke server gagal!', 'error');
+          this.setState({ loadingOTP: false });
         }
       })
-      .catch(err => {
-        //console.log(err);
-        this.props.showNotification('Koneksi ke server gagal!', 'error');
-      });
-
-    if (data) {
-      var token = data.headers.get('Authorization');
-
-      data = await data.json();
-
-      var error = data.error;
-      var metadata = data.metadata;
-
-      if (error.status === false) {
-        if (metadata.status === true) {
-          window.localStorage.setItem('tokenOTP', token);
-          //GOTO RESET PWD
-          this.props.showNotification('Nomor OTP baru telah dikirim', 'info');
-          this.setState(
-            {
-              showNewOTP: false,
-              timerMinute: 1,
-              timerSecond: 0,
-              timeUpMessage: 'Waktu Habis! Tolong request ulang OTP',
-              resetTimer: true,
-            },
-            () => this.setState({ resetTimer: false }),
-          );
+      .then(data => {
+        console.log('data Registrasi', data.result.otp_code);
+        if (data.status === 0) {
+          this.showNotification(data.result.message, 'error');
+          this.setState({ loading: false });
         } else {
-          this.props.showNotification(metadata.message, 'error');
+          this.showNotification(data.result.message, 'info');
+          //  window.location.replace('/verifikasi');
         }
-      } else {
-        this.props.showNotification(error.msg, 'error');
-      }
-    } else {
-      this.props.showNotification('Tidak ada respon dari server!', 'error');
-    }
-  };
+      })
+      .catch(error => {
+        console.error('Koneksi Ke Server gagal!', error);
+        this.setState({loading:false})
+      });
+  }
 
   canBeSubmitted() {
     const filter = /^(?:(([\+])?\d{10,13})|(^\w+([.-]?\w+)*@\w+([.-]?\w+)*(.\w{2,3})+$))$/;
@@ -432,57 +221,6 @@ class AuthForm extends React.Component {
     this.setState({
       [event.target.name]: event.target.value,
     });
-  };
-
-  OTPValueChange = event => {
-    this.setState({
-      otpValue: event.target.value,
-    });
-  };
-
-  showNewOTP = () => {
-    //console.log("DONE TIMER");
-    this.setState({
-      showNewOTP: true,
-    });
-  };
-
-  componentDidMount() {
-    if (this.isForgetPass) {
-      window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier(
-        'recaptcha-container',
-        {
-          size: 'invisible',
-          callback: response => {
-            //console.log("HEDEK")
-            // reCAPTCHA solved, allow signInWithPhoneNumber.
-            // ...
-          },
-          'expired-callback': () => {
-            //console.log("HAHAHA")
-            // Response expired. Ask user to solve reCAPTCHA again.
-            // ...
-          },
-        },
-      );
-      window.recaptchaVerifier.render();
-    }
-  }
-
-  autoDel = event => {
-    if (event.keyCode === 8) {
-      if (event.target.value.length === 0) {
-        event.target.previousElementSibling.disabled = false;
-        event.target.disabled = true;
-
-        //         event.target.blur();
-        //         event.target.previousElementSibling.focus();
-      } else {
-        return;
-      }
-    } else {
-      return;
-    }
   };
 
   myFunction() {
@@ -613,7 +351,7 @@ class AuthForm extends React.Component {
               onChange={this.updateValue}
               autoComplete="off"
             />
-            <div style={{display:'none'}} id="recaptcha-container"></div>
+            <div style={{ display: 'none' }} id="recaptcha-container"></div>
           </FormGroup>
         )}
         <br />
@@ -762,10 +500,10 @@ AuthForm.defaultProps = {
     placeholder: 'confirm your password',
     name: 'confirm',
   },
-  emailNumberLabel: 'E-Mail',
+  emailNumberLabel: 'E-Mail/No. Handphone',
   emailNumberInputProps: {
     type: 'text',
-    placeholder: 'Email...',
+    placeholder: 'Email/No. Handphone...',
     name: 'inputEmailNumber',
   },
   onLogoClick: () => {},

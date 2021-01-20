@@ -1,9 +1,10 @@
 {
-  "name": "Alsintanlink UPJA",
-  "short_name": "Alsintanlink UPJA",
+  "name": "Alsintanlink Admin",
+  "short_name": "Alsintanlink Admin",
   "theme_color": "#2196f3",
   "background_color": "#2196f3",
   "display": "standalone",
+  "scope": "./",
   "start_url": "/",
   "icons": [
     {

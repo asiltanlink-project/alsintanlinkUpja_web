@@ -18,7 +18,7 @@ import NotificationSystem from 'react-notification-system';
 import { NOTIFICATION_SYSTEM_STYLE } from 'utils/constants';
 import './VerifikasiOTP.css';
 
-import { Md3DRotation, MdLoyalty } from 'react-icons/md';
+import { MdAutorenew, MdLoyalty } from 'react-icons/md';
 
 class AuthPage extends React.Component {
   constructor(props) {
@@ -29,6 +29,7 @@ class AuthPage extends React.Component {
       timeUp: 'block',
       timeUpMessage: '',
       loading: false,
+      loadingOTP: false,
       kirimUlang: 'none',
       login: 'block',
     };
@@ -75,7 +76,7 @@ class AuthPage extends React.Component {
         this.setState({
           timeUpMessage: 'Waktu Habis, Silahkan kirim Ulang OTP anda',
           kirimUlang: 'block',
-          login: 'none',
+          login: 'block',
           timeUp: 'none',
         });
         // setCaptcha("block");
@@ -83,15 +84,114 @@ class AuthPage extends React.Component {
     }, 1000);
   }
 
+  kirimUlangOTP() {
+    var url = myUrl.url_resendOTP;
+    var email = window.localStorage.getItem('emailPhone');
+    this.setState({ loadingOTP: true });
+
+    var payload = {
+      email: email,
+    };
+
+    console.log('ISI PAYLOAD', payload);
+
+    const option = {
+      method: 'POST',
+      json: true,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+        // "Authorization": window.localStorage.getItem('tokenLogin')
+      },
+      body: JSON.stringify(payload),
+    };
+
+    fetch(url, option)
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          this.showNotification('Koneksi ke server gagal!', 'error');
+          this.setState({ loadingOTP: false });
+        }
+      })
+      .then(data => {
+        console.log('data Registrasi', data.result.otp_code);
+        if (data.status === 0) {
+          this.showNotification(data.result.message, 'error');
+          this.setState({ loadingOTP: false });
+        } else {
+          this.showNotification(data.result.message, 'info');
+          document.getElementById('otp').value = '';
+          console.log('OTP VALUE', document.getElementById('otp'));
+          window.localStorage.setItem('otp', data.result.otp_code);
+          this.setState(
+            {
+              kirimUlang: 'none',
+              timerSecond: 59,
+              login: 'block',
+              timeUp: 'block',
+              timeUpMessage: '',
+              loadingOTP: false,
+              otp: '',
+            },
+            () => this.tickTock(),
+          );
+        }
+      });
+  }
+
+  toLogin() {
+    var url = myUrl.url_submitOTP;
+    var email = window.localStorage.getItem('emailPhone');
+    this.setState({ loading: true });
+
+    var payload = {
+      email: email,
+    };
+
+    console.log('ISI PAYLOAD LOGIN', payload);
+
+    const option = {
+      method: 'POST',
+      json: true,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+        // "Authorization": window.localStorage.getItem('tokenLogin')
+      },
+      body: JSON.stringify(payload),
+    };
+
+    fetch(url, option)
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          this.showNotification('Koneksi ke server gagal!', 'error');
+          this.setState({ loading: false });
+        }
+      })
+      .then(data => {
+        console.log('data Registrasi', data);
+        if (data.status === 0) {
+          this.showNotification(data.result.message, 'error');
+          this.setState({ loading: false });
+        } else {
+          this.showNotification(data.result.message, 'info');
+
+          window.location.replace('/login');
+        }
+      });
+  }
+
   componentDidMount() {
     this.tickTock();
   }
   canBeLogin() {
-    return this.state.otp !== '' && this.state.otp.length === 6;
+    return this.state.otp !== '' && this.state.otp.length === 4;
   }
 
   render() {
-    const { loading } = this.state;
+    const { loading, loadingOTP } = this.state;
     return (
       <Page>
         <Row
@@ -124,9 +224,10 @@ class AuthPage extends React.Component {
                 <CardBody id="otp">
                   <div className="otpInput">
                     <ReactInputVerificationCode
-                      length={6}
+                      length={4}
                       onChange={this.handleChange}
                       placeholder=""
+                      value={this.state.otp}
                     />
                   </div>
                   <br></br>
@@ -137,29 +238,28 @@ class AuthPage extends React.Component {
                 </CardBody>
               </FormGroup>
               <Label>{this.state.timeUpMessage}</Label>
-              <Button
-                block
-                className="btn-round"
-                color="info"
-                // onClick={() => kirimUlangCaptcha()}
-                // onClick={() => sendVerificationCodeFirst()}
-                size="lg"
-                style={{ display: this.state.kirimUlang }}
-              >
-                Kirim Ulang OTP
-              </Button>
               <CardFooter className="text-center">
                 <Button
                   block
                   className="btn-round"
-                  color="info"
-                  //   onClick={() => toLogin()}
+                  color="secondary"
+                  onClick={() => this.kirimUlangOTP()}
+                  size="lg"
+                  style={{ display: this.state.kirimUlang }}
+                >
+                  Kirim Ulang OTP
+                </Button>
+                <Button
+                  block
+                  className="btn-round"
+                  color="primary"
+                  onClick={() => this.toLogin()}
                   size="lg"
                   disabled={!this.canBeLogin() || loading}
                   style={{ display: this.state.login }}
                 >
                   {!loading && 'Masuk'}
-                  {loading && <Md3DRotation />}
+                  {loading && <MdAutorenew />}
                   {loading && ' Sedang diproses'}
                 </Button>
               </CardFooter>

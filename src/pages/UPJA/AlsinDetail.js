@@ -881,6 +881,80 @@ class AlsinDetail extends React.Component {
     }
   }
 
+  deleteHeaderData = first_param => {
+    var url = myUrl.url_deleteAlsin;
+    const deleteDataHeader = first_param;
+    var token = window.localStorage.getItem('tokenCookies');
+    console.log('DATA HEADER', deleteDataHeader);
+
+    this.setState({loading:true})
+    var payload = {
+      alsin_item_id: deleteDataHeader.alsin_item_id,
+    };
+
+    console.log('PAYLOAD', payload);
+
+    const option = {
+      method: 'DELETE',
+      json: true,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+        Authorization: `${'Bearer'} ${token}`,
+      },
+      body: JSON.stringify(payload),
+    };
+    fetch(url, option)
+      .then(response => {
+        // trace.stop();
+        if (response.ok) {
+          return response.json();
+        } else {
+          if (response.status === 401) {
+            this.showNotification('Username/Password salah!', 'error');
+          } else if (response.status === 500) {
+            this.showNotification('Internal Server Error', 'error');
+          } else {
+            this.showNotification('Response ke server gagal!', 'error');
+          }
+          this.setState({
+            loadingPage: false,
+            loading: false,
+          });
+        }
+      })
+      .then(data => {
+        console.log('DATA DELETE', data);
+        var status = data.status;
+        var message = data.result.message;
+        if (status === 0) {
+          this.showNotification(message, 'error');
+          this.setState({
+            loadingPage: false,
+            loading: false,
+          });
+        } else {
+          this.showNotification(message, 'info');
+          this.setState(
+            {
+              loadingPage: false,
+              loading: false,
+              modal_nested_parent_nonaktifAlsin: false,
+              nested_parent_nonaktifAlsin: false,
+            },
+            () => this.getListbyPaging(),
+          );
+        }
+      })
+      .catch(err => {
+        // console.log('ERRORNYA', err);
+        this.showNotification('Error ke server!', 'error');
+        this.setState({
+          loadingPage: false,
+          loading: false,
+        });
+      });
+  };
+
   render() {
     const {
       loading,
@@ -978,17 +1052,12 @@ class AlsinDetail extends React.Component {
       currentTodosAlsin.map((todo, i) => {
         return (
           <tr key={i}>
-            <td>{todo.vechile_code}</td>
-            {todo.status === 1 && (
-              <td>
-                <Badge color="success">Tersedia</Badge>
-              </td>
-            )}
-            {todo.status === 0 && (
-              <td>
-                <Badge color="danger">Tidak Tersedia</Badge>
-              </td>
-            )}
+            {todo.vechile_code === null && <td>-</td>}
+            {todo.vechile_code !== null && <td>{todo.vechile_code}</td>}
+
+            <td>
+              <Badge color="success">{todo.status}</Badge>
+            </td>
             <td>
               <Button
                 style={{ margin: '0px' }}
@@ -1511,7 +1580,7 @@ class AlsinDetail extends React.Component {
           <ModalFooter>
             <Button
               color="primary"
-              // onClick={() => this.deleteHeaderData(this.state.deleteDataHeader)}
+              onClick={() => this.deleteHeaderData(this.state.deleteDataHeader)}
               disabled={loading}
             >
               {!loading && 'Ya'}
@@ -1565,13 +1634,7 @@ class AlsinDetail extends React.Component {
             </Form>
           </ModalBody>
           <ModalFooter>
-            <Button
-              color="primary"
-              // disabled={!isEnabledEdit}
-              // onClick={this.toggle('nested_editAlsin')}
-            >
-              Simpan Edit Alsin
-            </Button>
+            <Button color="primary">Simpan Edit Alsin</Button>
             <Modal
               onExit={this.handleClose}
               isOpen={this.state.modal_nested_editAlsin}

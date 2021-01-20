@@ -216,7 +216,7 @@ class Registrasi extends React.Component {
       district: parseInt(this.state.pilihKecamatan),
       leader_name: input.namaKepalaDesa,
       village: input.namaDesa,
-      badanHukum: input.badanHukum,
+      legality: input.badanHukum,
       class: parseInt(this.state.pilihClass),
       password: this.state.password,
     };
@@ -248,6 +248,8 @@ class Registrasi extends React.Component {
           this.showNotification(data.result.message, 'error');
           this.setState({ loading: false });
         } else {
+          window.localStorage.setItem('emailPhone', data.result.upja.email);
+          window.localStorage.setItem('otp', data.result.otp_code);
           this.showNotification(data.result.message, 'info');
           this.setState({ loading: false, modal_nested: false });
           this.toggleVerifikasi('nested_parent_list_verifikasi');
@@ -340,10 +342,8 @@ class Registrasi extends React.Component {
 
   // Get Kecamatan
   getKecamatan(currPage, currLimit) {
-    var offset = (currPage - 1) * currLimit;
-    var keyword = this.state.keywordList;
     const urlA = myUrl.url_getDistrict + '?city_id=' + this.state.pilihKotaKab;
-    // console.log('jalan kecamatan', urlA);
+    console.log('jalan kecamatan', urlA);
     this.setState({ loadingPage: true });
     const option = {
       method: 'GET',
@@ -951,7 +951,7 @@ class Registrasi extends React.Component {
                           marginLeft: '1%',
                           width: '200px',
                         }}
-                        // disabled={!isEnabledRegis}
+                        disabled={!isEnabledRegis}
                         color="primary"
                         onClick={this.toggle('nested')}
                       >
@@ -990,7 +990,7 @@ class Registrasi extends React.Component {
                         style={{ float: 'right', width: '200px' }}
                         outline
                         // block
-                        onClick={this.signOut}
+                        onClick={() => this.props.history.push('/login')}
                       >
                         <MdExitToApp size={25} /> Batal
                       </Button>
