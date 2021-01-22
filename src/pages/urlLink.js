@@ -3,7 +3,7 @@
 
 // UPJA
 var url_login = 'https://alsintanlink.com/api/upja/login';
-var url_forgetPassword = 'https://alsintalink.com/api/upja/forget_password';
+var url_forgetPassword = 'https://alsintanlink.com/api/upja/forget_password';
 var url_registarsiUpja = 'https://alsintanlink.com/api/upja/register';
 var url_resendOTP = 'https://alsintanlink.com/api/upja/resend_otp';
 var url_submitOTP = 'https://alsintanlink.com/api/upja/submit_otp';

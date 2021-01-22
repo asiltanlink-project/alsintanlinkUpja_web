@@ -10,12 +10,18 @@ import {
   CardBody,
   Row,
   Col,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
 } from 'reactstrap';
 import * as firebase from 'firebase/app';
 import 'firebase/performance';
 import 'firebase/auth';
 import * as myUrl from 'pages/urlLink';
-import { MdAutorenew } from 'react-icons/md';
+import { MdAutorenew, MdLoyalty } from 'react-icons/md';
+import NotificationSystem from 'react-notification-system';
+import { NOTIFICATION_SYSTEM_STYLE } from 'utils/constants';
 // global grecaptcha
 
 import Timer from 'components/Timer';
@@ -33,6 +39,7 @@ class AuthForm extends React.Component {
     timerSecond: 0,
     resetTimer: true,
     loading: false,
+    loadingButton: false,
     otpValue: '',
     isEnabledOTP: false,
     enterButton: false,
@@ -58,6 +65,19 @@ class AuthForm extends React.Component {
 
   handleSubmit = event => {
     event.preventDefault();
+  };
+
+  showNotification = (currMessage, levelType) => {
+    setTimeout(() => {
+      if (!this.notificationSystem) {
+        return;
+      }
+      this.notificationSystem.addNotification({
+        title: <MdLoyalty />,
+        message: currMessage,
+        level: levelType,
+      });
+    }, 300);
   };
 
   renderButtonText() {
@@ -110,6 +130,74 @@ class AuthForm extends React.Component {
     }
   };
 
+  toggle = modalType => () => {
+    if (!modalType) {
+      return this.setState(
+        {
+          modal: !this.state.modal,
+          keywordList: '',
+          realCurrentPages: 1,
+          maxPages: 1,
+          currentPages: 1,
+          ecommerceIDtemp: this.state.ecommerceID,
+        },
+        // () => this.getProvinsi(1, this.state.todosPerPages),
+      );
+    }
+
+    this.setState(
+      {
+        [`modal_${modalType}`]: !this.state[`modal_${modalType}`],
+        keywordList: '',
+        realCurrentPages: 1,
+        maxPages: 1,
+        currentPages: 1,
+      },
+      // () => this.getProvinsi(1, this.state.todosPerPages),
+    );
+  };
+
+  toggleVerifikasi = modalType => {
+    if (!modalType) {
+      return this.setState(
+        {
+          modal: !this.state.modal,
+          keywordList: '',
+          realCurrentPages: 1,
+          maxPages: 1,
+          currentPages: 1,
+          ecommerceIDtemp: this.state.ecommerceID,
+        },
+        // () => this.getProvinsi(1, this.state.todosPerPages),
+      );
+    }
+
+    this.setState(
+      {
+        [`modal_${modalType}`]: !this.state[`modal_${modalType}`],
+        keywordList: '',
+        realCurrentPages: 1,
+        maxPages: 1,
+        currentPages: 1,
+      },
+      // () => this.getProvinsi(1, this.state.todosPerPages),
+    );
+  };
+
+  redirectVerifikasi() {
+    window.localStorage.removeItem('token');
+    window.localStorage.removeItem('accessList');
+    this.setState({ loading: true }, () =>
+      window.location.replace('/verifikasi'),
+    );
+  }
+
+  redirectOut() {
+    window.localStorage.removeItem('token');
+    window.localStorage.removeItem('accessList');
+    this.setState({ loading: true }, () => window.location.replace('/login'));
+  }
+
   fetchData = () => {
     this.setState({ loading: true });
   };
@@ -124,6 +212,8 @@ class AuthForm extends React.Component {
 
     console.log('ISI PAYLOAD LOGIN EMAIL', payload);
 
+    this.setState({ loadingButton: true });
+
     const option = {
       method: 'POST',
       json: true,
@@ -140,23 +230,23 @@ class AuthForm extends React.Component {
           return response.json();
         } else {
           this.showNotification('Koneksi ke server gagal!', 'error');
-          this.setState({ loading: false });
+          this.setState({ loading: false, loadingButton: false });
         }
       })
       .then(data => {
         console.log('data Registrasi', data);
         if (data.status === 0) {
           this.showNotification(data.result.message, 'error');
-          this.setState({ loading: false });
+          this.setState({ loading: false, loadingButton: false });
         } else {
           this.showNotification(data.result.message, 'info');
-
-          // window.location.replace('/login');
+          this.setState({ loading: false, loadingButton: false });
+          this.toggleVerifikasi('nested_parent_list_verifikasi');
         }
       })
       .catch(error => {
         console.error('Koneksi Ke Server gagal!', error);
-        this.setState({loading:false})
+        this.setState({ loading: false, loadingButton: false });
       });
   }
 
@@ -170,6 +260,8 @@ class AuthForm extends React.Component {
 
     console.log('ISI PAYLOAD HP', payload);
 
+    this.setState({ loadingButton: true });
+
     const option = {
       method: 'POST',
       json: true,
@@ -186,22 +278,23 @@ class AuthForm extends React.Component {
           return response.json();
         } else {
           this.showNotification('Koneksi ke server gagal!', 'error');
-          this.setState({ loadingOTP: false });
+          this.setState({ loading: false, loadingButton: false });
         }
       })
       .then(data => {
-        console.log('data Registrasi', data.result.otp_code);
+        console.log('data Registrasi', data);
         if (data.status === 0) {
           this.showNotification(data.result.message, 'error');
-          this.setState({ loading: false });
+          this.setState({ loading: false, loadingButton: false });
         } else {
           this.showNotification(data.result.message, 'info');
-          //  window.location.replace('/verifikasi');
+          this.setState({ loading: false, loadingButton: false });
+          this.toggleVerifikasi('nested_parent_list_verifikasi');
         }
       })
       .catch(error => {
         console.error('Koneksi Ke Server gagal!', error);
-        this.setState({loading:false})
+        this.setState({ loading: false, loadingButton: false });
       });
   }
 
@@ -286,6 +379,7 @@ class AuthForm extends React.Component {
       emailNumberLabel,
       children,
       onLogoClick,
+      loadingButton,
     } = this.props;
 
     const { OTP, loading } = this.state;
@@ -295,6 +389,13 @@ class AuthForm extends React.Component {
     const isEnabledLogin = this.canBeSubmittedLogin();
     return (
       <Form onSubmit={this.handleSubmit}>
+        <NotificationSystem
+          dismissible={false}
+          ref={notificationSystem =>
+            (this.notificationSystem = notificationSystem)
+          }
+          style={NOTIFICATION_SYSTEM_STYLE}
+        />
         {showLogo && (
           <div className="text-center pb-4">
             <img
@@ -453,6 +554,57 @@ class AuthForm extends React.Component {
             })
           }
         </script>
+
+        {/* Modal Verifikasi */}
+        <Modal
+          onExit={this.handleClose}
+          isOpen={this.state.modal_nested_parent_list_verifikasi}
+          toggle={this.toggle('nested_parent_list_verifikasi')}
+          className={this.props.className}
+        >
+          <ModalHeader>Proses Lupa Password Berhasil</ModalHeader>
+          {(this.state.inputEmailNumber.includes('0') ||
+            this.state.inputEmailNumber.includes('+62')) && (
+            <ModalBody>
+              <Label>Silahkan cek Handphone Anda untuk kode OTP!</Label>
+            </ModalBody>
+          )}
+          {(this.state.inputEmailNumber.includes('0') ||
+            this.state.inputEmailNumber.includes('+62')) && (
+            <ModalFooter style={{ textAlign: 'center' }}>
+              <Button
+                style={{ textAlign: 'center' }}
+                disabled={loadingButton}
+                onClick={() => this.redirectVerifikasi()}
+              >
+                {!loadingButton && 'Oke'}
+                {loadingButton && <MdAutorenew />}
+                {loadingButton && 'Sedang diproses'}
+              </Button>
+            </ModalFooter>
+          )}
+          {(this.state.inputEmailNumber.includes('@') ||
+            this.state.inputEmailNumber.includes('.')) && (
+            <ModalBody>
+              <Label>Silahkan cek Email Anda untuk Verifikasi!</Label>
+            </ModalBody>
+          )}
+          {(this.state.inputEmailNumber.includes('@') ||
+            this.state.inputEmailNumber.includes('.')) && (
+            <ModalFooter style={{ textAlign: 'center' }}>
+              <Button
+                style={{ textAlign: 'center' }}
+                disabled={loadingButton}
+                onClick={() => this.redirectOut()}
+              >
+                {!loadingButton && 'Oke'}
+                {loadingButton && <MdAutorenew />}
+                {loadingButton && 'Sedang diproses'}
+              </Button>
+            </ModalFooter>
+          )}
+        </Modal>
+        {/* Modal Verifikasi */}
       </Form>
     );
   }
