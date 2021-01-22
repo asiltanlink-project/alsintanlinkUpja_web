@@ -64,6 +64,11 @@ class Registrasi extends React.Component {
           class_name: 'Profesional',
         },
       ],
+      RMU: false,
+      benihPadi: false,
+      bibitPadi: false,
+      reparasi: false,
+      sukuCadang: false,
     };
   }
 
@@ -219,6 +224,11 @@ class Registrasi extends React.Component {
       legality: input.badanHukum,
       class: parseInt(this.state.pilihClass),
       password: this.state.password,
+      RMU: this.state.RMU === true ? 1 : 0,
+      benihPadi: this.state.benihPadi === true ? 1 : 0,
+      bibitPadi: this.state.bibitPadi === true ? 1 : 0,
+      reparasi: this.state.reparasi === true ? 1 : 0,
+      sukuCadang: this.state.sukuCadang === true ? 1 : 0,
     };
 
     console.log('ISI PAYLOAD', payload);
@@ -254,6 +264,11 @@ class Registrasi extends React.Component {
           this.setState({ loading: false, modal_nested: false });
           this.toggleVerifikasi('nested_parent_list_verifikasi');
         }
+      })
+      .catch(err => {
+        // console.log(err);
+        this.props.showNotification('Koneksi ke server gagal!', 'error');
+        this.setState({ loading: false });
       });
   }
 
@@ -887,6 +902,94 @@ class Registrasi extends React.Component {
                   </FormGroup>
                   <br></br>
                   <br></br>
+
+                  {/* untuk isi Layanan Lainnya UPJA */}
+                  <FormGroup>
+                    <Label style={{ textAlign: 'center' }}>
+                      Layanan Lainnya:
+                    </Label>
+                    <Row>
+                      <Col style={{ marginBottom: 0, paddingBottom: 0 }}>
+                        <FormGroup check>
+                          <Label check>
+                            <Input
+                              type="checkbox"
+                              id="RMU"
+                              checked={this.state.RMU}
+                              onChange={() =>
+                                this.setState({
+                                  RMU: !this.state.RMU,
+                                })
+                              }
+                            />
+                            RMU
+                          </Label>
+                        </FormGroup>
+                        <FormGroup check>
+                          <Label check>
+                            <Input
+                              type="checkbox"
+                              id="benihPadi"
+                              checked={this.state.benihPadi}
+                              onChange={() =>
+                                this.setState({
+                                  benihPadi: !this.state.benihPadi,
+                                })
+                              }
+                            />
+                            Benih Padi
+                          </Label>
+                        </FormGroup>
+                        <FormGroup check>
+                          <Label check>
+                            <Input
+                              type="checkbox"
+                              id="bibitPadi"
+                              checked={this.state.bibitPadi}
+                              onChange={() =>
+                                this.setState({
+                                  bibitPadi: !this.state.bibitPadi,
+                                })
+                              }
+                            />
+                            Bibit Padi
+                          </Label>
+                        </FormGroup>
+                      </Col>
+                      <Col style={{ marginBottom: 0, paddingBottom: 0 }}>
+                        <FormGroup check>
+                          <Label check>
+                            <Input
+                              type="checkbox"
+                              id="reparasi"
+                              checked={this.state.reparasi}
+                              onChange={() =>
+                                this.setState({
+                                  reparasi: !this.state.reparasi,
+                                })
+                              }
+                            />
+                            Reparasi
+                          </Label>
+                        </FormGroup>
+                        <FormGroup check>
+                          <Label check>
+                            <Input
+                              type="checkbox"
+                              id="sukuCadang"
+                              checked={this.state.sukuCadang}
+                              onChange={() =>
+                                this.setState({
+                                  sukuCadang: !this.state.sukuCadang,
+                                })
+                              }
+                            />
+                            Suku Cadang
+                          </Label>
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                  </FormGroup>
 
                   {/* untuk isi password */}
                   <FormGroup style={{ marginBottom: 0 }}>

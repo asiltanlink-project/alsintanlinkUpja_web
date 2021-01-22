@@ -7,8 +7,6 @@ import { NavLink } from 'react-router-dom';
 import { Nav, Navbar, NavItem, NavLink as BSNavLink } from 'reactstrap';
 import bn from 'utils/bemnames';
 
-var accessList = {};
-
 const sidebarBackground = {
   backgroundImage: `url("${sidebarBgImage}")`,
   backgroundSize: 'cover',
@@ -30,6 +28,13 @@ const alsintanlink = [
     exact: false,
     Icon: MdHdrStrong,
   },
+  {
+    to: '/transaksi',
+    id: '5',
+    name: 'Transaksi',
+    exact: false,
+    Icon: MdHdrStrong,
+  },
 ];
 
 const bem = bn.create('sidebar');
@@ -37,23 +42,10 @@ const bem = bn.create('sidebar');
 class Sidebar extends React.Component {
   constructor(props) {
     super(props);
-
-    if (window.localStorage.getItem('accessList')) {
-      accessList = JSON.parse(window.localStorage.getItem('accessList'));
-    }
   }
 
   state = {
     isOpenAlsintanlink: false,
-  };
-
-  handleClick = name => () => {
-    this.setState(prevState => {
-      const isOpen = prevState[`isOpen${name}`];
-      return {
-        [`isOpen${name}`]: !isOpen,
-      };
-    });
   };
 
   handleSidebarControlButton = event => {
@@ -81,7 +73,7 @@ class Sidebar extends React.Component {
 
           <Nav vertical>
             {alsintanlink &&
-              alsintanlink.map(({ to, name, exact }, index) => (
+              alsintanlink.map(({ to, name, exact, Icon }, index) => (
                 <NavItem key={index} className={bem.e('nav-item')}>
                   <BSNavLink
                     id={`navItem-${name}-${index}`}
@@ -92,6 +84,7 @@ class Sidebar extends React.Component {
                     exact={exact}
                     onClick={this.handleSidebarControlButton}
                   >
+                    <Icon className={bem.e('nav-item-icon')} />
                     <span className="">{name}</span>
                   </BSNavLink>
                 </NavItem>

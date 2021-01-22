@@ -1,7 +1,6 @@
 import { STATE_FORGETPASS, STATE_LOGIN } from 'components/AuthForm';
 import GAListener from 'components/GAListener';
 import { EmptyLayout, LayoutRoute, MainLayout } from 'components/Layout';
-import PrivateRoute from 'components/Layout/PrivateRoute';
 import PageSpinner from 'components/PageSpinner';
 import Registrasi from 'pages/Registrasi';
 import Verifikasi from 'pages/Verifikasi';
@@ -27,72 +26,13 @@ const Dashboard = React.lazy(() => import('pages/template/DashboardPage'));
 const profileUPJA = React.lazy(() => import('pages/UPJA/Profile'));
 const alsinUPJA = React.lazy(() => import('pages/UPJA/Alsin'));
 const alsinUPJADetail = React.lazy(() => import('pages/UPJA/AlsinDetail'));
+const transaksi = React.lazy(() => import('pages/UPJA/Transaksi'));
 
 const getBasename = () => {
   return `/${process.env.PUBLIC_URL.split('/').pop()}`;
 };
 
 class App extends React.Component {
-  state = {
-    title: '',
-    color: '',
-    menuID: '',
-    reqData: [],
-  };
-
-  setTitle = (title, color) => {
-    this.setState({ title: title, color: color });
-  };
-
-  passData = (type, data) => {
-    var tempArr = this.state.reqData;
-    if (type === 'SPManual') {
-      var newObj = {
-        selectedTipeLaporan: data.selectedTipeLaporan,
-        selectedJenisLaporan: data.selectedJenisLaporan,
-        inputDate: data.inputDate,
-        spNotPrintChecked: data.spNotPrintChecked,
-        notFound: data.notFound,
-        hasilSP: data.hasilSP,
-      };
-      tempArr.push(newObj);
-      this.setState({
-        reqData: tempArr,
-      });
-    }
-    if (type === 'clear') {
-      this.setState({
-        reqData: [],
-      });
-    }
-  };
-
-  getAccess() {
-    var accessList = JSON.parse(window.localStorage.getItem('accessList'));
-    if (accessList !== null && accessList !== undefined) {
-      // console.log('MENU ID MASUK 1');
-      if (Object.keys(accessList).includes('18')) {
-        // console.log('MENU ID 18');
-        this.setState({ menuID: '18' });
-      } else if (Object.keys(accessList).includes('5')) {
-        // console.log('MENU ID 5');
-        this.setState({ menuID: '5' });
-      } else if (Object.keys(accessList).includes('3')) {
-        // console.log('MENU ID 3');
-        this.setState({ menuID: '3' });
-      } else {
-        // console.log('MENU ID MASUK 2');
-        return;
-      }
-    }
-    // console.log('MENU ID MASUK 3');
-    // return;
-  }
-
-  componentDidMount() {
-    this.getAccess();
-  }
-
   render() {
     return (
       <BrowserRouter basename={getBasename()}>
@@ -127,16 +67,11 @@ class App extends React.Component {
               layout={EmptyLayout}
               component={props => <Verifikasi {...props} />}
             />
-            {/* {console.log('ISI MENU ID: ', this.state.menuID)} */}
-
-            <MainLayout
-              breakpoint={this.props.breakpoint}
-              title={this.state.title}
-              color={this.state.color}
-            >
+            <MainLayout breakpoint={this.props.breakpoint}>
               <React.Suspense fallback={<PageSpinner />}>
                 <Route exact path="/profile" component={profileUPJA} />
                 <Route exact path="/Alsin" component={alsinUPJA} />
+                <Route exact path="/Transaksi" component={transaksi} />
                 <Route
                   exact
                   path="/Alsin/detail/:alsin_type_id"

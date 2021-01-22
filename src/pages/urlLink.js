@@ -23,6 +23,7 @@ var url_updateAlsin = 'https://alsintanlink.com/api/upja/update_alsin';
 var url_deleteAlsinItem = 'https://alsintanlink.com/api/upja/delete_alsin_item';
 var url_updateAlsinItem = 'https://alsintanlink.com/api/upja/update_alsin_item';
 var url_allAlsinType = 'http://alsintanlink.com/api/upja/show_all_alsin_type';
+var url_getTransaksi = 'http://alsintanlink.com/api/upja/show_all_transaction';
 
 export {
   url_resendOTP,
@@ -43,4 +44,5 @@ export {
   url_deleteAlsin,
   url_deleteAlsinItem,
   url_updateAlsinItem,
+  url_getTransaksi,
 };
