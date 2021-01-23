@@ -1704,7 +1704,7 @@ class Transaksi extends React.Component {
         Authorization: `${'Bearer'} ${token}`,
       },
     };
-    // console.log('option', option);
+    console.log('option', option);
     fetch(url, option)
       .then(response => {
         // trace.stop();

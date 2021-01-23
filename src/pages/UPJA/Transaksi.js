@@ -120,6 +120,8 @@ class Transaksi extends React.Component {
       loadingAlsin: true,
 
       resultAlsin: [],
+      resultPricing: [],
+      resultPricingDetail: [],
     };
 
     if (window.localStorage.getItem('accessList')) {
@@ -2260,6 +2262,178 @@ class Transaksi extends React.Component {
     );
   }
 
+  toggleEdit = (modalType, todo) => {
+    if (!modalType) {
+      return this.setState({
+        modal: !this.state.modal,
+        keywordList: '',
+        realCurrentPages: 1,
+        maxPages: 1,
+        currentPages: 1,
+        ecommerceIDtemp: this.state.ecommerceID,
+      });
+    }
+
+    this.setState(
+      {
+        [`modal_${modalType}`]: !this.state[`modal_${modalType}`],
+        keywordList: '',
+        realCurrentPages: 1,
+        maxPages: 1,
+        currentPages: 1,
+        editPricing: todo,
+      },
+      () => this.getTransactionFormPricing(this.state.editPricing),
+    );
+  };
+
+  getTransactionFormPricing(todo) {
+    const url =
+      myUrl.url_showFormPricing +
+      '?transaction_order_id=' +
+      todo.transaction_order_id;
+    var token = window.localStorage.getItem('tokenCookies');
+    // console.log('URL GET LIST', url);
+
+    // this.setState({ loadingAlsin: true });
+    // console.log("offset", offset, "currLimit", currLimit);
+
+    const option = {
+      method: 'GET',
+      json: true,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+        Authorization: `${'Bearer'} ${token}`,
+      },
+    };
+    // console.log('option', option);
+    fetch(url, option)
+      .then(response => {
+        // trace.stop();
+        if (response.ok) {
+          return response.json();
+        } else {
+          if (response.status === 401) {
+            this.showNotification('Username/Password salah!', 'error');
+          } else if (response.status === 500) {
+            this.showNotification('Internal Server Error', 'error');
+          } else {
+            this.showNotification('Response ke server gagal!', 'error');
+          }
+          this.setState({
+            loadingAlsin: false,
+          });
+        }
+      })
+      .then(data => {
+        var status = data.status;
+        var result = data.result.alsins;
+        var message = data.result.message;
+        console.log('Data Transaksi', data);
+        if (status === 0) {
+          // this.showNotification(message, 'error');
+        } else {
+          this.showNotification('Data ditemukan!', 'info');
+          this.setState({
+            resultPricing: result,
+            loadingAlsin: false,
+          });
+        }
+      })
+      .catch(err => {
+        // console.log('ERRORNYA', err);
+        this.showNotification('Error ke server!', 'error');
+        // this.setState({
+        //   loadingAlsin: false,
+        // });
+      });
+  }
+
+  toggleShowPricing = (modalType, todo) => {
+    if (!modalType) {
+      return this.setState({
+        modal: !this.state.modal,
+        keywordList: '',
+        realCurrentPages: 1,
+        maxPages: 1,
+        currentPages: 1,
+        ecommerceIDtemp: this.state.ecommerceID,
+      });
+    }
+
+    this.setState(
+      {
+        [`modal_${modalType}`]: !this.state[`modal_${modalType}`],
+        keywordList: '',
+        realCurrentPages: 1,
+        maxPages: 1,
+        currentPages: 1,
+        editPricingDetail: todo,
+      },
+      () => this.getTransactionFormPricingDetail(this.state.editPricingDetail),
+    );
+  };
+
+  getTransactionFormPricingDetail(todo) {
+    const url =
+      myUrl.url_showFormPricing + '?alsin_type_id=' + todo.alsin_type_id;
+    var token = window.localStorage.getItem('tokenCookies');
+    console.log('URL GET LIST PRICING DETAIL', url);
+
+    // this.setState({ loadingAlsin: true });
+    // console.log("offset", offset, "currLimit", currLimit);
+
+    const option = {
+      method: 'GET',
+      json: true,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+        Authorization: `${'Bearer'} ${token}`,
+      },
+    };
+    // console.log('option', option);
+    fetch(url, option)
+      .then(response => {
+        // trace.stop();
+        if (response.ok) {
+          return response.json();
+        } else {
+          if (response.status === 401) {
+            this.showNotification('Username/Password salah!', 'error');
+          } else if (response.status === 500) {
+            this.showNotification('Internal Server Error', 'error');
+          } else {
+            this.showNotification('Response ke server gagal!', 'error');
+          }
+          this.setState({
+            loadingAlsin: false,
+          });
+        }
+      })
+      .then(data => {
+        var status = data.status;
+        var result = data.result.alsins;
+        var message = data.result.message;
+        console.log('Data pricing detail', data);
+        if (status === 0) {
+          this.showNotification(message, 'error');
+        } else {
+          this.showNotification('Data ditemukan!', 'info');
+          this.setState({
+            resultPricingDetail: result,
+            // loadingAlsin: false,
+          });
+        }
+      })
+      .catch(err => {
+        // console.log('ERRORNYA', err);
+        this.showNotification('Error ke server!', 'error');
+        // this.setState({
+        //   loadingAlsin: false,
+        // });
+      });
+  }
+
   firstPage() {
     this.setState(
       {
@@ -2355,7 +2529,6 @@ class Transaksi extends React.Component {
     const { loading, loadingPage, loadingAlsin } = this.state;
     const currentTodos = this.state.result.data;
     const alsintItemTodos = this.state.resultAllAlsinType;
-    const alsinTodos = this.state.resultAlsin;
     const pelapakEcommerceTodos = this.state.resultPelapakEcommerce;
     const periodeTodos = this.state.resultPeriode;
     const isEnabled = this.canBeSubmitted();
@@ -2372,8 +2545,11 @@ class Transaksi extends React.Component {
     });
 
     const listEcommerce = this.state.resultEcommerce;
+    const alsinTodos = this.state.resultAlsin;
+    const pricingTodos = this.state.resultPricing;
+    const pricingDetailTodos = this.state.resultPricingDetail;
 
-    console.log('ALSIN', alsinTodos);
+    console.log('ALSIN', pricingDetailTodos);
     const renderAlsin =
       alsinTodos &&
       alsinTodos.map((todo, i) => {
@@ -2407,22 +2583,58 @@ class Transaksi extends React.Component {
                 style={{ margin: '0px' }}
                 color="secondary"
                 size="sm"
-                onClick={this.toggle('nested_parent_editAlsin', { ...todo })}
+                onClick={() =>
+                  this.toggleEdit('nested_parent_editAlsin', {
+                    ...todo,
+                  })
+                }
               >
                 <MdEdit />
               </Button>
             </td>
-            <td>
-              <Button
-                style={{ margin: '0px' }}
-                color="danger"
-                size="sm"
-                onClick={this.toggle('nested_parent_nonaktifAlsin', {
-                  ...todo,
-                })}
-              >
-                <MdDelete />
-              </Button>
+          </tr>
+        );
+      });
+
+    const renderPricing =
+      pricingTodos &&
+      pricingTodos.map((todo, i) => {
+        return (
+          <tr key={i}>
+            <td
+              style={{
+                fontWeight: 'bold',
+                cursor: 'pointer',
+                textDecoration: 'underline',
+                color: '#009688',
+              }}
+              onClick={() =>
+                this.toggleShowPricing('nested_parent', { ...todo })
+              }
+            >
+              {todo.alsin_type_name}
+            </td>
+          </tr>
+        );
+      });
+
+    const renderPricingDetail =
+      pricingDetailTodos &&
+      pricingDetailTodos.map((todo, i) => {
+        return (
+          <tr key={i}>
+            <td
+              style={{
+                fontWeight: 'bold',
+                cursor: 'pointer',
+                textDecoration: 'underline',
+                color: '#009688',
+              }}
+              onClick={() =>
+                this.toggleShowPricing('nested_parent', { ...todo })
+              }
+            >
+              {todo.vechile_code}
             </td>
           </tr>
         );
@@ -2716,7 +2928,7 @@ class Transaksi extends React.Component {
                 <Col sm={7} style={{ textAlign: 'right', paddingRight: 0 }}></Col>
               </CardHeader> */}
               <CardBody>
-                <Row>
+                {/* <Row>
                   <Col style={{ textAlign: 'right' }}>
                     <Button
                       color="primary"
@@ -2725,7 +2937,7 @@ class Transaksi extends React.Component {
                       Tambah Alsin
                     </Button>
                   </Col>
-                </Row>
+                </Row> */}
                 <Table responsive striped id="tableUtama">
                   <thead>
                     <tr>
@@ -2736,7 +2948,7 @@ class Transaksi extends React.Component {
                       <th>Waktu Kirim</th>
                       <th>Status</th>
                       <th>Edit</th>
-                      <th>Hapus</th>
+                      {/* <th>Hapus</th> */}
                     </tr>
                   </thead>
                   <tbody>
@@ -2847,50 +3059,37 @@ class Transaksi extends React.Component {
           toggle={this.toggle('nested_parent_editAlsin')}
           className={this.props.className}
         >
-          <ModalHeader>Edit Alsin</ModalHeader>
+          <ModalHeader>Edit Transaksi</ModalHeader>
           <ModalBody>
+            {/* {console.log('NAMA ALSIN', this.state.editPricing)}
             <Form>
               <FormGroup>
-                <Label>Gambar</Label>
-                <br></br>
-                {this.state.editAlsin &&
-                  this.state.editAlsin.picture_detail === null && (
-                    <img
-                      src={imageNotFound}
-                      width="150"
-                      height="70"
-                      className="pr-2"
-                      alt=""
-                    />
-                  )}
-                {this.state.editAlsin &&
-                  this.state.editAlsin.picture_detail !== null && (
-                    <img
-                      src={this.state.editAlsin.picture_detail}
-                      width="150"
-                      height="70"
-                      className="pr-2"
-                      alt=""
-                    />
-                  )}
-                <br></br>
-                <Label>Harga</Label>
+                <Label>Alsin</Label>
                 <Input
                   autoComplete="off"
                   type="text"
-                  name="cost"
+                  name="alsin_type_name"
                   placeholder="Harga..."
                   onChange={evt =>
                     this.updateInputValue(
                       evt.target.value,
                       evt.target.name,
-                      'editAlsin',
+                      'editPricing',
                     )
                   }
-                  value={this.state.editAlsin && this.state.editAlsin.cost}
+                  value={
+                    this.state.result && this.state.editPricing.alsin_type_name
+                  }
                 />
               </FormGroup>
-            </Form>
+            </Form> */}
+            <thead>
+              <tr>
+                <th>Alsin</th>
+                {/* <td>Edit</td> */}
+              </tr>
+            </thead>
+            <tbody>{renderPricing}</tbody>
           </ModalBody>
           <ModalFooter>
             <Button
@@ -2981,10 +3180,17 @@ class Transaksi extends React.Component {
           className={this.props.className}
         >
           <ModalHeader toggle={this.toggle('nested_parent')}>
-            Batas Standar (Nilai Pembagi LNBuPri)
+            Edit Transaksi Detail
           </ModalHeader>
           <ModalBody>
-            <Form onSubmit={e => e.preventDefault()}>
+          <thead>
+              <tr>
+                <th>Kode Kendaraan</th>
+                {/* <td>Edit</td> */}
+              </tr>
+            </thead>
+            <tbody>{renderPricingDetail}</tbody>
+            {/* <Form onSubmit={e => e.preventDefault()}>
               <FormGroup>
                 <Label>Produk Pharos</Label>
                 <Input
@@ -3027,7 +3233,7 @@ class Transaksi extends React.Component {
                   }
                 />
               </FormGroup>
-            </Form>
+            </Form> */}
             <br></br>
           </ModalBody>
           <ModalFooter>

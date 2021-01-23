@@ -25,7 +25,10 @@ var url_updateAlsinItem = 'https://alsintanlink.com/api/upja/update_alsin_item';
 var url_allAlsinType = 'https://alsintanlink.com/api/upja/show_all_alsin_type';
 var url_getTransaksi = 'https://alsintanlink.com/api/upja/show_all_transaction';
 var url_getTransaksiDetail =
-  'https://alsintanlink.com/api/upja/show_detail_transaction/';
+  'https://alsintanlink.com/api/upja/show_detail_transaction';
+var url_showFormPricing = 'https://alsintanlink.com/api/upja/show_form_pricing';
+var url_showFormPricingDetail =
+  'https://alsintanlink.com/api/upja/show_alsin_item_available';
 
 export {
   url_resendOTP,
@@ -47,5 +50,7 @@ export {
   url_deleteAlsinItem,
   url_updateAlsinItem,
   url_getTransaksi,
-  url_getTransaksiDetail
+  url_getTransaksiDetail,
+  url_showFormPricing,
+  url_showFormPricingDetail,
 };
