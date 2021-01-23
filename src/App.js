@@ -27,6 +27,7 @@ const profileUPJA = React.lazy(() => import('pages/UPJA/Profile'));
 const alsinUPJA = React.lazy(() => import('pages/UPJA/Alsin'));
 const alsinUPJADetail = React.lazy(() => import('pages/UPJA/AlsinDetail'));
 const transaksi = React.lazy(() => import('pages/UPJA/Transaksi'));
+const transaksiDetail = React.lazy(() => import('pages/UPJA/TransaksiDetail'));
 
 const getBasename = () => {
   return `/${process.env.PUBLIC_URL.split('/').pop()}`;
@@ -72,6 +73,11 @@ class App extends React.Component {
                 <Route exact path="/profile" component={profileUPJA} />
                 <Route exact path="/Alsin" component={alsinUPJA} />
                 <Route exact path="/Transaksi" component={transaksi} />
+                <Route
+                  exact
+                  path="/Transaksi/detail/:transaction_order_id"
+                  component={transaksiDetail}
+                />
                 <Route
                   exact
                   path="/Alsin/detail/:alsin_type_id"

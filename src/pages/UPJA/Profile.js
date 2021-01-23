@@ -1085,6 +1085,95 @@ class Profile extends React.Component {
                       </InputGroupAddon>
                     </InputGroup>
                   </FormGroup>
+                  <br></br>
+
+                  {/* untuk isi Layanan Lainnya UPJA */}
+                  <FormGroup>
+                    <Label style={{ textAlign: 'center' }}>
+                      Layanan Lainnya:
+                    </Label>
+                    <Row>
+                      <Col style={{ marginBottom: 0, paddingBottom: 0 }}>
+                        <FormGroup check>
+                          <Label check>
+                            <Input
+                              type="checkbox"
+                              id="RMU"
+                              checked={this.state.RMU}
+                              onChange={() =>
+                                this.setState({
+                                  RMU: !this.state.RMU,
+                                })
+                              }
+                            />
+                            RMU
+                          </Label>
+                        </FormGroup>
+                        <FormGroup check>
+                          <Label check>
+                            <Input
+                              type="checkbox"
+                              id="benihPadi"
+                              checked={this.state.benihPadi}
+                              onChange={() =>
+                                this.setState({
+                                  benihPadi: !this.state.benihPadi,
+                                })
+                              }
+                            />
+                            Benih Padi
+                          </Label>
+                        </FormGroup>
+                        <FormGroup check>
+                          <Label check>
+                            <Input
+                              type="checkbox"
+                              id="bibitPadi"
+                              checked={this.state.bibitPadi}
+                              onChange={() =>
+                                this.setState({
+                                  bibitPadi: !this.state.bibitPadi,
+                                })
+                              }
+                            />
+                            Bibit Padi
+                          </Label>
+                        </FormGroup>
+                      </Col>
+                      <Col style={{ marginBottom: 0, paddingBottom: 0 }}>
+                        <FormGroup check>
+                          <Label check>
+                            <Input
+                              type="checkbox"
+                              id="reparasi"
+                              checked={this.state.reparasi}
+                              onChange={() =>
+                                this.setState({
+                                  reparasi: !this.state.reparasi,
+                                })
+                              }
+                            />
+                            Reparasi
+                          </Label>
+                        </FormGroup>
+                        <FormGroup check>
+                          <Label check>
+                            <Input
+                              type="checkbox"
+                              id="sukuCadang"
+                              checked={this.state.sukuCadang}
+                              onChange={() =>
+                                this.setState({
+                                  sukuCadang: !this.state.sukuCadang,
+                                })
+                              }
+                            />
+                            Suku Cadang
+                          </Label>
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                  </FormGroup>
                 </Form>
               </CardBody>
               <CardFooter style={{ textAlign: 'right' }}>

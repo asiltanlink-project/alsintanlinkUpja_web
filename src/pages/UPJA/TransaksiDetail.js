@@ -120,6 +120,7 @@ class Transaksi extends React.Component {
       loadingAlsin: true,
 
       resultAlsin: [],
+      transaction_order_id: props.match.params.transaction_order_id,
     };
 
     if (window.localStorage.getItem('accessList')) {
@@ -1684,7 +1685,11 @@ class Transaksi extends React.Component {
   };
 
   getTransaksi() {
-    const url = myUrl.url_getTransaksi;
+    var transaction_order_id = this.state.transaction_order_id;
+    const url =
+      myUrl.url_getTransaksiDetail +
+      '?transaction_order_id=' +
+      transaction_order_id;
     var token = window.localStorage.getItem('tokenCookies');
     // console.log('URL GET LIST', url);
 
@@ -2379,24 +2384,8 @@ class Transaksi extends React.Component {
       alsinTodos.map((todo, i) => {
         return (
           <tr key={i}>
-            {todo.transaction_order_id !== '' && (
-              <td style={{ width: '10%', textAlign: 'left' }}>
-                <Link to={`/transaksi/detail/${todo.transaction_order_id}`}>
-                  {
-                    <Label
-                      style={{
-                        fontWeight: 'bold',
-                        cursor: 'pointer',
-                        textDecoration: 'underline',
-                        color: '#009688',
-                      }}
-                    >
-                      {todo.farmer_name}
-                    </Label>
-                  }
-                </Link>
-              </td>
-            )}
+            {/* <td>{formatter.format(todo.cost)}</td> */}
+            <td>{todo.farmer_name}</td>
             <td>{formatter.format(todo.transport_cost)}</td>
             <td>{formatter.format(todo.total_cost)}</td>
             <td>{todo.order_time}</td>
@@ -2718,11 +2707,17 @@ class Transaksi extends React.Component {
               <CardBody>
                 <Row>
                   <Col style={{ textAlign: 'right' }}>
-                    <Button
+                    {/* <Button
                       color="primary"
                       onClick={this.toggle('nested_parent_editMassal')}
                     >
                       Tambah Alsin
+                    </Button> */}
+                    <Button
+                      color="primary"
+                      onClick={() => window.history.back()}
+                    >
+                      Kembali
                     </Button>
                   </Col>
                 </Row>
