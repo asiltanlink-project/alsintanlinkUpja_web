@@ -30,13 +30,11 @@ import {
   MdList,
   MdAdd,
 } from 'react-icons/md';
-import imageNotFound from 'assets/img/imageNotFound.jpg';
 import { MdLoyalty, MdRefresh } from 'react-icons/md';
 import NotificationSystem from 'react-notification-system';
 import { NOTIFICATION_SYSTEM_STYLE } from 'utils/constants';
 import * as myUrl from '../urlLink';
 import * as firebase from 'firebase/app';
-import { Scrollbar } from 'react-scrollbars-custom';
 import LoadingSpinner from 'pages/template/LoadingSpinner.js';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 
@@ -118,6 +116,7 @@ class Transaksi extends React.Component {
           periode_name: 'Sudah Selesai',
         },
       ],
+      disabledStatus: false,
       resultType: [
         {
           status_id: ' ',
@@ -689,16 +688,24 @@ class Transaksi extends React.Component {
   updateHeaderData = first_param => {
     const trace = perf.trace('updateHeaderData');
     trace.start();
-    var url = myUrl.url_updateAlsin;
+    // var url = myUrl.url_updateAlsin;
     const updateHeaderData = first_param;
     var token = window.localStorage.getItem('tokenCookies');
-    console.log('DATA HEADER', updateHeaderData);
-    console.log('DATA HEADER', this.state.editAlsin);
+    // console.log('DATA HEADER', updateHeaderData.statusFarmer);
 
     this.fetchData();
+    if (updateHeaderData.statusFarmer !== undefined) {
+      console.log('MASUK IF', updateHeaderData);
+      if (updateHeaderData.status === updateHeaderData.statusFarmer) {
+        updateHeaderData.status = updateHeaderData.status;
+      } else {
+        updateHeaderData.status = updateHeaderData.statusFarmer;
+      }
+    } else {
+      updateHeaderData.status = updateHeaderData.status;
+    }
     var payload = {
-      alsin_id: updateHeaderData.alsin_id,
-      cost: parseInt(updateHeaderData.cost),
+      editPricing: updateHeaderData,
     };
 
     console.log('PAYLOAD EDIT', payload);
@@ -712,56 +719,60 @@ class Transaksi extends React.Component {
       },
       body: JSON.stringify(payload),
     };
-    fetch(url, option)
-      .then(response => {
-        // trace.stop();
-        if (response.ok) {
-          return response.json();
-        } else {
-          if (response.status === 401) {
-            this.showNotification('Username/Password salah!', 'error');
-          } else if (response.status === 500) {
-            this.showNotification('Internal Server Error', 'error');
-          } else {
-            this.showNotification('Response ke server gagal!', 'error');
-          }
-          this.setState({
-            loadingPage: false,
-            loading: false,
-          });
-        }
-      })
-      .then(data => {
-        console.log('DATA EDIT', data);
-        var status = data.status;
-        var message = data.result.message;
-        if (status === 0) {
-          this.showNotification(message, 'error');
-          this.setState({
-            loadingPage: false,
-            loading: false,
-          });
-        } else {
-          this.showNotification(message, 'info');
-          this.setState(
-            {
-              loadingPage: false,
-              loading: false,
-              modal_nested_parent_editAlsin: false,
-              modal_nested_editAlsin: false,
-            },
-            () => this.getTransaksi(),
-          );
-        }
-      })
-      .catch(err => {
-        // console.log('ERRORNYA', err);
-        this.showNotification('Error ke server!', 'error');
-        this.setState({
-          loadingPage: false,
-          loading: false,
-        });
-      });
+
+    this.setState({
+      loading: false,
+    });
+    // fetch(url, option)
+    //   .then(response => {
+    //     // trace.stop();
+    //     if (response.ok) {
+    //       return response.json();
+    //     } else {
+    //       if (response.status === 401) {
+    //         this.showNotification('Username/Password salah!', 'error');
+    //       } else if (response.status === 500) {
+    //         this.showNotification('Internal Server Error', 'error');
+    //       } else {
+    //         this.showNotification('Response ke server gagal!', 'error');
+    //       }
+    //       this.setState({
+    //         loadingPage: false,
+    //         loading: false,
+    //       });
+    //     }
+    //   })
+    //   .then(data => {
+    //     console.log('DATA EDIT', data);
+    //     var status = data.status;
+    //     var message = data.result.message;
+    //     if (status === 0) {
+    //       this.showNotification(message, 'error');
+    //       this.setState({
+    //         loadingPage: false,
+    //         loading: false,
+    //       });
+    //     } else {
+    //       this.showNotification(message, 'info');
+    //       this.setState(
+    //         {
+    //           loadingPage: false,
+    //           loading: false,
+    //           modal_nested_parent_editAlsin: false,
+    //           modal_nested_editAlsin: false,
+    //         },
+    //         () => this.getTransaksi(),
+    //       );
+    //     }
+    //   })
+    //   .catch(err => {
+    //     // console.log('ERRORNYA', err);
+    //     this.showNotification('Error ke server!', 'error');
+    //     this.setState({
+    //       loadingPage: false,
+    //       loading: false,
+    //     });
+    //   });
   };
 
   getListPerOutlet(currPage, currLimit) {
@@ -2109,6 +2120,7 @@ class Transaksi extends React.Component {
       this.setState({
         [`modal_${modalType}`]: !this.state[`modal_${modalType}`],
         editAlsin: todo,
+        disabledStatus: false,
       });
     } else if (modalType === 'nested_parent_nonaktifAlsin') {
       // console.log('LOG 1');
@@ -2399,6 +2411,7 @@ class Transaksi extends React.Component {
         maxPages: 1,
         currentPages: 1,
         editPricing: todo,
+        editPricingTemp: todo,
       },
       () => this.getTransactionFormPricing(this.state.editPricing),
     );
@@ -2645,7 +2658,8 @@ class Transaksi extends React.Component {
   setStatus = event => {
     if (
       this.state.editPricing &&
-      this.state.editPricing.status === 'Menunggu Penentuan Pembayaran'
+      (this.state.editPricing.status === 'Menunggu Penentuan Pembayaran' ||
+        this.state.editPricing.status === 'Transaksi ditolak Upja')
     ) {
       var nama = this.state.resultPricing1.find(function (element) {
         // console.log('ELEMENT TYPE', element);
@@ -2669,7 +2683,8 @@ class Transaksi extends React.Component {
       });
     } else if (
       this.state.editPricing &&
-      this.state.editPricing.status === 'Menunggu Alsin dikirim'
+      (this.state.editPricing.status === 'Menunggu Alsin dikirim' ||
+        this.state.editPricing.status === 'Sedang dikerjakan')
     ) {
       var nama = this.state.resultPricing4.find(function (element) {
         // console.log('ELEMENT TYPE', element);
@@ -2683,6 +2698,11 @@ class Transaksi extends React.Component {
         // console.log('ELEMENT TYPE', element);
         return element.status_id === event.target.value;
       });
+    } else {
+      var nama = this.state.resultType.find(function (element) {
+        // console.log('ELEMENT TYPE', element);
+        return element.status_id === event.target.value;
+      });
     }
 
     // console.log('NAMA', nama);
@@ -2690,8 +2710,10 @@ class Transaksi extends React.Component {
       {
         pilihStatusFarmer: event.target.value,
         namaStatusFarmer: nama.status_name,
+        // disabledStatus: true,
       },
-      () => (this.state.editPricing.status = this.state.namaStatusFarmer),
+      // () => (this.state.editPricing.status = this.state.namaStatusFarmer),
+      () => (this.state.editPricing.statusFarmer = this.state.namaStatusFarmer),
     );
   };
 
@@ -3414,9 +3436,10 @@ class Transaksi extends React.Component {
               </tr>
             </thead>
             <tbody>{renderPricing}</tbody>
-            {/* {console.log('EDIT TRANSAKSI', this.state.editPricing)} */}
+            {console.log('EDIT TRANSAKSI', this.state.editPricing)}
             <Label>Status</Label>
             <Input
+              disabled={this.state.disabledStatus}
               type="select"
               autoComplete="off"
               name="select"
@@ -3434,8 +3457,9 @@ class Transaksi extends React.Component {
                 {this.state.editPricing && this.state.editPricing.status}
               </option>
               {this.state.editPricing &&
-                this.state.editPricing.status ===
-                  'Menunggu Penentuan Pembayaran' &&
+                (this.state.editPricing.status ===
+                  'Menunggu Penentuan Pembayaran' ||
+                  this.state.editPricing.status === 'Transaksi ditolak Upja') &&
                 renderStatus1}
               {this.state.editPricing &&
                 this.state.editPricing.status ===
@@ -3445,7 +3469,8 @@ class Transaksi extends React.Component {
                 this.state.editPricing.status === 'Menungggu Konfirmasi Upja' &&
                 renderStatus3}
               {this.state.editPricing &&
-                this.state.editPricing.status === 'Menunggu Alsin dikirim' &&
+                (this.state.editPricing.status === 'Menunggu Alsin dikirim' ||
+                  this.state.editPricing.status === 'Sedang dikerjakan') &&
                 renderStatus4}
               {this.state.editPricing &&
                 this.state.editPricing.status === 'Sedang dkerjakan' &&
@@ -3471,7 +3496,7 @@ class Transaksi extends React.Component {
                 <Button
                   id="btnEdit"
                   color="primary"
-                  onClick={() => this.updateHeaderData(this.state.editAlsin)}
+                  onClick={() => this.updateHeaderData(this.state.editPricing)}
                   disabled={loading}
                 >
                   {!loading && 'Ya'}

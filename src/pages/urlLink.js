@@ -1,15 +1,15 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-redeclare */
 
-// UPJA
+// Authentikasi
 var url_login = 'https://alsintanlink.com/api/upja/login';
 var url_forgetPassword = 'https://alsintanlink.com/api/upja/forget_password';
 var url_registarsiUpja = 'https://alsintanlink.com/api/upja/register';
 var url_resendOTP = 'https://alsintanlink.com/api/upja/resend_otp';
 var url_submitOTP = 'https://alsintanlink.com/api/upja/submit_otp';
-var url_showDetailUPJA = 'https://alsintanlink.com/api/upja/show_detail_upja';
 
-// Show Domisili
+// Main UPJA
+var url_showDetailUPJA = 'https://alsintanlink.com/api/upja/show_detail_upja';
 var url_getProvince = 'https://alsintanlink.com/api/location/province';
 var url_getCity = 'https://alsintanlink.com/api/location/city';
 var url_getDistrict = 'https://alsintanlink.com/api/location/district';

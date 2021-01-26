@@ -2379,7 +2379,7 @@ class Alsin extends React.Component {
         return (
           <tr key={i}>
             {todo.name !== '' && (
-              <td style={{ width: '10%', textAlign: 'left' }}>
+              <td style={{ textAlign: 'left' }}>
                 <Link to={`/alsin/detail/${todo.alsin_type_id}`}>
                   {
                     <Label
