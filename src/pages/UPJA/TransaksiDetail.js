@@ -90,6 +90,7 @@ class Transaksi extends React.Component {
       resetInfo: false,
       namaOutlet: '',
       result: [],
+      resultTransaction: [],
       resultAllAlsinType: [],
       resultDataProcod: [],
       currentDimenBatasStandar: [],
@@ -1725,15 +1726,17 @@ class Transaksi extends React.Component {
       })
       .then(data => {
         var status = data.status;
-        var result = data.result.transactions;
+        var result = data.result.alsins;
+        var resultTransaction = data.result.transaction;
         var message = data.result.message;
-        console.log('Data Transaksi', data);
+        console.log('Data Transaksi Detail', data);
         if (status === 0) {
           this.showNotification(message, 'error');
         } else {
           this.showNotification('Data ditemukan!', 'info');
           this.setState({
             resultAlsin: result,
+            resultTransaction: resultTransaction,
             loadingAlsin: false,
           });
         }
@@ -2384,14 +2387,15 @@ class Transaksi extends React.Component {
       alsinTodos.map((todo, i) => {
         return (
           <tr key={i}>
-            {/* <td>{formatter.format(todo.cost)}</td> */}
-            <td>{todo.farmer_name}</td>
-            <td>{formatter.format(todo.transport_cost)}</td>
-            <td>{formatter.format(todo.total_cost)}</td>
-            <td>{todo.order_time}</td>
-            <td>{todo.delivery_time}</td>
-            <td>{todo.status}</td>
-            <td>
+            {console.log('TODO', todo)}
+            <td>{todo.alsin_name}</td>
+            <td style={{ textAlign: 'right' }}>
+              {formatter.format(todo.cost)}
+            </td>
+            <td style={{ textAlign: 'right' }}>{todo.alsin_item_total}</td>
+            <td>{todo.created_at}</td>
+            <td style={{ textAlign: 'right' }}>{todo.land_area_range}</td>
+            {/* <td>
               <Button
                 style={{ margin: '0px' }}
                 color="secondary"
@@ -2412,7 +2416,7 @@ class Transaksi extends React.Component {
               >
                 <MdDelete />
               </Button>
-            </td>
+            </td> */}
           </tr>
         );
       });
@@ -2477,12 +2481,6 @@ class Transaksi extends React.Component {
         );
       });
 
-    const renderAlsinItem =
-      alsintItemTodos &&
-      alsintItemTodos.map((todo, i) => {
-        return <option value={todo.id}>{todo.name}</option>;
-      });
-
     const renderPelapakEditMasal =
       pelapakEcommerceTodos &&
       pelapakEcommerceTodos.map((todo, i) => {
@@ -2502,74 +2500,6 @@ class Transaksi extends React.Component {
                 Pilih
               </Button>
             </td>
-          </tr>
-        );
-      });
-
-    const renderTodos =
-      currentTodos &&
-      currentTodos.map((todo, i) => {
-        return (
-          <tr key={i}>
-            <td>{todo.procod}</td>
-            <td>{todo.productname}</td>
-            <td>{new Date(todo.startdate).toDateString()}</td>
-            {todo.enddate === null && (
-              <td>
-                <Label>-</Label>
-              </td>
-            )}
-            {todo.enddate !== null && (
-              <td>{new Date(todo.enddate).toDateString()}</td>
-            )}
-            <td style={{ textAlign: 'right' }}>
-              {formatter.format(todo.limitpriceecommerce)}
-            </td>
-            <td>{todo.sellpackname}</td>
-            {todo.activeyn === 'Y' && (
-              <td>
-                <Badge color="success">Aktif</Badge>
-              </td>
-            )}
-            {todo.activeyn === 'N' && (
-              <td>
-                <Badge color="danger">Tidak Aktif</Badge>
-              </td>
-            )}
-            <td>{new Date(todo.lastupdated).toDateString()}</td>
-            <td style={{ textAlign: 'left' }}>{todo.updatedby}</td>
-            {this.state.menuID === 61 && (
-              <td>
-                <Button
-                  id="61"
-                  style={{ margin: '0px' }}
-                  color="secondary"
-                  size="sm"
-                  onClick={() =>
-                    this.toggleEditData('nested_parent_edit', { ...todo })
-                  }
-                >
-                  <MdEdit />
-                </Button>
-              </td>
-            )}
-            {this.state.menuID === 61 && (
-              <td>
-                <Button
-                  id="61"
-                  style={{ margin: '0px' }}
-                  color="danger"
-                  size="sm"
-                  onClick={() =>
-                    this.toggleDeleteData('nested_parent_nonaktifHeaderData', {
-                      ...todo,
-                    })
-                  }
-                >
-                  <MdDelete />
-                </Button>
-              </td>
-            )}
           </tr>
         );
       });
@@ -2706,13 +2636,13 @@ class Transaksi extends React.Component {
               </CardHeader> */}
               <CardBody>
                 <Row>
-                  <Col style={{ textAlign: 'right' }}>
-                    {/* <Button
-                      color="primary"
-                      onClick={this.toggle('nested_parent_editMassal')}
-                    >
-                      Tambah Alsin
-                    </Button> */}
+                  <Col
+                    style={{
+                      textAlign: 'right',
+                      paddingBottom: 0,
+                      marginBottom: 0,
+                    }}
+                  >
                     <Button
                       color="primary"
                       onClick={() => window.history.back()}
@@ -2721,17 +2651,137 @@ class Transaksi extends React.Component {
                     </Button>
                   </Col>
                 </Row>
+                <Row style={{ paddingBottom: 0, marginBottom: 0 }}>
+                  <Col>
+                    <Row style={{ paddingBottom: 0, marginBottom: 0 }}>
+                      <Col sm={2} style={{ paddingBottom: 0, marginBottom: 0 }}>
+                        <Label style={{ fontWeight: 'bold' }}>UPJA</Label>
+                      </Col>
+                      <Col
+                        sm={10}
+                        style={{ paddingBottom: 0, marginBottom: 0 }}
+                      >
+                        :&nbsp;
+                        {this.state.resultTransaction.upja_name === undefined ||
+                        this.state.resultTransaction.upja_name === '' ? (
+                          <Label style={{ fontWeight: 'bold' }}>-</Label>
+                        ) : (
+                          <Label style={{ fontWeight: 'bold' }}>
+                            {this.state.resultTransaction.upja_name}
+                          </Label>
+                        )}
+                      </Col>
+                    </Row>
+
+                    <Row style={{ paddingBottom: 0, marginBottom: 0 }}>
+                      <Col sm={2} style={{ paddingBottom: 0, marginBottom: 0 }}>
+                        <Label style={{ fontWeight: 'bold' }}>Status</Label>
+                      </Col>
+                      <Col
+                        sm={10}
+                        style={{ paddingBottom: 0, marginBottom: 0 }}
+                      >
+                        :&nbsp;
+                        {this.state.resultTransaction.status === undefined ||
+                        this.state.resultTransaction.status === '' ? (
+                          <Label style={{ fontWeight: 'bold' }}>-</Label>
+                        ) : (
+                          <Label style={{ fontWeight: 'bold' }}>
+                            {this.state.resultTransaction.status}
+                          </Label>
+                        )}
+                      </Col>
+                    </Row>
+
+                    <Row style={{ paddingBottom: 0, marginBottom: 0 }}>
+                      <Col sm={2} style={{ paddingBottom: 0, marginBottom: 0 }}>
+                        <Label style={{ fontWeight: 'bold' }}>
+                          Waktu Order
+                        </Label>
+                      </Col>
+                      <Col sm={4} style={{ paddingBottom: 0, marginBottom: 0 }}>
+                        :&nbsp;
+                        {this.state.resultTransaction.order_time ===
+                          undefined ||
+                        this.state.resultTransaction.order_time === '' ? (
+                          <Label style={{ fontWeight: 'bold' }}>-</Label>
+                        ) : (
+                          <Label style={{ fontWeight: 'bold' }}>
+                            {this.state.resultTransaction.order_time}
+                          </Label>
+                        )}
+                      </Col>
+                      <Col sm={2} style={{ paddingBottom: 0, marginBottom: 0 }}>
+                        <Label style={{ fontWeight: 'bold' }}>
+                          Waktu Kirim
+                        </Label>
+                      </Col>
+                      <Col sm={4} style={{ paddingBottom: 0, marginBottom: 0 }}>
+                        :&nbsp;
+                        {this.state.resultTransaction.delivery_time ===
+                          undefined ||
+                        this.state.resultTransaction.delivery_time === '' ? (
+                          <Label style={{ fontWeight: 'bold' }}>-</Label>
+                        ) : (
+                          <Label style={{ fontWeight: 'bold' }}>
+                            {this.state.resultTransaction.delivery_time}
+                          </Label>
+                        )}
+                      </Col>
+                    </Row>
+
+                    <Row style={{ paddingBottom: 0, marginBottom: 0 }}>
+                      <Col sm={2} style={{ paddingBottom: 0, marginBottom: 0 }}>
+                        <Label style={{ fontWeight: 'bold' }}>
+                          Harga Transport
+                        </Label>
+                      </Col>
+                      <Col sm={4} style={{ paddingBottom: 0, marginBottom: 0 }}>
+                        :&nbsp;
+                        {this.state.resultTransaction.transport_cost ===
+                          undefined ||
+                        this.state.resultTransaction.transport_cost === '' ? (
+                          <Label style={{ fontWeight: 'bold' }}>-</Label>
+                        ) : (
+                          <Label style={{ fontWeight: 'bold' }}>
+                            {formatter.format(
+                              this.state.resultTransaction.transport_cost,
+                            )}
+                          </Label>
+                        )}
+                      </Col>
+                      <Col sm={2} style={{ paddingBottom: 0, marginBottom: 0 }}>
+                        <Label style={{ fontWeight: 'bold' }}>
+                          Total Harga
+                        </Label>
+                      </Col>
+                      <Col sm={4} style={{ paddingBottom: 0, marginBottom: 0 }}>
+                        :&nbsp;
+                        {this.state.resultTransaction.total_cost ===
+                          undefined ||
+                        this.state.resultTransaction.total_cost === '' ? (
+                          <Label style={{ fontWeight: 'bold' }}>-</Label>
+                        ) : (
+                          <Label style={{ fontWeight: 'bold' }}>
+                            {formatter.format(
+                              this.state.resultTransaction.total_cost,
+                            )}
+                          </Label>
+                        )}
+                      </Col>
+                    </Row>
+                  </Col>
+                </Row>
                 <Table responsive striped id="tableUtama">
                   <thead>
                     <tr>
-                      <th>Farmer</th>
-                      <th>Harga Transport</th>
-                      <th>Total Harga</th>
-                      <th>Waktu Order</th>
-                      <th>Waktu Kirim</th>
-                      <th>Status</th>
-                      <th>Edit</th>
-                      <th>Hapus</th>
+                      <th>Alsin</th>
+                      <th style={{ textAlign: 'right' }}>Harga</th>
+                      <th style={{ textAlign: 'right' }}>Total Item</th>
+                      <th>Waktu Dibuat</th>
+                      <th style={{ textAlign: 'right' }}>Luas Lahan</th>
+                      {/* <th>Edit</th>
+                      <th>Hapus</th> */}
                     </tr>
                   </thead>
                   <tbody>
@@ -3573,7 +3623,7 @@ class Transaksi extends React.Component {
                   <option value={''} disabled selected hidden id="pilih">
                     Pilih Alsin Item
                   </option>
-                  {renderAlsinItem}
+                  {/* {renderAlsinItem} */}
                 </Input>
                 <Label>Harga</Label>
                 <Input
@@ -3815,146 +3865,6 @@ class Transaksi extends React.Component {
           </ModalFooter>
         </Modal>
         {/* Modal Hapus */}
-
-        {/* Modal List Pelapak */}
-        <Modal
-          onExit={this.handleClose}
-          isOpen={this.state.modal_nested_parent_list}
-          toggle={this.toggle('nested_parent_list')}
-          className={this.props.className}
-        >
-          <ModalHeader toggle={this.toggle('nested_parent_list')}>
-            List Alsin
-          </ModalHeader>
-          <ModalBody>
-            <Form
-              inline
-              className="cr-search-form"
-              onSubmit={e => e.preventDefault()}
-            >
-              <MdSearch
-                size="20"
-                className="cr-search-form__icon-search text-secondary"
-              />
-              <Input
-                autoComplete="off"
-                type="search"
-                className="cr-search-form__input"
-                placeholder="Cari Pelapak..."
-                id="search"
-                onChange={evt => this.updateSearchValueList(evt)}
-                onKeyPress={event => this.enterPressedSearchList(event, true)}
-              />
-            </Form>
-
-            <Table responsive striped>
-              <thead>
-                <tr>
-                  <th style={{ border: 'none' }}>
-                    <Label style={{ textAlign: 'left' }}>Kode</Label>
-                  </th>
-                  <th style={{ border: 'none' }}>
-                    <Label style={{ textAlign: 'left' }}>Alsin</Label>
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {renderAlsinItem}
-                {!alsintItemTodos && (
-                  <tr>
-                    <td
-                      style={{ backgroundColor: 'white' }}
-                      colSpan="11"
-                      className="text-center"
-                    >
-                      TIDAK ADA DATA
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </Table>
-          </ModalBody>
-          <ModalFooter>
-            <Row>
-              <Col sm="6">
-                <Input
-                  disabled
-                  style={{
-                    textAlign: 'left',
-                    backgroundColor: 'transparent',
-                    border: 0,
-                  }}
-                  value={
-                    'Halaman: ' +
-                    this.state.realCurrentPages +
-                    '/' +
-                    this.state.maxPages
-                  }
-                ></Input>
-              </Col>
-              <Col sm="6">
-                <Card className="mb-3s">
-                  <ButtonGroup>
-                    <Button
-                      name="FirstButton"
-                      value={1}
-                      onClick={e =>
-                        this.paginationButtonList(e, 0, this.state.maxPages)
-                      }
-                    >
-                      &#10092;&#10092;
-                    </Button>
-                    <Button
-                      name="PrevButton"
-                      value={this.state.currentPages}
-                      onClick={e =>
-                        this.paginationButtonList(e, -1, this.state.maxPages)
-                      }
-                    >
-                      &#10092;
-                    </Button>
-                    <input
-                      type="text"
-                      placeholder="Page"
-                      outline="none"
-                      value={this.state.currentPages}
-                      onChange={e =>
-                        this.setState({
-                          currentPages: e.target.value,
-                        })
-                      }
-                      onKeyPress={e => this.enterPressedPageList(e)}
-                      style={{
-                        height: '38px',
-                        width: '75px',
-                        textAlign: 'center',
-                      }}
-                    />
-                    <Button
-                      name="NextButton"
-                      value={this.state.currentPages}
-                      onClick={e =>
-                        this.paginationButtonList(e, 1, this.state.maxPages)
-                      }
-                    >
-                      &#10093;
-                    </Button>
-                    <Button
-                      name="LastButton"
-                      value={this.state.maxPages}
-                      onClick={e =>
-                        this.paginationButtonList(e, 0, this.state.maxPages)
-                      }
-                    >
-                      &#10093;&#10093;
-                    </Button>
-                  </ButtonGroup>
-                </Card>
-              </Col>
-            </Row>
-          </ModalFooter>
-        </Modal>
-        {/* Modal List Pelapak */}
 
         {/* Modal List Ecommerce */}
         <Modal

@@ -89,6 +89,10 @@ class Transaksi extends React.Component {
       endDate: '',
       resetInfo: false,
       namaOutlet: '',
+      pilihStatus: '',
+      namaStatus: '',
+      pilihStatusFarmer: '',
+      namaStatusFarmer: '',
       result: [],
       resultAllAlsinType: [],
       resultDataProcod: [],
@@ -112,6 +116,94 @@ class Transaksi extends React.Component {
         {
           periode_id: 'expired',
           periode_name: 'Sudah Selesai',
+        },
+      ],
+      resultType: [
+        {
+          status_id: ' ',
+          status_name: 'Semuanya',
+        },
+        {
+          status_id: 'Menunggu Penentuan Pembayaran',
+          status_name: 'Menunggu Penentuan Pembayaran',
+        },
+        {
+          status_id: 'Menunggu Konfirimasi Petani',
+          status_name: 'Menunggu Konfirimasi Petani',
+        },
+        {
+          status_id: 'Menunggu Konfirmasi Upja',
+          status_name: 'Menunggu Konfirmasi Upja',
+        },
+        {
+          status_id: 'Menunggu Alsin dikirim',
+          status_name: 'Menunggu Alsin dikirim',
+        },
+        {
+          status_id: 'Sedang dikerjakan',
+          status_name: 'Sedang dikerjakan',
+        },
+        {
+          status_id: 'Selesai',
+          status_name: 'Selesai',
+        },
+        {
+          status_id: 'Transaksi ditolak Upja',
+          status_name: 'Transaksi ditolak Upja',
+        },
+      ],
+      resultPricing1: [
+        {
+          status_id: 'Transaksi ditolak Upja',
+          status_name: 'Transaksi ditolak Upja',
+        },
+        {
+          status_id: 'Menunggu Penentuan Pembayaran',
+          status_name: 'Menunggu Penentuan Pembayaran',
+        },
+        {
+          status_id: 'Menunggu Konfirimasi Petani',
+          status_name: 'Menunggu Konfirimasi Petani',
+        },
+      ],
+      resultPricing2: [
+        {
+          status_id: 'Menunggu Konfirimasi Petani',
+          status_name: 'Menunggu Konfirimasi Petani',
+        },
+        {
+          status_id: 'Menungggu Konfirmasi Upja',
+          status_name: 'Menungggu Konfirmasi Upja',
+        },
+      ],
+      resultPricing3: [
+        {
+          status_id: 'Menungggu Konfirmasi Upja',
+          status_name: 'Menungggu Konfirmasi Upja',
+        },
+        {
+          status_id: 'Menunggu Alsin dikirim',
+          status_name: 'Menunggu Alsin dikirim',
+        },
+      ],
+      resultPricing4: [
+        {
+          status_id: 'Menunggu Alsin dikirim',
+          status_name: 'Menunggu Alsin dikirim',
+        },
+        {
+          status_id: 'Sedang  dikerjakan',
+          status_name: 'Sedang dikerjakan',
+        },
+      ],
+      resultPricing5: [
+        {
+          status_id: 'Sedang dikerjakan',
+          status_name: 'Sedang dikerjakan',
+        },
+        {
+          status_id: 'Selesai',
+          status_name: 'Selesai',
         },
       ],
       dynamicHeightEcommerce: '0px',
@@ -1001,6 +1093,20 @@ class Transaksi extends React.Component {
     buttonSearch.disabled = false;
   };
 
+  // untuk pilih Status
+  setType = event => {
+    var nama = this.state.resultType.find(function (element) {
+      return element.status_id === event.target.value;
+    });
+    this.setState({
+      pilihStatus: event.target.value,
+      namaStatus: nama.status_name,
+      namaStatusTemp: nama.status_name,
+      modal_nested_parent_list_provinsi: false,
+      domisiliDisabled: false,
+    });
+  };
+
   setEcommerceBatasPerPelapak = event => {
     this.setState({ pilihEcommerceBatasPerPelapak: event.target.value });
   };
@@ -1686,9 +1792,10 @@ class Transaksi extends React.Component {
   };
 
   getTransaksi() {
-    const url = myUrl.url_getTransaksi;
+    var pilihStatus = this.state.pilihStatus;
+    const url = myUrl.url_getTransaksi + '?status=' + pilihStatus;
     var token = window.localStorage.getItem('tokenCookies');
-    // console.log('URL GET LIST', url);
+    console.log('URL GET LIST TRANSAKSI', url);
 
     this.setState({ loadingAlsin: true });
     // console.log("offset", offset, "currLimit", currLimit);
@@ -2106,8 +2213,8 @@ class Transaksi extends React.Component {
   }
 
   SearchAllList() {
-    const { pilihEcommerce, pilihPelapak, pilihPeriode } = this.state;
-    return pilihPelapak !== '' && pilihEcommerce !== '' && pilihPeriode !== '';
+    const { pilihStatus } = this.state;
+    return pilihStatus !== '';
   }
 
   updateTanggalValue = field => evt => {
@@ -2195,24 +2302,34 @@ class Transaksi extends React.Component {
     }
   }
 
+  setModalProvinsi() {
+    var buttonSearch = document.getElementById('buttonSearch');
+    buttonSearch.disabled = false;
+    this.setState(
+      {
+        periodeDisabled: false,
+        typeDisabled: true,
+        // domisiliDisabled: true,
+        // namaEcommerce: '',
+      },
+      this.toggle('nested_parent_list_provinsi'),
+    );
+  }
+
   findData() {
     var buttonSearch = document.getElementById('buttonSearch');
     buttonSearch.disabled = true;
     this.setState(
       {
-        namaPelapakSave: this.state.namaPelapak,
-        namaEcommerceSave: this.state.namaEcommerce,
-        namaPeriodeSave: this.state.namaPeriode,
-        ecommerceDisabled: true,
-        pelapakDisabled: false,
-        periodeDisabled: true,
-        lastID: 0,
+        namaStatusSave: this.state.namaStatus,
       },
-      this.setState(
-        { namaPeriode: '', namaPelapak: '', namaEcommerce: '' },
-        () =>
-          this.getListbyPaging(this.state.currentPage, this.state.todosPerPage),
-      ),
+      () =>
+        this.setState(
+          {
+            namaStatus: '',
+          },
+          () => this.getTransaksi(),
+        ),
     );
   }
 
@@ -2525,6 +2642,59 @@ class Transaksi extends React.Component {
     );
   }
 
+  setStatus = event => {
+    if (
+      this.state.editPricing &&
+      this.state.editPricing.status === 'Menunggu Penentuan Pembayaran'
+    ) {
+      var nama = this.state.resultPricing1.find(function (element) {
+        // console.log('ELEMENT TYPE', element);
+        return element.status_id === event.target.value;
+      });
+    } else if (
+      this.state.editPricing &&
+      this.state.editPricing.status === 'Menunggu Konfirmasi Petani'
+    ) {
+      var nama = this.state.resultPricing2.find(function (element) {
+        // console.log('ELEMENT TYPE', element);
+        return element.status_id === event.target.value;
+      });
+    } else if (
+      this.state.editPricing &&
+      this.state.editPricing.status === 'Menungggu Konfirmasi Upja'
+    ) {
+      var nama = this.state.resultPricing3.find(function (element) {
+        // console.log('ELEMENT TYPE', element);
+        return element.status_id === event.target.value;
+      });
+    } else if (
+      this.state.editPricing &&
+      this.state.editPricing.status === 'Menunggu Alsin dikirim'
+    ) {
+      var nama = this.state.resultPricing4.find(function (element) {
+        // console.log('ELEMENT TYPE', element);
+        return element.status_id === event.target.value;
+      });
+    } else if (
+      this.state.editPricing &&
+      this.state.editPricing.status === 'Sedang dkerjakan'
+    ) {
+      var nama = this.state.resultPricing5.find(function (element) {
+        // console.log('ELEMENT TYPE', element);
+        return element.status_id === event.target.value;
+      });
+    }
+
+    // console.log('NAMA', nama);
+    this.setState(
+      {
+        pilihStatusFarmer: event.target.value,
+        namaStatusFarmer: nama.status_name,
+      },
+      () => (this.state.editPricing.status = this.state.namaStatusFarmer),
+    );
+  };
+
   render() {
     const { loading, loadingPage, loadingAlsin } = this.state;
     const currentTodos = this.state.result.data;
@@ -2540,6 +2710,76 @@ class Transaksi extends React.Component {
     const isEnabledToSearch = this.canBeSearch();
     const isSearch = this.SearchAllList();
 
+    const typeTodos = this.state.resultType;
+
+    const statusTodos = this.state.resultType;
+    const statusTodos1 = this.state.resultPricing1;
+    const statusTodos2 = this.state.resultPricing2;
+    const statusTodos3 = this.state.resultPricing3;
+    const statusTodos4 = this.state.resultPricing4;
+    const statusTodos5 = this.state.resultPricing5;
+
+    const renderStatus =
+      statusTodos &&
+      statusTodos.map(todo => {
+        return <option value={todo.status_id}>{todo.status_name}</option>;
+      });
+
+    // menunggu pembayaran
+    const renderStatus1 =
+      statusTodos1 &&
+      statusTodos1.map(todo => {
+        return <option value={todo.status_id}>{todo.status_name}</option>;
+      });
+
+    // menunggu konfirmasi petani
+    const renderStatus2 =
+      statusTodos2 &&
+      statusTodos2.map(todo => {
+        return <option value={todo.status_id}>{todo.status_name}</option>;
+      });
+
+    // menunggu konfirmasi upja
+    const renderStatus3 =
+      statusTodos3 &&
+      statusTodos3.map(todo => {
+        return <option value={todo.status_id}>{todo.status_name}</option>;
+      });
+
+    // menunggu alsin di kirim
+    const renderStatus4 =
+      statusTodos4 &&
+      statusTodos4.map(todo => {
+        return <option value={todo.status_id}>{todo.status_name}</option>;
+      });
+
+    // sedang dikerjakan
+    const renderStatus5 =
+      statusTodos5 &&
+      statusTodos5.map(todo => {
+        return <option value={todo.status_id}>{todo.status_name}</option>;
+      });
+
+    const renderType =
+      typeTodos &&
+      typeTodos.map((todo, i) => {
+        return (
+          <tr key={i}>
+            <td>{todo.status_name}</td>
+            <td style={{ textAlign: 'right' }}>
+              <Button
+                color="primary"
+                style={{ margin: '0px', fontSize: '15px' }}
+                value={todo.status_id}
+                onClick={this.setType}
+              >
+                Pilih
+              </Button>
+            </td>
+          </tr>
+        );
+      });
+
     var formatter = new Intl.NumberFormat('id-ID', {
       currency: 'IDR',
     });
@@ -2549,7 +2789,7 @@ class Transaksi extends React.Component {
     const pricingTodos = this.state.resultPricing;
     const pricingDetailTodos = this.state.resultPricingDetail;
 
-    console.log('ALSIN', pricingDetailTodos);
+    // console.log('ALSIN', pricingDetailTodos);
     const renderAlsin =
       alsinTodos &&
       alsinTodos.map((todo, i) => {
@@ -2927,17 +3167,61 @@ class Transaksi extends React.Component {
                 </Col>
                 <Col sm={7} style={{ textAlign: 'right', paddingRight: 0 }}></Col>
               </CardHeader> */}
+
+              <CardHeader
+                className="d-flex justify-content-between"
+                // style={{ paddingBottom: 0 }}
+              >
+                <Col
+                  style={{
+                    paddingRight: 0,
+                    paddingBottom: 0,
+                    marginBottom: 0,
+                    paddingLeft: 0,
+                  }}
+                >
+                  <InputGroup style={{ float: 'right' }}>
+                    <Input
+                      disabled
+                      placeholder="Pilih Status"
+                      style={{ fontWeight: 'bold' }}
+                      value={this.state.namaStatus}
+                    />
+                    {/* {console.log('ISINYA:', this.state.namaProvinsi)} */}
+                    <InputGroupAddon addonType="append">
+                      <Button onClick={() => this.setModalProvinsi()}>
+                        <MdList />
+                      </Button>
+                      <Button
+                        color="primary"
+                        style={{ float: 'right' }}
+                        onClick={() => this.findData()}
+                        disabled={!isSearch}
+                        id="buttonSearch"
+                      >
+                        <MdSearch />
+                      </Button>
+                    </InputGroupAddon>
+                  </InputGroup>
+                </Col>
+              </CardHeader>
               <CardBody>
-                {/* <Row>
-                  <Col style={{ textAlign: 'right' }}>
-                    <Button
-                      color="primary"
-                      onClick={this.toggle('nested_parent_editMassal')}
-                    >
-                      Tambah Alsin
-                    </Button>
+                <Row>
+                  <Col style={{ textAlign: 'left' }}>
+                    <Label style={{ marginBottom: 0, fontWeight: 'bold' }}>
+                      Status:&nbsp;
+                    </Label>
+                    {this.state.namaStatusSave === undefined ? (
+                      <Label style={{ marginBottom: 0, fontWeight: 'bold' }}>
+                        Semuanya
+                      </Label>
+                    ) : (
+                      <Label style={{ marginBottom: 0, fontWeight: 'bold' }}>
+                        {this.state.namaStatusSave}
+                      </Label>
+                    )}
                   </Col>
-                </Row> */}
+                </Row>
                 <Table responsive striped id="tableUtama">
                   <thead>
                     <tr>
@@ -2954,7 +3238,8 @@ class Transaksi extends React.Component {
                   <tbody>
                     {!alsinTodos && loadingAlsin === true ? (
                       <LoadingSpinner status={4} />
-                    ) : loadingAlsin === false && !alsinTodos ? (
+                    ) : loadingAlsin === false &&
+                      (!alsinTodos || alsinTodos.length === 0) ? (
                       (
                         <tr>
                           <td
@@ -3021,6 +3306,45 @@ class Transaksi extends React.Component {
         </Row>
 
         {/* KHUSUS MODAL */}
+
+        {/* Modal List Status */}
+        <Modal
+          onExit={this.handleCloseDomisili}
+          isOpen={this.state.modal_nested_parent_list_provinsi}
+          toggle={this.toggle('nested_parent_list_provinsi')}
+          className={this.props.className}
+        >
+          <ModalHeader toggle={this.toggle('nested_parent_list_provinsi')}>
+            List Status
+          </ModalHeader>
+          <ModalBody>
+            <Table responsive striped>
+              <tbody>
+                {typeTodos.length === 0 && loadingPage === true ? (
+                  <LoadingSpinner status={4} />
+                ) : loadingPage === false && typeTodos.length === 0 ? (
+                  (
+                    <tr>
+                      <td
+                        style={{ backgroundColor: 'white' }}
+                        colSpan="17"
+                        className="text-center"
+                      >
+                        TIDAK ADA DATA
+                      </td>
+                    </tr>
+                  ) || <LoadingSpinner status={4} />
+                ) : loadingPage === true && typeTodos.length !== 0 ? (
+                  <LoadingSpinner status={4} />
+                ) : (
+                  renderType
+                )}
+              </tbody>
+            </Table>
+          </ModalBody>
+        </Modal>
+        {/* Modal List Status */}
+
         {/* Modal Delete Alsin*/}
         <Modal
           onExit={this.handleClose}
@@ -3090,6 +3414,43 @@ class Transaksi extends React.Component {
               </tr>
             </thead>
             <tbody>{renderPricing}</tbody>
+            {/* {console.log('EDIT TRANSAKSI', this.state.editPricing)} */}
+            <Label>Status</Label>
+            <Input
+              type="select"
+              autoComplete="off"
+              name="select"
+              color="primary"
+              style={{ marginRight: '1px' }}
+              onChange={this.setStatus}
+            >
+              <option
+                value={this.state.editPricing && this.state.editPricing.status}
+                disabled
+                selected
+                hidden
+                id="pilih"
+              >
+                {this.state.editPricing && this.state.editPricing.status}
+              </option>
+              {this.state.editPricing &&
+                this.state.editPricing.status ===
+                  'Menunggu Penentuan Pembayaran' &&
+                renderStatus1}
+              {this.state.editPricing &&
+                this.state.editPricing.status ===
+                  'Menunggu Konfirmasi Petani' &&
+                renderStatus2}
+              {this.state.editPricing &&
+                this.state.editPricing.status === 'Menungggu Konfirmasi Upja' &&
+                renderStatus3}
+              {this.state.editPricing &&
+                this.state.editPricing.status === 'Menunggu Alsin dikirim' &&
+                renderStatus4}
+              {this.state.editPricing &&
+                this.state.editPricing.status === 'Sedang dkerjakan' &&
+                renderStatus5}
+            </Input>
           </ModalBody>
           <ModalFooter>
             <Button
@@ -3183,7 +3544,7 @@ class Transaksi extends React.Component {
             Edit Transaksi Detail
           </ModalHeader>
           <ModalBody>
-          <thead>
+            <thead>
               <tr>
                 <th>Kode Kendaraan</th>
                 {/* <td>Edit</td> */}

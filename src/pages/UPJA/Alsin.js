@@ -2396,28 +2396,6 @@ class Alsin extends React.Component {
                 </Link>
               </td>
             )}
-            {todo.picture === null && (
-              <td>
-                <img
-                  src={imageNotFound}
-                  width="100"
-                  height="50"
-                  className="pr-2"
-                  alt=""
-                />
-              </td>
-            )}
-            {todo.picture !== null && (
-              <td>
-                <img
-                  src={todo.picture}
-                  width="100"
-                  height="50"
-                  className="pr-2"
-                  alt=""
-                />
-              </td>
-            )}
             <td>{formatter.format(todo.cost)}</td>
             <td>{todo.available}</td>
             <td>{todo.not_available}</td>
@@ -2750,7 +2728,6 @@ class Alsin extends React.Component {
                   <thead>
                     <tr>
                       <th>Alsin</th>
-                      <th>Gambar</th>
                       <th>Harga</th>
                       <th>Tersedia</th>
                       <th>Tidak Tersedia</th>
@@ -2871,29 +2848,23 @@ class Alsin extends React.Component {
           <ModalBody>
             <Form>
               <FormGroup>
-                <Label>Gambar</Label>
-                <br></br>
-                {this.state.editAlsin &&
-                  this.state.editAlsin.picture_detail === null && (
-                    <img
-                      src={imageNotFound}
-                      width="150"
-                      height="70"
-                      className="pr-2"
-                      alt=""
-                    />
-                  )}
-                {this.state.editAlsin &&
-                  this.state.editAlsin.picture_detail !== null && (
-                    <img
-                      src={this.state.editAlsin.picture_detail}
-                      width="150"
-                      height="70"
-                      className="pr-2"
-                      alt=""
-                    />
-                  )}
-                <br></br>
+                <Label>Alsin</Label>
+                <Input
+                  autoComplete="off"
+                  type="text"
+                  name="cost"
+                  placeholder="Alsin..."
+                  onChange={evt =>
+                    this.updateInputValue(
+                      evt.target.value,
+                      evt.target.name,
+                      'editAlsin',
+                    )
+                  }
+                  disabled={true}
+                  value={this.state.editAlsin && this.state.editAlsin.name}
+                />
+                {/* {console.log("EDIT ALSIN", this.state.editAlsin)} */}
                 <Label>Harga</Label>
                 <Input
                   autoComplete="off"

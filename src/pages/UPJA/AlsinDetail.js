@@ -1174,9 +1174,22 @@ class AlsinDetail extends React.Component {
             {todo.vechile_code === null && <td>-</td>}
             {todo.vechile_code !== null && <td>{todo.vechile_code}</td>}
 
-            <td>
-              <Badge color="success">{todo.status}</Badge>
-            </td>
+            {todo.status === 'Rusak' && (
+              <td>
+                <Badge color="danger">{todo.status}</Badge>
+              </td>
+            )}
+            {todo.status === 'Sedang Digunakan' && (
+              <td>
+                <Badge color="warning">{todo.status}</Badge>
+              </td>
+            )}
+            {todo.status === 'Tersedia' && (
+              <td>
+                <Badge color="success">{todo.status}</Badge>
+              </td>
+            )}
+
             <td>
               <Button
                 style={{ margin: '0px' }}
@@ -1277,30 +1290,19 @@ class AlsinDetail extends React.Component {
               </td>
             )}
             <td>{todo.cost}</td>
-            {todo.status === 0 && (
-              <td style={{ textAlign: 'left' }}>
-                {
-                  <Label
-                    style={{
-                      fontWeight: 'bold',
-                    }}
-                  >
-                    <Badge color="danger">Tidak Tersedia</Badge>
-                  </Label>
-                }
+            {todo.status === 'Rusak' && (
+              <td>
+                <Badge color="danger">{todo.status}</Badge>
               </td>
             )}
-            {todo.status === 1 && (
-              <td style={{ textAlign: 'left' }}>
-                {
-                  <Label
-                    style={{
-                      fontWeight: 'bold',
-                    }}
-                  >
-                    <Badge color="success">Tersedia</Badge>
-                  </Label>
-                }
+            {todo.status === 'Sedang Digunakan' && (
+              <td>
+                <Badge color="warning">{todo.status}</Badge>
+              </td>
+            )}
+            {todo.status === 'Tersedia' && (
+              <td>
+                <Badge color="success">{todo.status}</Badge>
               </td>
             )}
           </tr>
