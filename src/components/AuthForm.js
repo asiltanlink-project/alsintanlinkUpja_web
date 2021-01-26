@@ -186,6 +186,7 @@ class AuthForm extends React.Component {
 
   redirectVerifikasi() {
     window.localStorage.removeItem('token');
+    window.localStorage.removeItem('tokenCookies');
     window.localStorage.removeItem('accessList');
     this.setState({ loading: true }, () =>
       window.location.replace('/verifikasi'),
@@ -194,6 +195,7 @@ class AuthForm extends React.Component {
 
   redirectOut() {
     window.localStorage.removeItem('token');
+    window.localStorage.removeItem('tokenCookies');
     window.localStorage.removeItem('accessList');
     this.setState({ loading: true }, () => window.location.replace('/login'));
   }
@@ -563,7 +565,7 @@ class AuthForm extends React.Component {
           className={this.props.className}
         >
           <ModalHeader>Proses Lupa Password Berhasil</ModalHeader>
-          {(this.state.inputEmailNumber.includes('0') ||
+          {/* {(this.state.inputEmailNumber.includes('0') ||
             this.state.inputEmailNumber.includes('+62')) && (
             <ModalBody>
               <Label>Silahkan cek Handphone Anda untuk kode OTP!</Label>
@@ -582,27 +584,27 @@ class AuthForm extends React.Component {
                 {loadingButton && 'Sedang diproses'}
               </Button>
             </ModalFooter>
-          )}
+          )} */}
+          {/* {(this.state.inputEmailNumber.includes('@') ||
+            this.state.inputEmailNumber.includes('.')) && ( */}
+          <ModalBody>
+            <Label>Silahkan cek Email Anda untuk Verifikasi!</Label>
+          </ModalBody>
+          {/* )}
           {(this.state.inputEmailNumber.includes('@') ||
-            this.state.inputEmailNumber.includes('.')) && (
-            <ModalBody>
-              <Label>Silahkan cek Email Anda untuk Verifikasi!</Label>
-            </ModalBody>
-          )}
-          {(this.state.inputEmailNumber.includes('@') ||
-            this.state.inputEmailNumber.includes('.')) && (
-            <ModalFooter style={{ textAlign: 'center' }}>
-              <Button
-                style={{ textAlign: 'center' }}
-                disabled={loadingButton}
-                onClick={() => this.redirectOut()}
-              >
-                {!loadingButton && 'Oke'}
-                {loadingButton && <MdAutorenew />}
-                {loadingButton && 'Sedang diproses'}
-              </Button>
-            </ModalFooter>
-          )}
+            this.state.inputEmailNumber.includes('.')) && ( */}
+          <ModalFooter style={{ textAlign: 'center' }}>
+            <Button
+              style={{ textAlign: 'center' }}
+              disabled={loadingButton}
+              onClick={() => this.redirectOut()}
+            >
+              {!loadingButton && 'Oke'}
+              {loadingButton && <MdAutorenew />}
+              {loadingButton && 'Sedang diproses'}
+            </Button>
+          </ModalFooter>
+          {/* )} */}
         </Modal>
         {/* Modal Verifikasi */}
       </Form>
@@ -634,10 +636,10 @@ AuthForm.propTypes = {
 AuthForm.defaultProps = {
   authState: 'LOGIN',
   showLogo: true,
-  usernameLabel: 'Email',
+  usernameLabel: 'Email/No. Handphone',
   usernameInputProps: {
     type: 'input',
-    placeholder: 'Email...',
+    placeholder: 'Email/No. Handphone...',
     name: 'username',
   },
   passwordLabel: 'Password',

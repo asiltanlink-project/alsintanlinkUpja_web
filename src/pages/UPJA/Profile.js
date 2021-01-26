@@ -481,6 +481,7 @@ class Profile extends React.Component {
 
   redirectOut() {
     window.localStorage.removeItem('token');
+    window.localStorage.removeItem('tokenCookies');
     window.localStorage.removeItem('accessList');
     this.setState({ loading: true }, () => window.location.replace('/login'));
   }
