@@ -68,6 +68,12 @@ class Profile extends React.Component {
           class_name: 'Profesional',
         },
       ],
+      RMU: false,
+      benihPadi: false,
+      bibitPadi: false,
+      reparasi: false,
+      sukuCadang: false,
+      training: false,
     };
   }
 
@@ -227,6 +233,12 @@ class Profile extends React.Component {
     var namaKepalaDesa = document.getElementById('namaKepalaDesa');
     var namaDesa = document.getElementById('namaDesa');
     var badanHukum = document.getElementById('badanHukum');
+    var RMU = document.getElementById('RMU');
+    var benihPadi = document.getElementById('benihPadi');
+    var bibitPadi = document.getElementById('bibitPadi');
+    var reparasi = document.getElementById('reparasi');
+    var sukuCadang = document.getElementById('sukuCadang');
+    var training = document.getElementById('training');
     var namaKelas = document.getElementById('namaKelas');
     var simpan = document.getElementById('simpan');
     var batalsimpan = document.getElementById('batalsimpan');
@@ -243,6 +255,12 @@ class Profile extends React.Component {
       village: input.village,
       class: input.class || this.state.pilihClass,
       legality: input.legality,
+      rmu: this.state.RMU === true ? 1 : 0,
+      rice_seed: this.state.benihPadi === true ? 1 : 0,
+      rice: this.state.bibitPadi === true ? 1 : 0,
+      reparation: this.state.reparasi === true ? 1 : 0,
+      spare_part: this.state.sukuCadang === true ? 1 : 0,
+      training: this.state.training === true ? 1 : 0,
     };
 
     console.log('PAYLOAD SAVE', payload);
@@ -283,6 +301,12 @@ class Profile extends React.Component {
           namaKepalaDesa.disabled = true;
           namaDesa.disabled = true;
           badanHukum.disabled = true;
+          RMU.disabled = true;
+          benihPadi.disabled = true;
+          bibitPadi.disabled = true;
+          reparasi.disabled = true;
+          sukuCadang.disabled = true;
+          training.disabled = true;
           namaKelas.style.display = 'none';
           simpan.style.display = 'none';
           batalsimpan.style.display = 'none';
@@ -662,6 +686,12 @@ class Profile extends React.Component {
     var namaKelas = document.getElementById('namaKelas');
     var simpan = document.getElementById('simpan');
     var batalsimpan = document.getElementById('batalsimpan');
+    var RMU = document.getElementById('RMU');
+    var benihPadi = document.getElementById('benihPadi');
+    var bibitPadi = document.getElementById('bibitPadi');
+    var reparasi = document.getElementById('reparasi');
+    var sukuCadang = document.getElementById('sukuCadang');
+    var training = document.getElementById('training');
 
     namaLengkap.disabled = false;
     namaProvinsi.style.display = 'block';
@@ -670,6 +700,12 @@ class Profile extends React.Component {
     namaKepalaDesa.disabled = false;
     namaDesa.disabled = false;
     badanHukum.disabled = false;
+    RMU.disabled = false;
+    benihPadi.disabled = false;
+    bibitPadi.disabled = false;
+    reparasi.disabled = false;
+    sukuCadang.disabled = false;
+    training.disabled = false;
     namaKelas.style.display = 'block';
     simpan.style = 'block';
     batalsimpan.style = 'block';
@@ -682,6 +718,12 @@ class Profile extends React.Component {
     var namaKepalaDesa = document.getElementById('namaKepalaDesa');
     var namaDesa = document.getElementById('namaDesa');
     var badanHukum = document.getElementById('badanHukum');
+    var RMU = document.getElementById('RMU');
+    var benihPadi = document.getElementById('benihPadi');
+    var bibitPadi = document.getElementById('bibitPadi');
+    var reparasi = document.getElementById('reparasi');
+    var sukuCadang = document.getElementById('sukuCadang');
+    var training = document.getElementById('training');
     var namaKelas = document.getElementById('namaKelas');
     var simpan = document.getElementById('simpan');
     var batalsimpan = document.getElementById('batalsimpan');
@@ -693,6 +735,12 @@ class Profile extends React.Component {
     namaKepalaDesa.disabled = true;
     namaDesa.disabled = true;
     badanHukum.disabled = true;
+    RMU.disabled = true;
+    benihPadi.disabled = true;
+    bibitPadi.disabled = true;
+    reparasi.disabled = true;
+    sukuCadang.disabled = true;
+    training.disabled = true;
     namaKelas.style.display = 'none';
     simpan.style.display = 'none';
     batalsimpan.style.display = 'none';
@@ -1100,6 +1148,7 @@ class Profile extends React.Component {
                           <Label check>
                             <Input
                               type="checkbox"
+                              disabled
                               id="RMU"
                               checked={this.state.RMU}
                               onChange={() =>
@@ -1115,6 +1164,7 @@ class Profile extends React.Component {
                           <Label check>
                             <Input
                               type="checkbox"
+                              disabled
                               id="benihPadi"
                               checked={this.state.benihPadi}
                               onChange={() =>
@@ -1130,6 +1180,7 @@ class Profile extends React.Component {
                           <Label check>
                             <Input
                               type="checkbox"
+                              disabled
                               id="bibitPadi"
                               checked={this.state.bibitPadi}
                               onChange={() =>
@@ -1147,6 +1198,7 @@ class Profile extends React.Component {
                           <Label check>
                             <Input
                               type="checkbox"
+                              disabled
                               id="reparasi"
                               checked={this.state.reparasi}
                               onChange={() =>
@@ -1162,6 +1214,7 @@ class Profile extends React.Component {
                           <Label check>
                             <Input
                               type="checkbox"
+                              disabled
                               id="sukuCadang"
                               checked={this.state.sukuCadang}
                               onChange={() =>
@@ -1171,6 +1224,22 @@ class Profile extends React.Component {
                               }
                             />
                             Suku Cadang
+                          </Label>
+                        </FormGroup>
+                        <FormGroup check>
+                          <Label check>
+                            <Input
+                              type="checkbox"
+                              disabled
+                              id="training"
+                              checked={this.state.training}
+                              onChange={() =>
+                                this.setState({
+                                  training: !this.state.training,
+                                })
+                              }
+                            />
+                            Training
                           </Label>
                         </FormGroup>
                       </Col>

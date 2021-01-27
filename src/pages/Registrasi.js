@@ -69,6 +69,7 @@ class Registrasi extends React.Component {
       bibitPadi: false,
       reparasi: false,
       sukuCadang: false,
+      training: false,
     };
   }
 
@@ -224,11 +225,12 @@ class Registrasi extends React.Component {
       legality: input.badanHukum,
       class: parseInt(this.state.pilihClass),
       password: this.state.password,
-      RMU: this.state.RMU === true ? 1 : 0,
-      benihPadi: this.state.benihPadi === true ? 1 : 0,
-      bibitPadi: this.state.bibitPadi === true ? 1 : 0,
-      reparasi: this.state.reparasi === true ? 1 : 0,
-      sukuCadang: this.state.sukuCadang === true ? 1 : 0,
+      rmu: this.state.RMU === true ? 1 : 0,
+      rice_seed: this.state.benihPadi === true ? 1 : 0,
+      rice: this.state.bibitPadi === true ? 1 : 0,
+      reparation: this.state.reparasi === true ? 1 : 0,
+      spare_part: this.state.sukuCadang === true ? 1 : 0,
+      training: this.state.training === true ? 1 : 0,
     };
 
     console.log('ISI PAYLOAD', payload);
@@ -987,6 +989,21 @@ class Registrasi extends React.Component {
                               }
                             />
                             Suku Cadang
+                          </Label>
+                        </FormGroup>
+                        <FormGroup check>
+                          <Label check>
+                            <Input
+                              type="checkbox"
+                              id="training"
+                              checked={this.state.training}
+                              onChange={() =>
+                                this.setState({
+                                  training: !this.state.training,
+                                })
+                              }
+                            />
+                            Training
                           </Label>
                         </FormGroup>
                       </Col>
