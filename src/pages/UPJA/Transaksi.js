@@ -103,6 +103,7 @@ class Transaksi extends React.Component {
       ecommerceDetail: [],
       listEditMasal: [],
       resultBatasPerPelapak: [],
+      resultPricingService: [],
       resultPeriode: [
         {
           periode_id: 'upcoming',
@@ -1155,8 +1156,9 @@ class Transaksi extends React.Component {
   };
   // untuk pilih ecommerce
 
-  setListEditMassal = event => {
+  setListEditMassal = (param, param2) => {
     var listDetail = this.state.listEditMasal;
+    // console.log('EDIT BATAS BAWAH', param, '@@@', param2);
 
     this.setState(
       {
@@ -1164,14 +1166,16 @@ class Transaksi extends React.Component {
       },
       () => {
         var newlistEditMasal = {
-          alsin_type_id: parseInt(this.state.pilihAlsin),
-          cost: parseInt(this.state.currentDimen.cost),
-          total_item: parseInt(this.state.currentDimen.total_item),
-          nama: this.state.namaAlsin,
+          alsin_type_id: this.state.addAlsin.alsin_type_id,
+          cost: parseInt(this.state.addAlsin.cost),
+          total_item: parseInt(this.state.addAlsin.total_item),
+          alsin_type_name: this.state.addAlsin.alsin_type_name,
+          vechile_code: this.state.addAlsin.vechile_code,
+          alsin_item_id: this.state.addAlsin.alsin_item_id,
         };
 
         var newArr = listDetail.filter(
-          item => item.alsin_type_id === newlistEditMasal.alsin_type_id,
+          item => item.alsin_item_id === param2.alsin_item_id,
         );
 
         if (newArr.length > 0) {
@@ -1179,7 +1183,7 @@ class Transaksi extends React.Component {
           listDetail.push(newlistEditMasal);
         }
 
-        console.log('LIST EDIT MASAL', listDetail);
+        console.log('LIST EDIT MASAL', newArr);
 
         this.setState({
           modal_tambahProduk: false,
@@ -2136,6 +2140,12 @@ class Transaksi extends React.Component {
         [`modal_${modalType}`]: !this.state[`modal_${modalType}`],
         deleteAlsin: todo,
       });
+    } else if (modalType === 'nested_parent_tambahProduk') {
+      // console.log('LOG 1');
+      this.setState({
+        [`modal_${modalType}`]: !this.state[`modal_${modalType}`],
+        addAlsin: todo,
+      });
     } else {
       this.setState({
         [`modal_${modalType}`]: !this.state[`modal_${modalType}`],
@@ -2143,7 +2153,6 @@ class Transaksi extends React.Component {
         realCurrentPages: 1,
         maxPages: 1,
         currentPages: 1,
-        addAlsin: todo,
       });
     }
   };
@@ -2183,6 +2192,7 @@ class Transaksi extends React.Component {
       },
       editBatasBawah: {},
       resultDataProcod: [],
+      addAlsin: {},
     });
   };
 
@@ -2290,7 +2300,7 @@ class Transaksi extends React.Component {
 
   deleteListEditMassal(todo) {
     var newArr = this.state.listEditMasal.filter(
-      item => item.alsin_type_id !== todo.alsin_type_id,
+      item => item.alsin_item_id !== todo.alsin_item_id,
     );
     this.setState({
       listEditMasal: newArr,
@@ -2475,6 +2485,7 @@ class Transaksi extends React.Component {
           this.showNotification('Data ditemukan!', 'info');
           this.setState({
             resultPricing: result,
+            resultPricingService: data.result.other_service,
             loadingAlsin: false,
           });
         }
@@ -2818,6 +2829,7 @@ class Transaksi extends React.Component {
     const listEcommerce = this.state.resultEcommerce;
     const alsinTodos = this.state.resultAlsin;
     const pricingTodos = this.state.resultPricing;
+    const pricingServiceTodos = this.state.resultPricingService;
     const pricingDetailTodos = this.state.resultPricingDetail;
 
     // console.log('ALSIN', pricingDetailTodos);
@@ -2872,75 +2884,36 @@ class Transaksi extends React.Component {
       pricingTodos.map((todo, i) => {
         return (
           <tr key={i}>
-            <td
-              style={{
-                fontWeight: 'bold',
-                cursor: 'pointer',
-                textDecoration: 'underline',
-                color: '#009688',
-              }}
-              onClick={this.toggle('nested_parent_editMassal')}
-            >
-              {todo.alsin_type_name}
+            <td>
+              {todo.alsin_type_name}({todo.vechile_code})
             </td>
-            {/* {todo.cost === undefined && (
-              <td style={{ textAlign: 'right' }}>-</td>
-            )}
-            {todo.cost !== undefined && (
-              <td style={{ textAlign: 'right' }}>
-                {formatter.format(todo.cost)}
-              </td>
-            )}
-            {todo.total_item === undefined && (
-              <td style={{ textAlign: 'right' }}>-</td>
-            )}
-            {todo.total_item !== undefined && (
-              <td style={{ textAlign: 'right' }}>
-                {formatter.format(todo.total_item)}
-              </td>
-            )} */}
             <td>
               <Button
                 color="secondary"
                 size="sm"
                 onClick={this.toggle('nested_parent_tambahProduk', todo)}
-                // onClick={() =>
-                // this.toggleEditData('nested_parent_editMassal_edit', {
-                //   ...todo,
-                // })
-                // }
               >
                 <MdAdd />
               </Button>
             </td>
+          </tr>
+        );
+      });
+
+    const renderPricingService =
+      pricingServiceTodos &&
+      pricingServiceTodos.map((todo, i) => {
+        return (
+          <tr key={i}>
+            <td>{todo.alsin_type_name}</td>
+            <td>{parseInt(todo.cost)}</td>
             {/* <td>
               <Button
-                color="danger"
-                size="sm"
-                value={todo.nama}
-                onClick={() => this.deleteListEditMassal({ ...todo })}
-              >
-                <MdDelete />
-              </Button>
-            </td> */}
-            {/* <td style={{ textAlign: 'right', float: 'right' }}>
-              <Button
-                onClick={() =>
-                  this.toggleShowPricing('nested_parent', { ...todo })
-                }
-                color="primary"
-              >
-                <MdAdd></MdAdd>
-                Alsin Item
-              </Button>
-            </td>
-            <td style={{ textAlign: 'right', float: 'right' }}>
-              <Button
-                onClick={this.toggle('nested_parent_editMassal')}
                 color="secondary"
+                size="sm"
+                onClick={this.toggle('nested_parent_tambahProduk', todo)}
               >
-                <MdInsertChart></MdInsertChart>
-                Input Alsin
+                <MdAdd />
               </Button>
             </td> */}
           </tr>
@@ -3181,14 +3154,16 @@ class Transaksi extends React.Component {
       this.state.listEditMasal.map((todo, i) => {
         return (
           <tr key={i}>
-            <td style={{ textAlign: 'left' }}>{todo.alsin_type_name}</td>
+            <td style={{ textAlign: 'left' }}>
+              {todo.alsin_type_name}({todo.vechile_code})
+            </td>
             <td style={{ textAlign: 'right' }}>
               {formatter.format(todo.cost)}
             </td>
             <td style={{ textAlign: 'right' }}>
               {formatter.format(todo.total_item)}
             </td>
-            <td>
+            {/* <td>
               <Button
                 color="secondary"
                 size="sm"
@@ -3200,7 +3175,7 @@ class Transaksi extends React.Component {
               >
                 <MdEdit />
               </Button>
-            </td>
+            </td> */}
             <td>
               <Button
                 color="danger"
@@ -3503,11 +3478,11 @@ class Transaksi extends React.Component {
                 {/* <td>Edit</td> */}
               </tr>
             </thead>
-            <Label style={{ marginBottom: '0', fontSize: '0.7em' }}>
+            <Label
+              style={{ marginBottom: '0', fontSize: '0.7em', color: 'red' }}
+            >
               *klik untuk menginput data dari Alsin yang telah dipesan
             </Label>
-
-            {/* <tbody>{renderPricing}</tbody> */}
             <CardBody>
               <Table responsive striped id="tableBatasPerPelapak">
                 <tbody>{renderPricing}</tbody>
@@ -3518,13 +3493,13 @@ class Transaksi extends React.Component {
                     <th>Alsin</th>
                     <th>Harga</th>
                     <th>Total Item</th>
-                    <th>Edit</th>
+                    {/* <th>Edit</th> */}
                     <th>Hapus</th>
                   </tr>
                 </thead>
 
                 <tbody>{renderListEditMassal}</tbody>
-                {/* {this.state.listEditMasal.length === 0 && (
+                {this.state.listEditMasal.length === 0 && (
                   <tr>
                     <td
                       style={{ backgroundColor: 'white' }}
@@ -3534,7 +3509,7 @@ class Transaksi extends React.Component {
                       TIDAK ADA DATA
                     </td>
                   </tr>
-                )} */}
+                )}
               </Table>
             </CardBody>
             <hr style={{ borderWidth: 'medium' }}></hr>
@@ -3544,11 +3519,34 @@ class Transaksi extends React.Component {
                 {/* <td>Edit</td> */}
               </tr>
             </thead>
-            <Label style={{ marginBottom: '0', fontSize: '0.7em' }}>
+            {/* <Label style={{ marginBottom: '0', fontSize: '0.7em', color:'red' }}>
               *klik untuk menginput data dari Alsin yang telah dipesan
-            </Label>
-            <tbody>{renderPricing}</tbody>
-            <tbody>{renderListEditMassal}</tbody>
+            </Label> */}
+            <Table responsive striped id="tableBatasPerPelapak">
+              <thead>
+                <tr>
+                  <th>Service</th>
+                  <th>Harga</th>
+                  {/* <th>Total</th> */}
+                  {/* <th>Edit</th> */}
+                  {/* <th>Hapus</th> */}
+                </tr>
+              </thead>
+              {<tbody>{renderPricingService}</tbody>}
+
+              {this.state.resultPricingService.length === 0 && (
+                <tr>
+                  <td
+                    style={{ backgroundColor: 'white' }}
+                    colSpan="11"
+                    className="text-center"
+                  >
+                    TIDAK ADA DATA
+                  </td>
+                </tr>
+              )}
+            </Table>
+            {/* <tbody>{renderListEditMassal}</tbody> */}
             <hr style={{ borderWidth: 'medium' }}></hr>
             {/* {console.log('EDIT TRANSAKSI', this.state.editPricing)} */}
             <Label>Status</Label>
@@ -3589,6 +3587,9 @@ class Transaksi extends React.Component {
               {this.state.editPricing &&
                 this.state.editPricing.status === 'Sedang dkerjakan' &&
                 renderStatus5}
+              {this.state.editPricing &&
+                this.state.editPricing.status === 'Selesai' &&
+                'Selesai'}
             </Input>
           </ModalBody>
           <ModalFooter>
@@ -4257,45 +4258,13 @@ class Transaksi extends React.Component {
             <Form onSubmit={e => e.preventDefault()}>
               <FormGroup>
                 <Label>Alsin</Label>
-                {/* <Input
-                  type="number"
-                  min={0}
-                  name="alsin_type_id"
-                  style={{ textAlign: 'right' }}
-                  placeholder="Type ID"
-                  onKeyPress={e => this.numValidate(e)}
-                  onChange={evt =>
-                    this.updateInputValue(
-                      evt.target.value,
-                      evt.target.name,
-                      'currentDimen',
-                    )
-                  }
-                  value={this.state.alsin_type_id}
-                /> */}
                 <Input
-                  // type="select"
                   type="text"
                   disabled={true}
-                  autoComplete="off"
-                  name="alsin_type_name"
-                  color="primary"
-                  style={{ marginRight: '1px' }}
-                  // onChange={this.setAlsinItem}
-                  onChange={evt =>
-                    this.updateInputValue(
-                      evt.target.value,
-                      evt.target.name,
-                      'currentDimen',
-                    )
+                  value={
+                    this.state.addAlsin && this.state.addAlsin.alsin_type_name
                   }
-                  value={this.state.addAlsin && this.state.addAlsin.alsin_type_name}
-                >
-                  {/* <option value={''} disabled selected hidden id="pilih">
-                    Pilih Alsin Item
-                  </option>
-                  {renderAlsinItem} */}
-                </Input>
+                ></Input>
                 <Label>Harga</Label>
                 <Input
                   type="number"
@@ -4308,10 +4277,10 @@ class Transaksi extends React.Component {
                     this.updateInputValue(
                       evt.target.value,
                       evt.target.name,
-                      'currentDimen',
+                      'addAlsin',
                     )
                   }
-                  value={this.state.cost}
+                  value={this.state.addAlsin && this.state.addAlsin.cost}
                 />
                 <Label>Total Alsin</Label>
                 <Input
@@ -4325,10 +4294,10 @@ class Transaksi extends React.Component {
                     this.updateInputValue(
                       evt.target.value,
                       evt.target.name,
-                      'currentDimen',
+                      'addAlsin',
                     )
                   }
-                  value={this.state.total_item}
+                  value={this.state.addAlsin && this.state.addAlsin.total_item}
                 />
                 <Label
                   style={{ fontSize: '0.8em', marginBottom: 0, color: 'red' }}
@@ -4359,8 +4328,8 @@ class Transaksi extends React.Component {
                 <Button
                   color="primary"
                   onClick={() =>
-                    this.setListEditMassal(this.state.editBatasBawah, {
-                      ...this.state.editBatasBawah,
+                    this.setListEditMassal(this.state.addAlsin, {
+                      ...this.state.addAlsin,
                     })
                   }
                   disabled={loading}
