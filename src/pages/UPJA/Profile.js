@@ -435,6 +435,13 @@ class Profile extends React.Component {
     // const trace = perf.trace('getBundling');
     const url = myUrl.url_showDetailUPJA;
     var token = window.localStorage.getItem('tokenCookies');
+    var RMU = document.getElementById('RMU');
+    var benihPadi = document.getElementById('benihPadi');
+    var bibitPadi = document.getElementById('bibitPadi');
+    var reparasi = document.getElementById('reparasi');
+    var sukuCadang = document.getElementById('sukuCadang');
+    var training = document.getElementById('training');
+
     // console.log('URL GET LIST', url);
 
     this.setState({ loadingPage: true });
@@ -476,10 +483,44 @@ class Profile extends React.Component {
           this.showNotification(message, 'error');
         } else {
           this.showNotification('Data ditemukan!', 'info');
-          this.setState({
-            result: result,
-            loadingPage: false,
-          });
+          this.setState(
+            {
+              result: result,
+              loadingPage: false,
+            },
+            () => {
+              if (this.state.result.rmu === 0) {
+                this.setState({ RMU: true });
+              } else {
+                this.setState({ RMU: false });
+              }
+              if (this.state.result.rice === 0) {
+                this.setState({ bibitPadi: true });
+              } else {
+                this.setState({ bibitPadi: false });
+              }
+              if (this.state.result.rice_seed === 0) {
+                this.setState({ benihPadi: true });
+              } else {
+                this.setState({ benihPadi: false });
+              }
+              if (this.state.result.spare_part === 0) {
+                this.setState({ sukuCadang: true });
+              } else {
+                this.setState({ sukuCadang: false });
+              }
+              if (this.state.result.training === 0) {
+                this.setState({ training: true });
+              } else {
+                this.setState({ training: false });
+              }
+              if (this.state.result.reparation === 0) {
+                this.setState({ reparasi: true });
+              } else {
+                this.setState({ reparasi: false });
+              }
+            },
+          );
         }
       })
       .catch(err => {
