@@ -1698,7 +1698,7 @@ class Transaksi extends React.Component {
       '?transaction_order_id=' +
       transaction_order_id;
     var token = window.localStorage.getItem('tokenCookies');
-    // console.log('URL GET LIST', url);
+    console.log('URL GET LIST', url);
 
     this.setState({ loadingAlsin: true });
     // console.log("offset", offset, "currLimit", currLimit);
