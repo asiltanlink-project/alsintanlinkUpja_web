@@ -2488,7 +2488,7 @@ class Transaksi extends React.Component {
         return (
           <tr key={i}>
             {/* {console.log('TOTAL REPARATION', todo)} */}
-            <td>{todo.packaging}</td>
+            <td>{todo.packaging} Kg</td>
             <td style={{ textAlign: 'right' }}>{todo.weight} Kg</td>
             <td style={{ textAlign: 'right' }}>
               {formatter.format(todo.cost)}
