@@ -3160,9 +3160,9 @@ class Transaksi extends React.Component {
             <td style={{ textAlign: 'right' }}>
               {formatter.format(todo.cost)}
             </td>
-            <td style={{ textAlign: 'right' }}>
+            {/* <td style={{ textAlign: 'right' }}>
               {formatter.format(todo.total_item)}
-            </td>
+            </td> */}
             {/* <td>
               <Button
                 color="secondary"
@@ -3491,8 +3491,8 @@ class Transaksi extends React.Component {
                 <thead>
                   <tr>
                     <th>Alsin</th>
-                    <th>Harga</th>
-                    <th>Total Item</th>
+                    <th style={{ textAlign: 'right' }}>Harga</th>
+                    {/* <th>Total Item</th> */}
                     {/* <th>Edit</th> */}
                     <th>Hapus</th>
                   </tr>
@@ -4282,7 +4282,7 @@ class Transaksi extends React.Component {
                   }
                   value={this.state.addAlsin && this.state.addAlsin.cost}
                 />
-                <Label>Total Alsin</Label>
+                {/* <Label>Total Alsin</Label>
                 <Input
                   type="number"
                   min={0}
@@ -4298,7 +4298,7 @@ class Transaksi extends React.Component {
                     )
                   }
                   value={this.state.addAlsin && this.state.addAlsin.total_item}
-                />
+                /> */}
                 <Label
                   style={{ fontSize: '0.8em', marginBottom: 0, color: 'red' }}
                 >
