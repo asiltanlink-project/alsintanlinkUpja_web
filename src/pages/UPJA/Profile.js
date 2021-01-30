@@ -69,11 +69,22 @@ class Profile extends React.Component {
         },
       ],
       RMU: false,
-      benihPadi: false,
+      benihPadiInfari30: false,
+      benihPadiInfari33: false,
+      benihPadiIR64: false,
+      benihPadiSintanur: false,
+      benihPadiCiherang: false,
+      benihPadiSitubagendit: false,
+      // benihPadi: false,
       bibitPadi: false,
       reparasi: false,
       sukuCadang: false,
       training: false,
+      trainingOperator: false,
+      trainingPerawatan: false,
+      trainingPerbaikan: false,
+      trainingPembengkelan: false,
+      trainingPembibitan: false,
     };
   }
 
@@ -234,11 +245,24 @@ class Profile extends React.Component {
     var namaDesa = document.getElementById('namaDesa');
     var badanHukum = document.getElementById('badanHukum');
     var RMU = document.getElementById('RMU');
-    var benihPadi = document.getElementById('benihPadi');
+    var benihPadiInfari30 = document.getElementById('benihPadiInfari30');
+    var benihPadiInfari33 = document.getElementById('benihPadiInfari33');
+    var benihPadiIR64 = document.getElementById('benihPadiIR64');
+    var benihPadiSintanur = document.getElementById('benihPadiSintanur');
+    var benihPadiCiherang = document.getElementById('benihPadiCiherang');
+    var benihPadiSitubagendit = document.getElementById(
+      'benihPadiSitubagendit',
+    );
+    // var benihPadi = document.getElementById('benihPadi');
     var bibitPadi = document.getElementById('bibitPadi');
     var reparasi = document.getElementById('reparasi');
     var sukuCadang = document.getElementById('sukuCadang');
-    var training = document.getElementById('training');
+    // var training = document.getElementById('training');
+    var trainingOperator = document.getElementById('trainingOperator');
+    var trainingPerawatan = document.getElementById('trainingPerawatan');
+    var trainingPerbaikan = document.getElementById('trainingPerbaikan');
+    var trainingPembengkelan = document.getElementById('trainingPembengkelan');
+    var trainingPembibitan = document.getElementById('trainingPembibitan');
     var namaKelas = document.getElementById('namaKelas');
     var simpan = document.getElementById('simpan');
     var batalsimpan = document.getElementById('batalsimpan');
@@ -256,11 +280,22 @@ class Profile extends React.Component {
       class: input.class || this.state.pilihClass,
       legality: input.legality,
       rmu: this.state.RMU === true ? 1 : 0,
-      rice_seed: this.state.benihPadi === true ? 1 : 0,
+      benihPadiInfari30: this.state.benihPadiInfari30 === true ? 1 : 0,
+      benihPadiInfari33: this.state.benihPadiInfari33 === true ? 1 : 0,
+      benihPadiIR64: this.state.benihPadiIR64 === true ? 1 : 0,
+      benihPadiCiherang: this.state.benihPadiCiherang === true ? 1 : 0,
+      benihPadiSitubagendit: this.state.benihPadiSitubagendit === true ? 1 : 0,
+      benihPadiSintanur: this.state.benihPadiSintanur === true ? 1 : 0,
+      // rice_seed: this.state.benihPadi === true ? 1 : 0,
       rice: this.state.bibitPadi === true ? 1 : 0,
       reparation: this.state.reparasi === true ? 1 : 0,
       spare_part: this.state.sukuCadang === true ? 1 : 0,
-      training: this.state.training === true ? 1 : 0,
+      // training: this.state.training === true ? 1 : 0,
+      trainingOperator: this.state.trainingOperator === true ? 1 : 0,
+      trainingPerawatan: this.state.trainingPerawatan === true ? 1 : 0,
+      trainingPerbaikan: this.state.trainingPerbaikan === true ? 1 : 0,
+      trainingPembengkelan: this.state.trainingPembengkelan === true ? 1 : 0,
+      trainingPembibitan: this.state.trainingPembibitan === true ? 1 : 0,
     };
 
     console.log('PAYLOAD SAVE', payload);
@@ -302,11 +337,22 @@ class Profile extends React.Component {
           namaDesa.disabled = true;
           badanHukum.disabled = true;
           RMU.disabled = true;
-          benihPadi.disabled = true;
+          benihPadiInfari30.disabled = true;
+          benihPadiInfari33.disabled = true;
+          benihPadiIR64.disabled = true;
+          benihPadiCiherang.disabled = true;
+          benihPadiSitubagendit.disabled = true;
+          benihPadiSintanur.disabled = true;
+          // benihPadi.disabled = true;
           bibitPadi.disabled = true;
           reparasi.disabled = true;
           sukuCadang.disabled = true;
-          training.disabled = true;
+          // training.disabled = true;
+          trainingOperator.disabled = true;
+          trainingPerawatan.disabled = true;
+          trainingPerbaikan.disabled = true;
+          trainingPembengkelan.disabled = true;
+          trainingPembibitan.disabled = true;
           namaKelas.style.display = 'none';
           simpan.style.display = 'none';
           batalsimpan.style.display = 'none';
@@ -435,12 +481,6 @@ class Profile extends React.Component {
     // const trace = perf.trace('getBundling');
     const url = myUrl.url_showDetailUPJA;
     var token = window.localStorage.getItem('tokenCookies');
-    var RMU = document.getElementById('RMU');
-    var benihPadi = document.getElementById('benihPadi');
-    var bibitPadi = document.getElementById('bibitPadi');
-    var reparasi = document.getElementById('reparasi');
-    var sukuCadang = document.getElementById('sukuCadang');
-    var training = document.getElementById('training');
 
     // console.log('URL GET LIST', url);
 
@@ -489,32 +529,87 @@ class Profile extends React.Component {
               loadingPage: false,
             },
             () => {
-              if (this.state.result.rmu === 0) {
+              if (this.state.result.rmu === 1) {
                 this.setState({ RMU: true });
               } else {
                 this.setState({ RMU: false });
               }
-              if (this.state.result.rice === 0) {
+              if (this.state.result.benihPadiInfari33 === 1) {
+                this.setState({ benihPadiInfari33: true });
+              } else {
+                this.setState({ benihPadiInfari33: false });
+              }
+              if (this.state.result.benihPadiInfari30 === 1) {
+                this.setState({ benihPadiInfari30: true });
+              } else {
+                this.setState({ benihPadiInfari30: false });
+              }
+              if (this.state.result.benihPadiIR64 === 1) {
+                this.setState({ benihPadiIR64: true });
+              } else {
+                this.setState({ benihPadiIR64: false });
+              }
+              if (this.state.result.benihPadiCiherang === 1) {
+                this.setState({ benihPadiCiherang: true });
+              } else {
+                this.setState({ benihPadiCiherang: false });
+              }
+              if (this.state.result.benihPadiSitubagendit === 1) {
+                this.setState({ benihPadiSitubagendit: true });
+              } else {
+                this.setState({ benihPadiSitubagendit: false });
+              }
+              if (this.state.result.benihPadiSintanur === 1) {
+                this.setState({ benihPadiSintanur: true });
+              } else {
+                this.setState({ benihPadiSintanur: false });
+              }
+              if (this.state.result.rice === 1) {
                 this.setState({ bibitPadi: true });
               } else {
                 this.setState({ bibitPadi: false });
               }
-              if (this.state.result.rice_seed === 0) {
-                this.setState({ benihPadi: true });
-              } else {
-                this.setState({ benihPadi: false });
-              }
-              if (this.state.result.spare_part === 0) {
+              // if (this.state.result.rice_seed === 0) {
+              //   this.setState({ benihPadi: true });
+              // } else {
+              //   this.setState({ benihPadi: false });
+              // }
+              if (this.state.result.spare_part === 1) {
                 this.setState({ sukuCadang: true });
               } else {
                 this.setState({ sukuCadang: false });
               }
-              if (this.state.result.training === 0) {
-                this.setState({ training: true });
+              // if (this.state.result.training === 0) {
+              //   this.setState({ training: true });
+              // } else {
+              //   this.setState({ training: false });
+              // }
+              if (this.state.result.trainingOperator === 1) {
+                this.setState({ trainingOperator: true });
               } else {
-                this.setState({ training: false });
+                this.setState({ trainingOperator: false });
               }
-              if (this.state.result.reparation === 0) {
+              if (this.state.result.trainingPerbaikan === 1) {
+                this.setState({ trainingPerbaikan: true });
+              } else {
+                this.setState({ trainingPerbaikan: false });
+              }
+              if (this.state.result.trainingPerawatan === 1) {
+                this.setState({ trainingPerawatan: true });
+              } else {
+                this.setState({ trainingPerawatan: false });
+              }
+              if (this.state.result.trainingPembengkelan === 1) {
+                this.setState({ trainingPembengkelan: true });
+              } else {
+                this.setState({ trainingPembengkelan: false });
+              }
+              if (this.state.result.trainingPembibitan === 1) {
+                this.setState({ trainingPembibitan: true });
+              } else {
+                this.setState({ trainingPembibitan: false });
+              }
+              if (this.state.result.reparation === 1) {
                 this.setState({ reparasi: true });
               } else {
                 this.setState({ reparasi: false });
@@ -728,11 +823,24 @@ class Profile extends React.Component {
     var simpan = document.getElementById('simpan');
     var batalsimpan = document.getElementById('batalsimpan');
     var RMU = document.getElementById('RMU');
-    var benihPadi = document.getElementById('benihPadi');
+    var benihPadiInfari30 = document.getElementById('benihPadiInfari30');
+    var benihPadiInfari33 = document.getElementById('benihPadiInfari33');
+    var benihPadiIR64 = document.getElementById('benihPadiIR64');
+    var benihPadiCiherang = document.getElementById('benihPadiCiherang');
+    var benihPadiSitubagendit = document.getElementById(
+      'benihPadiSitubagendit',
+    );
+    var benihPadiSintanur = document.getElementById('benihPadiSintanur');
+    // var benihPadi = document.getElementById('benihPadi');
     var bibitPadi = document.getElementById('bibitPadi');
     var reparasi = document.getElementById('reparasi');
     var sukuCadang = document.getElementById('sukuCadang');
-    var training = document.getElementById('training');
+    // var training = document.getElementById('training');
+    var trainingOperator = document.getElementById('trainingOperator');
+    var trainingPerawatan = document.getElementById('trainingPerawatan');
+    var trainingPerbaikan = document.getElementById('trainingPerbaikan');
+    var trainingPembengkelan = document.getElementById('trainingPembengkelan');
+    var trainingPembibitan = document.getElementById('trainingPembibitan');
 
     namaLengkap.disabled = false;
     namaProvinsi.style.display = 'block';
@@ -742,11 +850,22 @@ class Profile extends React.Component {
     namaDesa.disabled = false;
     badanHukum.disabled = false;
     RMU.disabled = false;
-    benihPadi.disabled = false;
+    benihPadiInfari30.disabled = false;
+    benihPadiInfari33.disabled = false;
+    benihPadiIR64.disabled = false;
+    benihPadiCiherang.disabled = false;
+    benihPadiSitubagendit.disabled = false;
+    benihPadiSintanur.disabled = false;
+    // benihPadi.disabled = false;
     bibitPadi.disabled = false;
     reparasi.disabled = false;
     sukuCadang.disabled = false;
-    training.disabled = false;
+    // training.disabled = false;
+    trainingOperator.disabled = false;
+    trainingPerawatan.disabled = false;
+    trainingPerbaikan.disabled = false;
+    trainingPembengkelan.disabled = false;
+    trainingPembibitan.disabled = false;
     namaKelas.style.display = 'block';
     simpan.style = 'block';
     batalsimpan.style = 'block';
@@ -760,11 +879,24 @@ class Profile extends React.Component {
     var namaDesa = document.getElementById('namaDesa');
     var badanHukum = document.getElementById('badanHukum');
     var RMU = document.getElementById('RMU');
-    var benihPadi = document.getElementById('benihPadi');
+    var benihPadiInfari30 = document.getElementById('benihPadiInfari30');
+    var benihPadiInfari33 = document.getElementById('benihPadiInfari33');
+    var benihPadiIR64 = document.getElementById('benihPadiIR64');
+    var benihPadiCiherang = document.getElementById('benihPadiCiherang');
+    var benihPadiSitubagendit = document.getElementById(
+      'benihPadiSitubagendit',
+    );
+    var benihPadiSintanur = document.getElementById('benihPadiSintanur');
+    // var benihPadi = document.getElementById('benihPadi');
     var bibitPadi = document.getElementById('bibitPadi');
     var reparasi = document.getElementById('reparasi');
     var sukuCadang = document.getElementById('sukuCadang');
-    var training = document.getElementById('training');
+    // var training = document.getElementById('training');
+    var trainingOperator = document.getElementById('trainingOperator');
+    var trainingPerawatan = document.getElementById('trainingPerawatan');
+    var trainingPerbaikan = document.getElementById('trainingPerbaikan');
+    var trainingPembengkelan = document.getElementById('trainingPembengkelan');
+    var trainingPembibitan = document.getElementById('trainingPembibitan');
     var namaKelas = document.getElementById('namaKelas');
     var simpan = document.getElementById('simpan');
     var batalsimpan = document.getElementById('batalsimpan');
@@ -777,14 +909,43 @@ class Profile extends React.Component {
     namaDesa.disabled = true;
     badanHukum.disabled = true;
     RMU.disabled = true;
-    benihPadi.disabled = true;
+    benihPadiInfari30.disabled = true;
+    benihPadiInfari33.disabled = true;
+    benihPadiCiherang.disabled = true;
+    benihPadiIR64.disabled = true;
+    benihPadiSitubagendit.disabled = true;
+    benihPadiSintanur.disabled = true;
+    // benihPadi.disabled = true;
     bibitPadi.disabled = true;
     reparasi.disabled = true;
     sukuCadang.disabled = true;
-    training.disabled = true;
+    // training.disabled = true;
+    trainingOperator.disabled = true;
+    trainingPerawatan.disabled = true;
+    trainingPerbaikan.disabled = true;
+    trainingPembengkelan.disabled = true;
+    trainingPembibitan.disabled = true;
+    this.setState({
+      trainingOperator: !trainingOperator,
+      trainingPerawatan: !trainingPerawatan,
+      trainingPerbaikan: !trainingPerbaikan,
+      trainingPembengkelan: !trainingPembengkelan,
+      trainingPembibitan: !trainingPembibitan,
+      benihPadiInfari30: !benihPadiInfari30,
+      benihPadiInfari33: !benihPadiInfari33,
+      benihPadiIR64: !benihPadiIR64,
+      benihPadiCiherang: !benihPadiCiherang,
+      benihPadiSitubagendit: !benihPadiSitubagendit,
+      benihPadiSintanur: !benihPadiSintanur,
+      RMU: !RMU,
+      sukuCadang: !sukuCadang,
+      bibitPadi: !bibitPadi,
+      reparasi: !reparasi,
+    });
     namaKelas.style.display = 'none';
     simpan.style.display = 'none';
     batalsimpan.style.display = 'none';
+    this.componentDidMount();
   }
 
   setModalEdit(todo) {
@@ -1186,8 +1347,8 @@ class Profile extends React.Component {
                     <Row>
                       <Col>
                         <FormGroup check>
-                          <Label check>
-                            <Input
+                          <Label check style={{ fontWeight: 'bold' }}>
+                            {/* <Input
                               type="checkbox"
                               disabled
                               id="benihPadi"
@@ -1197,7 +1358,7 @@ class Profile extends React.Component {
                                   benihPadi: !this.state.benihPadi,
                                 })
                               }
-                            />
+                            /> */}
                             Benih Padi
                           </Label>
                         </FormGroup>
@@ -1211,11 +1372,12 @@ class Profile extends React.Component {
                               <Input
                                 type="checkbox"
                                 disabled
-                                id="benihPadi"
-                                checked={this.state.benihPadi}
+                                id="benihPadiInfari30"
+                                checked={this.state.benihPadiInfari30}
                                 onChange={() =>
                                   this.setState({
-                                    benihPadi: !this.state.benihPadi,
+                                    benihPadiInfari30: !this.state
+                                      .benihPadiInfari30,
                                   })
                                 }
                               />
@@ -1227,11 +1389,12 @@ class Profile extends React.Component {
                               <Input
                                 type="checkbox"
                                 disabled
-                                id="benihPadi"
-                                checked={this.state.benihPadi}
+                                id="benihPadiInfari33"
+                                checked={this.state.benihPadiInfari33}
                                 onChange={() =>
                                   this.setState({
-                                    benihPadi: !this.state.benihPadi,
+                                    benihPadiInfari33: !this.state
+                                      .benihPadiInfari33,
                                   })
                                 }
                               />
@@ -1243,11 +1406,11 @@ class Profile extends React.Component {
                               <Input
                                 type="checkbox"
                                 disabled
-                                id="benihPadi"
-                                checked={this.state.benihPadi}
+                                id="benihPadiIR64"
+                                checked={this.state.benihPadiIR64}
                                 onChange={() =>
                                   this.setState({
-                                    benihPadi: !this.state.benihPadi,
+                                    benihPadiIR64: !this.state.benihPadiIR64,
                                   })
                                 }
                               />
@@ -1263,11 +1426,12 @@ class Profile extends React.Component {
                               <Input
                                 type="checkbox"
                                 disabled
-                                id="benihPadi"
-                                checked={this.state.benihPadi}
+                                id="benihPadiSintanur"
+                                checked={this.state.benihPadiSintanur}
                                 onChange={() =>
                                   this.setState({
-                                    benihPadi: !this.state.benihPadi,
+                                    benihPadiSintanur: !this.state
+                                      .benihPadiSintanur,
                                   })
                                 }
                               />
@@ -1279,11 +1443,12 @@ class Profile extends React.Component {
                               <Input
                                 type="checkbox"
                                 disabled
-                                id="benihPadi"
-                                checked={this.state.benihPadi}
+                                id="benihPadiCiherang"
+                                checked={this.state.benihPadiCiherang}
                                 onChange={() =>
                                   this.setState({
-                                    benihPadi: !this.state.benihPadi,
+                                    benihPadiCiherang: !this.state
+                                      .benihPadiCiherang,
                                   })
                                 }
                               />
@@ -1295,11 +1460,12 @@ class Profile extends React.Component {
                               <Input
                                 type="checkbox"
                                 disabled
-                                id="benihPadi"
-                                checked={this.state.benihPadi}
+                                id="benihPadiSitubagendit"
+                                checked={this.state.benihPadiSitubagendit}
                                 onChange={() =>
                                   this.setState({
-                                    benihPadi: !this.state.benihPadi,
+                                    benihPadiSitubagendit: !this.state
+                                      .benihPadiSitubagendit,
                                   })
                                 }
                               />
@@ -1312,8 +1478,8 @@ class Profile extends React.Component {
                     <Row>
                       <Col>
                         <FormGroup check>
-                          <Label check>
-                            <Input
+                          <Label check style={{ fontWeight: 'bold' }}>
+                            {/* <Input
                               type="checkbox"
                               disabled
                               id="training"
@@ -1323,7 +1489,7 @@ class Profile extends React.Component {
                                   training: !this.state.training,
                                 })
                               }
-                            />
+                            /> */}
                             Training
                           </Label>
                         </FormGroup>
@@ -1337,11 +1503,12 @@ class Profile extends React.Component {
                               <Input
                                 type="checkbox"
                                 disabled
-                                id="training"
-                                checked={this.state.training}
+                                id="trainingOperator"
+                                checked={this.state.trainingOperator}
                                 onChange={() =>
                                   this.setState({
-                                    training: !this.state.training,
+                                    trainingOperator: !this.state
+                                      .trainingOperator,
                                   })
                                 }
                               />
@@ -1353,11 +1520,12 @@ class Profile extends React.Component {
                               <Input
                                 type="checkbox"
                                 disabled
-                                id="training"
-                                checked={this.state.training}
+                                id="trainingPerawatan"
+                                checked={this.state.trainingPerawatan}
                                 onChange={() =>
                                   this.setState({
-                                    training: !this.state.training,
+                                    trainingPerawatan: !this.state
+                                      .trainingPerawatan,
                                   })
                                 }
                               />
@@ -1369,11 +1537,12 @@ class Profile extends React.Component {
                               <Input
                                 type="checkbox"
                                 disabled
-                                id="training"
-                                checked={this.state.training}
+                                id="trainingPerbaikan"
+                                checked={this.state.trainingPerbaikan}
                                 onChange={() =>
                                   this.setState({
-                                    training: !this.state.training,
+                                    trainingPerbaikan: !this.state
+                                      .trainingPerbaikan,
                                   })
                                 }
                               />
@@ -1389,11 +1558,12 @@ class Profile extends React.Component {
                               <Input
                                 type="checkbox"
                                 disabled
-                                id="training"
-                                checked={this.state.training}
+                                id="trainingPembengkelan"
+                                checked={this.state.trainingPembengkelan}
                                 onChange={() =>
                                   this.setState({
-                                    training: !this.state.training,
+                                    trainingPembengkelan: !this.state
+                                      .trainingPembengkelan,
                                   })
                                 }
                               />
@@ -1405,11 +1575,12 @@ class Profile extends React.Component {
                               <Input
                                 type="checkbox"
                                 disabled
-                                id="training"
-                                checked={this.state.training}
+                                id="trainingPembibitan"
+                                checked={this.state.trainingPembibitan}
                                 onChange={() =>
                                   this.setState({
-                                    training: !this.state.training,
+                                    trainingPembibitan: !this.state
+                                      .trainingPembibitan,
                                   })
                                 }
                               />
@@ -1529,7 +1700,7 @@ class Profile extends React.Component {
                     marginleft: '1%',
                     paddingLeft: '1%',
                   }}
-                  // onClick={this.toggle('nested_parent_editUpja')}
+                  // onClick={()=>this.componentDidMount()}
                   onClick={() => this.disetEdit()}
                 >
                   Batal

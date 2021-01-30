@@ -52,15 +52,15 @@ class Registrasi extends React.Component {
       email: '',
       resultClass: [
         {
-          class_id: 1,
+          class_id: 'Pemula',
           class_name: 'Pemula',
         },
         {
-          class_id: 2,
+          class_id: 'Berkembang',
           class_name: 'Berkembang',
         },
         {
-          class_id: 3,
+          class_id: 'Profesional',
           class_name: 'Profesional',
         },
       ],
