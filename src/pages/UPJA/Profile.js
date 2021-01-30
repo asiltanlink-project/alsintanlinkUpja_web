@@ -1184,6 +1184,243 @@ class Profile extends React.Component {
                       Layanan Lainnya:
                     </Label>
                     <Row>
+                      <Col>
+                        <FormGroup check>
+                          <Label check>
+                            <Input
+                              type="checkbox"
+                              disabled
+                              id="benihPadi"
+                              checked={this.state.benihPadi}
+                              onChange={() =>
+                                this.setState({
+                                  benihPadi: !this.state.benihPadi,
+                                })
+                              }
+                            />
+                            Benih Padi
+                          </Label>
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col>
+                        <Col>
+                          <FormGroup check>
+                            <Label check>
+                              <Input
+                                type="checkbox"
+                                disabled
+                                id="benihPadi"
+                                checked={this.state.benihPadi}
+                                onChange={() =>
+                                  this.setState({
+                                    benihPadi: !this.state.benihPadi,
+                                  })
+                                }
+                              />
+                              INFARI 30
+                            </Label>
+                          </FormGroup>
+                          <FormGroup check>
+                            <Label check>
+                              <Input
+                                type="checkbox"
+                                disabled
+                                id="benihPadi"
+                                checked={this.state.benihPadi}
+                                onChange={() =>
+                                  this.setState({
+                                    benihPadi: !this.state.benihPadi,
+                                  })
+                                }
+                              />
+                              INFARI 33
+                            </Label>
+                          </FormGroup>
+                          <FormGroup check>
+                            <Label check>
+                              <Input
+                                type="checkbox"
+                                disabled
+                                id="benihPadi"
+                                checked={this.state.benihPadi}
+                                onChange={() =>
+                                  this.setState({
+                                    benihPadi: !this.state.benihPadi,
+                                  })
+                                }
+                              />
+                              IR 64
+                            </Label>
+                          </FormGroup>
+                        </Col>
+                      </Col>
+                      <Col>
+                        <Col>
+                          <FormGroup check>
+                            <Label check>
+                              <Input
+                                type="checkbox"
+                                disabled
+                                id="benihPadi"
+                                checked={this.state.benihPadi}
+                                onChange={() =>
+                                  this.setState({
+                                    benihPadi: !this.state.benihPadi,
+                                  })
+                                }
+                              />
+                              Sintanur
+                            </Label>
+                          </FormGroup>
+                          <FormGroup check>
+                            <Label check>
+                              <Input
+                                type="checkbox"
+                                disabled
+                                id="benihPadi"
+                                checked={this.state.benihPadi}
+                                onChange={() =>
+                                  this.setState({
+                                    benihPadi: !this.state.benihPadi,
+                                  })
+                                }
+                              />
+                              Ciherang
+                            </Label>
+                          </FormGroup>
+                          <FormGroup check>
+                            <Label check>
+                              <Input
+                                type="checkbox"
+                                disabled
+                                id="benihPadi"
+                                checked={this.state.benihPadi}
+                                onChange={() =>
+                                  this.setState({
+                                    benihPadi: !this.state.benihPadi,
+                                  })
+                                }
+                              />
+                              Situbagendit
+                            </Label>
+                          </FormGroup>
+                        </Col>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col>
+                        <FormGroup check>
+                          <Label check>
+                            <Input
+                              type="checkbox"
+                              disabled
+                              id="training"
+                              checked={this.state.training}
+                              onChange={() =>
+                                this.setState({
+                                  training: !this.state.training,
+                                })
+                              }
+                            />
+                            Training
+                          </Label>
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col>
+                        <Col>
+                          <FormGroup check>
+                            <Label check>
+                              <Input
+                                type="checkbox"
+                                disabled
+                                id="training"
+                                checked={this.state.training}
+                                onChange={() =>
+                                  this.setState({
+                                    training: !this.state.training,
+                                  })
+                                }
+                              />
+                              Operator
+                            </Label>
+                          </FormGroup>
+                          <FormGroup check>
+                            <Label check>
+                              <Input
+                                type="checkbox"
+                                disabled
+                                id="training"
+                                checked={this.state.training}
+                                onChange={() =>
+                                  this.setState({
+                                    training: !this.state.training,
+                                  })
+                                }
+                              />
+                              Perawatan
+                            </Label>
+                          </FormGroup>
+                          <FormGroup check>
+                            <Label check>
+                              <Input
+                                type="checkbox"
+                                disabled
+                                id="training"
+                                checked={this.state.training}
+                                onChange={() =>
+                                  this.setState({
+                                    training: !this.state.training,
+                                  })
+                                }
+                              />
+                              Perbaikan
+                            </Label>
+                          </FormGroup>
+                        </Col>
+                      </Col>
+                      <Col>
+                        <Col>
+                          <FormGroup check>
+                            <Label check>
+                              <Input
+                                type="checkbox"
+                                disabled
+                                id="training"
+                                checked={this.state.training}
+                                onChange={() =>
+                                  this.setState({
+                                    training: !this.state.training,
+                                  })
+                                }
+                              />
+                              Pembengkelan
+                            </Label>
+                          </FormGroup>
+                          <FormGroup check>
+                            <Label check>
+                              <Input
+                                type="checkbox"
+                                disabled
+                                id="training"
+                                checked={this.state.training}
+                                onChange={() =>
+                                  this.setState({
+                                    training: !this.state.training,
+                                  })
+                                }
+                              />
+                              Pembibitan
+                            </Label>
+                          </FormGroup>
+                        </Col>
+                      </Col>
+                    </Row>
+
+                    <Row>
                       <Col style={{ marginBottom: 0, paddingBottom: 0 }}>
                         <FormGroup check>
                           <Label check>
@@ -1201,7 +1438,7 @@ class Profile extends React.Component {
                             RMU
                           </Label>
                         </FormGroup>
-                        <FormGroup check>
+                        {/* <FormGroup check>
                           <Label check>
                             <Input
                               type="checkbox"
@@ -1216,7 +1453,7 @@ class Profile extends React.Component {
                             />
                             Benih Padi
                           </Label>
-                        </FormGroup>
+                        </FormGroup> */}
                         <FormGroup check>
                           <Label check>
                             <Input
@@ -1233,8 +1470,6 @@ class Profile extends React.Component {
                             Bibit Padi
                           </Label>
                         </FormGroup>
-                      </Col>
-                      <Col style={{ marginBottom: 0, paddingBottom: 0 }}>
                         <FormGroup check>
                           <Label check>
                             <Input
@@ -1251,6 +1486,8 @@ class Profile extends React.Component {
                             Reparasi
                           </Label>
                         </FormGroup>
+                      </Col>
+                      <Col style={{ marginBottom: 0, paddingBottom: 0 }}>
                         <FormGroup check>
                           <Label check>
                             <Input
@@ -1265,22 +1502,6 @@ class Profile extends React.Component {
                               }
                             />
                             Suku Cadang
-                          </Label>
-                        </FormGroup>
-                        <FormGroup check>
-                          <Label check>
-                            <Input
-                              type="checkbox"
-                              disabled
-                              id="training"
-                              checked={this.state.training}
-                              onChange={() =>
-                                this.setState({
-                                  training: !this.state.training,
-                                })
-                              }
-                            />
-                            Training
                           </Label>
                         </FormGroup>
                       </Col>

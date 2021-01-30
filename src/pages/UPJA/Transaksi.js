@@ -104,6 +104,13 @@ class Transaksi extends React.Component {
       listEditMasal: [],
       resultBatasPerPelapak: [],
       resultPricingService: [],
+      resultPricingHeader: [],
+      resultReparation: [],
+      resultRiceSeeds: [],
+      resultRices: [],
+      resultRMUS: [],
+      resultSparePart: [],
+      resultTrainings: [],
       resultPeriode: [
         {
           periode_id: 'upcoming',
@@ -2478,6 +2485,7 @@ class Transaksi extends React.Component {
         var status = data.status;
         var result = data.result.alsins;
         var message = data.result.message;
+        var resultPricingService = data.result.other_service;
         console.log('Data Transaksi', data);
         if (status === 0) {
           // this.showNotification(message, 'error');
@@ -2485,8 +2493,15 @@ class Transaksi extends React.Component {
           this.showNotification('Data ditemukan!', 'info');
           this.setState({
             resultPricing: result,
-            resultPricingService: data.result.other_service,
+            resultPricingHeader: data.result.headers,
+
             loadingAlsin: false,
+            resultReparation: data.result.reparations,
+            resultRiceSeeds: data.result.rice_seeds,
+            resultRices: data.result.rices,
+            resultRMUS: data.result.rmus,
+            resultSparePart: data.result.spare_parts,
+            resultTrainings: data.result.trainings,
           });
         }
       })
@@ -2829,6 +2844,7 @@ class Transaksi extends React.Component {
     const listEcommerce = this.state.resultEcommerce;
     const alsinTodos = this.state.resultAlsin;
     const pricingTodos = this.state.resultPricing;
+    const pricingHeadersTodos = this.state.resultPricingHeader;
     const pricingServiceTodos = this.state.resultPricingService;
     const pricingDetailTodos = this.state.resultPricingDetail;
 
@@ -2900,6 +2916,17 @@ class Transaksi extends React.Component {
         );
       });
 
+    const renderPricingHeader =
+      pricingHeadersTodos &&
+      pricingHeadersTodos.map((todo, i) => {
+        return (
+          <tr key={i}>
+            <td>{todo.alsin_type_name}</td>
+            <td>{todo.land_area_range} Hektar</td>
+          </tr>
+        );
+      });
+
     const renderPricingService =
       pricingServiceTodos &&
       pricingServiceTodos.map((todo, i) => {
@@ -2916,6 +2943,97 @@ class Transaksi extends React.Component {
                 <MdAdd />
               </Button>
             </td> */}
+          </tr>
+        );
+      });
+
+    const renderTodosReparation =
+      this.state.resultReparation &&
+      this.state.resultReparation.map((todo, i) => {
+        return (
+          <tr key={i}>
+            {/* {console.log('TOTAL REPARATION', todo)} */}
+            <td>{todo.alsin_type_order_name}</td>
+            <td style={{ textAlign: 'right' }}>
+              {formatter.format(todo.cost)}
+            </td>
+          </tr>
+        );
+      });
+
+    const renderTodosRiceSeed =
+      this.state.resultRiceSeeds &&
+      this.state.resultRiceSeeds.map((todo, i) => {
+        return (
+          <tr key={i}>
+            {/* {console.log('TOTAL REPARATION', todo)} */}
+            <td>{todo.name}</td>
+            <td style={{ textAlign: 'right' }}>{todo.weight} Kg</td>
+            <td style={{ textAlign: 'right' }}>
+              {formatter.format(todo.cost)}
+            </td>
+          </tr>
+        );
+      });
+
+    const renderTodosRices =
+      this.state.resultRices &&
+      this.state.resultRices.map((todo, i) => {
+        return (
+          <tr key={i}>
+            {/* {console.log('TOTAL REPARATION', todo)} */}
+            <td>{todo.total_rice}</td>
+            <td style={{ textAlign: 'right' }}>
+              {todo.land_area_range} Hektar
+            </td>
+            <td style={{ textAlign: 'right' }}>
+              {formatter.format(todo.cost)}
+            </td>
+          </tr>
+        );
+      });
+
+    const renderTodosRMU =
+      this.state.resultRMUS &&
+      this.state.resultRMUS.map((todo, i) => {
+        return (
+          <tr key={i}>
+            {/* {console.log('TOTAL REPARATION', todo)} */}
+            <td>{todo.packaging} Kg</td>
+            <td style={{ textAlign: 'right' }}>{todo.weight} Kg</td>
+            <td style={{ textAlign: 'right' }}>
+              {formatter.format(todo.cost)}
+            </td>
+          </tr>
+        );
+      });
+
+    const renderTodosSparePart =
+      this.state.resultSparePart &&
+      this.state.resultSparePart.map((todo, i) => {
+        return (
+          <tr key={i}>
+            {/* {console.log('TOTAL REPARATION', todo)} */}
+            <td>{todo.name}</td>
+            {/* <td>{todo.weight}</td> */}
+            <td style={{ textAlign: 'right' }}>
+              {formatter.format(todo.cost)}
+            </td>
+          </tr>
+        );
+      });
+
+    const renderTodosTraining =
+      this.state.resultTrainings &&
+      this.state.resultTrainings.map((todo, i) => {
+        return (
+          <tr key={i}>
+            {/* {console.log('TOTAL REPARATION', todo)} */}
+            <td>{todo.name}</td>
+            <td style={{ textAlign: 'right' }}>{todo.total_member}</td>
+            <td style={{ textAlign: 'right' }}>
+              {formatter.format(todo.cost)}
+            </td>
           </tr>
         );
       });
@@ -3472,9 +3590,20 @@ class Transaksi extends React.Component {
                 />
               </FormGroup>
             </Form> */}
+
             <thead>
               <tr>
-                <th>Alsin yang telah di pesan oleh Farmer</th>
+                <th>Pesanan yang dipesan Farmer</th>
+                {/* <td>Edit</td> */}
+              </tr>
+            </thead>
+
+            <Table responsive striped id="tableBatasPerPelapak">
+              <tbody>{renderPricingHeader}</tbody>
+            </Table>
+            <thead>
+              <tr>
+                <th>Alsin tersedia yang dapat dipesan</th>
                 {/* <td>Edit</td> */}
               </tr>
             </thead>
@@ -3522,29 +3651,223 @@ class Transaksi extends React.Component {
             {/* <Label style={{ marginBottom: '0', fontSize: '0.7em', color:'red' }}>
               *klik untuk menginput data dari Alsin yang telah dipesan
             </Label> */}
-            <Table responsive striped id="tableBatasPerPelapak">
+            {/* Untuk Other Service Reparasi */}
+            <hr style={{ borderWidth: 'medium' }}></hr>
+            <Label style={{ fontWeight: 'bold' }}>Table Reparasi</Label>
+            <Table responsive striped id="tableUtama">
               <thead>
                 <tr>
-                  <th>Service</th>
-                  <th>Harga</th>
-                  {/* <th>Total</th> */}
-                  {/* <th>Edit</th> */}
-                  {/* <th>Hapus</th> */}
+                  <th style={{ width: '50%' }}>Alsin</th>
+                  <th style={{ textAlign: 'right', width: '50%' }}>Harga</th>
+                  {/* <th>Edit</th>
+                      <th>Hapus</th> */}
                 </tr>
               </thead>
-              {<tbody>{renderPricingService}</tbody>}
-
-              {this.state.resultPricingService.length === 0 && (
+              <tbody>
+                {!this.state.resultReparation && loadingAlsin === true ? (
+                  <LoadingSpinner status={4} />
+                ) : loadingAlsin === false &&
+                  this.state.resultReparation.length === 0 ? (
+                  (
+                    <tr>
+                      <td
+                        style={{ backgroundColor: 'white' }}
+                        colSpan="17"
+                        className="text-center"
+                      >
+                        TIDAK ADA DATA
+                      </td>
+                    </tr>
+                  ) || <LoadingSpinner status={4} />
+                ) : loadingAlsin === true && this.state.resultReparation ? (
+                  <LoadingSpinner status={4} />
+                ) : (
+                  renderTodosReparation
+                )}
+              </tbody>
+            </Table>
+            {/* Untuk Other Service Benih Padi */}
+            <hr style={{ borderWidth: 'medium' }}></hr>
+            <Label style={{ fontWeight: 'bold' }}>Table Benih Padi</Label>
+            <Table responsive striped id="tableUtama">
+              <thead>
                 <tr>
-                  <td
-                    style={{ backgroundColor: 'white' }}
-                    colSpan="11"
-                    className="text-center"
-                  >
-                    TIDAK ADA DATA
-                  </td>
+                  <th style={{ width: '33.3%' }}>Nama</th>
+                  <th style={{ textAlign: 'right', width: '33.3%' }}>Berat</th>
+                  <th style={{ textAlign: 'right', width: '33.3%' }}>Harga</th>
+                  {/* <th>Edit</th>
+                      <th>Hapus</th> */}
                 </tr>
-              )}
+              </thead>
+              <tbody>
+                {!this.state.resultRiceSeeds && loadingAlsin === true ? (
+                  <LoadingSpinner status={4} />
+                ) : loadingAlsin === false &&
+                  this.state.resultRiceSeeds.length === 0 ? (
+                  (
+                    <tr>
+                      <td
+                        style={{ backgroundColor: 'white' }}
+                        colSpan="17"
+                        className="text-center"
+                      >
+                        TIDAK ADA DATA
+                      </td>
+                    </tr>
+                  ) || <LoadingSpinner status={4} />
+                ) : loadingAlsin === true && this.state.resultRiceSeeds ? (
+                  <LoadingSpinner status={4} />
+                ) : (
+                  renderTodosRiceSeed
+                )}
+              </tbody>
+            </Table>
+            {/* Untuk Other Service Bibit */}
+            <hr style={{ borderWidth: 'medium' }}></hr>
+            <Label style={{ fontWeight: 'bold' }}>Table Bibit Padi</Label>
+            <Table responsive striped id="tableUtama">
+              <thead>
+                <tr>
+                  <th style={{ width: '33.3%' }}>Total bibit</th>
+                  <th style={{ textAlign: 'right', width: '33.3%' }}>
+                    Luas Lahan
+                  </th>
+                  <th style={{ textAlign: 'right', width: '33.3%' }}>Harga</th>
+                  {/* <th>Edit</th>
+                      <th>Hapus</th> */}
+                </tr>
+              </thead>
+              <tbody>
+                {!this.state.resultRices && loadingAlsin === true ? (
+                  <LoadingSpinner status={4} />
+                ) : loadingAlsin === false &&
+                  this.state.resultRices.length === 0 ? (
+                  (
+                    <tr>
+                      <td
+                        style={{ backgroundColor: 'white' }}
+                        colSpan="17"
+                        className="text-center"
+                      >
+                        TIDAK ADA DATA
+                      </td>
+                    </tr>
+                  ) || <LoadingSpinner status={4} />
+                ) : loadingAlsin === true && this.state.resultRices ? (
+                  <LoadingSpinner status={4} />
+                ) : (
+                  renderTodosRices
+                )}
+              </tbody>
+            </Table>
+            {/* Untuk Other Service RMUS */}
+            <hr style={{ borderWidth: 'medium' }}></hr>
+            <Label style={{ fontWeight: 'bold' }}>Table RMUS</Label>
+            <Table responsive striped id="tableUtama">
+              <thead>
+                <tr>
+                  <th style={{ width: '33.3%' }}>Packaging</th>
+                  <th style={{ textAlign: 'right', width: '33.3%' }}>Berat</th>
+                  <th style={{ textAlign: 'right', width: '33.3%' }}>Harga</th>
+                  {/* <th>Edit</th>
+                      <th>Hapus</th> */}
+                </tr>
+              </thead>
+              <tbody>
+                {!this.state.resultRMUS && loadingAlsin === true ? (
+                  <LoadingSpinner status={4} />
+                ) : loadingAlsin === false &&
+                  this.state.resultRMUS.length === 0 ? (
+                  (
+                    <tr>
+                      <td
+                        style={{ backgroundColor: 'white' }}
+                        colSpan="17"
+                        className="text-center"
+                      >
+                        TIDAK ADA DATA
+                      </td>
+                    </tr>
+                  ) || <LoadingSpinner status={4} />
+                ) : loadingAlsin === true && this.state.resultRMUS ? (
+                  <LoadingSpinner status={4} />
+                ) : (
+                  renderTodosRMU
+                )}
+              </tbody>
+            </Table>
+            {/* Untuk Other Service Spare Part */}
+            <hr style={{ borderWidth: 'medium' }}></hr>
+            <Label style={{ fontWeight: 'bold' }}>Table Suku Cadang</Label>
+            <Table responsive striped id="tableUtama">
+              <thead>
+                <tr>
+                  <th style={{ width: '50%' }}>Nama</th>
+                  <th style={{ textAlign: 'right', width: '50%' }}>Harga</th>
+                  {/* <th>Edit</th>
+                      <th>Hapus</th> */}
+                </tr>
+              </thead>
+              <tbody>
+                {!this.state.resultSparePart && loadingAlsin === true ? (
+                  <LoadingSpinner status={4} />
+                ) : loadingAlsin === false &&
+                  this.state.resultSparePart.length === 0 ? (
+                  (
+                    <tr>
+                      <td
+                        style={{ backgroundColor: 'white' }}
+                        colSpan="17"
+                        className="text-center"
+                      >
+                        TIDAK ADA DATA
+                      </td>
+                    </tr>
+                  ) || <LoadingSpinner status={4} />
+                ) : loadingAlsin === true && this.state.resultSparePart ? (
+                  <LoadingSpinner status={4} />
+                ) : (
+                  renderTodosSparePart
+                )}
+              </tbody>
+            </Table>
+            {/* Untuk Other Service Training */}
+            <hr style={{ borderWidth: 'medium' }}></hr>
+            <Label style={{ fontWeight: 'bold' }}>Table Pelatihan</Label>
+            <Table responsive striped id="tableUtama">
+              <thead>
+                <tr>
+                  <th style={{ width: '33.3%' }}>Nama</th>
+                  <th style={{ textAlign: 'right', width: '33.3%' }}>
+                    Jumlah Anggota
+                  </th>
+                  <th style={{ textAlign: 'right', width: '33.3%' }}>Harga</th>
+                  {/* <th>Edit</th>
+                      <th>Hapus</th> */}
+                </tr>
+              </thead>
+              <tbody>
+                {!this.state.resultTrainings && loadingAlsin === true ? (
+                  <LoadingSpinner status={4} />
+                ) : loadingAlsin === false &&
+                  this.state.resultTrainings.length === 0 ? (
+                  (
+                    <tr>
+                      <td
+                        style={{ backgroundColor: 'white' }}
+                        colSpan="17"
+                        className="text-center"
+                      >
+                        TIDAK ADA DATA
+                      </td>
+                    </tr>
+                  ) || <LoadingSpinner status={4} />
+                ) : loadingAlsin === true && this.state.resultTrainings ? (
+                  <LoadingSpinner status={4} />
+                ) : (
+                  renderTodosTraining
+                )}
+              </tbody>
             </Table>
             {/* <tbody>{renderListEditMassal}</tbody> */}
             <hr style={{ borderWidth: 'medium' }}></hr>
