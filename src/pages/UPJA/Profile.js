@@ -75,6 +75,12 @@ class Profile extends React.Component {
       benihPadiSintanur: false,
       benihPadiCiherang: false,
       benihPadiSitubagendit: false,
+      benihPadiMembramo: false,
+      benihPadiInfari42: false,
+      benihPadiInfari43: false,
+      benihPadiInpago12: false,
+      benihPadiTrabas: false,
+      benihPadiRindang: false,
       // benihPadi: false,
       bibitPadi: false,
       reparasi: false,
@@ -253,6 +259,12 @@ class Profile extends React.Component {
     var benihPadiSitubagendit = document.getElementById(
       'benihPadiSitubagendit',
     );
+    var benihPadiInfari42 = document.getElementById('benihPadiInfari42');
+    var benihPadiInfari43 = document.getElementById('benihPadiInfari43');
+    var benihPadiMembramo = document.getElementById('benihPadiMembramo');
+    var benihPadiInpago12 = document.getElementById('benihPadiInpago12');
+    var benihPadiTrabas = document.getElementById('benihPadiTrabas');
+    var benihPadiRindang = document.getElementById('benihPadiRindang');
     // var benihPadi = document.getElementById('benihPadi');
     var bibitPadi = document.getElementById('bibitPadi');
     var reparasi = document.getElementById('reparasi');
@@ -286,6 +298,12 @@ class Profile extends React.Component {
       benihPadiCiherang: this.state.benihPadiCiherang === true ? 1 : 0,
       benihPadiSitubagendit: this.state.benihPadiSitubagendit === true ? 1 : 0,
       benihPadiSintanur: this.state.benihPadiSintanur === true ? 1 : 0,
+      benihPadiInfari42: this.state.benihPadiInfari42 === true ? 1 : 0,
+      benihPadiInfari43: this.state.benihPadiInfari43 === true ? 1 : 0,
+      benihPadiMembramo: this.state.benihPadiMembramo === true ? 1 : 0,
+      benihPadiInpago12: this.state.benihPadiInpago12 === true ? 1 : 0,
+      benihPadiTrabas: this.state.benihPadiTrabas === true ? 1 : 0,
+      benihPadiRindang: this.state.benihPadiRindang === true ? 1 : 0,
       // rice_seed: this.state.benihPadi === true ? 1 : 0,
       rice: this.state.bibitPadi === true ? 1 : 0,
       reparation: this.state.reparasi === true ? 1 : 0,
@@ -343,6 +361,12 @@ class Profile extends React.Component {
           benihPadiCiherang.disabled = true;
           benihPadiSitubagendit.disabled = true;
           benihPadiSintanur.disabled = true;
+          benihPadiInfari42.disabled = true;
+          benihPadiInfari43.disabled = true;
+          benihPadiMembramo.disabled = true;
+          benihPadiInpago12.disabled = true;
+          benihPadiTrabas.disabled = true;
+          benihPadiRindang.disabled = true;
           // benihPadi.disabled = true;
           bibitPadi.disabled = true;
           reparasi.disabled = true;
@@ -563,6 +587,36 @@ class Profile extends React.Component {
                 this.setState({ benihPadiSintanur: true });
               } else {
                 this.setState({ benihPadiSintanur: false });
+              }
+              if (this.state.result.benihPadiInfari42 === 1) {
+                this.setState({ benihPadiInfari42: true });
+              } else {
+                this.setState({ benihPadiInfari42: false });
+              }
+              if (this.state.result.benihPadiInfari43 === 1) {
+                this.setState({ benihPadiInfari43: true });
+              } else {
+                this.setState({ benihPadiInfari43: false });
+              }
+              if (this.state.result.benihPadiMembramo === 1) {
+                this.setState({ benihPadiMembramo: true });
+              } else {
+                this.setState({ benihPadiMembramo: false });
+              }
+              if (this.state.result.benihPadiInpago12 === 1) {
+                this.setState({ benihPadiInpago12: true });
+              } else {
+                this.setState({ benihPadiInpago12: false });
+              }
+              if (this.state.result.benihPadiTrabas === 1) {
+                this.setState({ benihPadiTrabas: true });
+              } else {
+                this.setState({ benihPadiTrabas: false });
+              }
+              if (this.state.result.benihPadiRindang === 1) {
+                this.setState({ benihPadiRindang: true });
+              } else {
+                this.setState({ benihPadiRindang: false });
               }
               if (this.state.result.rice === 1) {
                 this.setState({ bibitPadi: true });
@@ -831,6 +885,12 @@ class Profile extends React.Component {
       'benihPadiSitubagendit',
     );
     var benihPadiSintanur = document.getElementById('benihPadiSintanur');
+    var benihPadiInfari42 = document.getElementById('benihPadiInfari42');
+    var benihPadiInfari43 = document.getElementById('benihPadiInfari43');
+    var benihPadiMembramo = document.getElementById('benihPadiMembramo');
+    var benihPadiInpago12 = document.getElementById('benihPadiInpago12');
+    var benihPadiTrabas = document.getElementById('benihPadiTrabas');
+    var benihPadiRindang = document.getElementById('benihPadiRindang');
     // var benihPadi = document.getElementById('benihPadi');
     var bibitPadi = document.getElementById('bibitPadi');
     var reparasi = document.getElementById('reparasi');
@@ -856,6 +916,12 @@ class Profile extends React.Component {
     benihPadiCiherang.disabled = false;
     benihPadiSitubagendit.disabled = false;
     benihPadiSintanur.disabled = false;
+    benihPadiInfari42.disabled = false;
+    benihPadiInfari43.disabled = false;
+    benihPadiMembramo.disabled = false;
+    benihPadiInpago12.disabled = false;
+    benihPadiTrabas.disabled = false;
+    benihPadiRindang.disabled = false;
     // benihPadi.disabled = false;
     bibitPadi.disabled = false;
     reparasi.disabled = false;
@@ -886,6 +952,12 @@ class Profile extends React.Component {
     var benihPadiSitubagendit = document.getElementById(
       'benihPadiSitubagendit',
     );
+    var benihPadiInfari42 = document.getElementById('benihPadiInfari42');
+    var benihPadiInfari43 = document.getElementById('benihPadiInfari43');
+    var benihPadiMembramo = document.getElementById('benihPadiMembramo');
+    var benihPadiInpago12 = document.getElementById('benihPadiInpago12');
+    var benihPadiTrabas = document.getElementById('benihPadiTrabas');
+    var benihPadiRindang = document.getElementById('benihPadiRindang');
     var benihPadiSintanur = document.getElementById('benihPadiSintanur');
     // var benihPadi = document.getElementById('benihPadi');
     var bibitPadi = document.getElementById('bibitPadi');
@@ -915,6 +987,12 @@ class Profile extends React.Component {
     benihPadiIR64.disabled = true;
     benihPadiSitubagendit.disabled = true;
     benihPadiSintanur.disabled = true;
+    benihPadiInfari42.disabled = true;
+    benihPadiInfari43.disabled = true;
+    benihPadiMembramo.disabled = true;
+    benihPadiInpago12.disabled = true;
+    benihPadiTrabas.disabled = true;
+    benihPadiRindang.disabled = true;
     // benihPadi.disabled = true;
     bibitPadi.disabled = true;
     reparasi.disabled = true;
@@ -937,6 +1015,12 @@ class Profile extends React.Component {
       benihPadiCiherang: !benihPadiCiherang,
       benihPadiSitubagendit: !benihPadiSitubagendit,
       benihPadiSintanur: !benihPadiSintanur,
+      benihPadiInfari42: !benihPadiInfari42,
+      benihPadiInfari42: !benihPadiInfari42,
+      benihPadiMembramo: !benihPadiMembramo,
+      benihPadiInpago12: !benihPadiInpago12,
+      benihPadiTrabas: !benihPadiTrabas,
+      benihPadiRindang: !benihPadiRindang,
       RMU: !RMU,
       sukuCadang: !sukuCadang,
       bibitPadi: !bibitPadi,
@@ -1470,6 +1554,116 @@ class Profile extends React.Component {
                                 }
                               />
                               Situbagendit
+                            </Label>
+                          </FormGroup>
+                        </Col>
+                      </Col>
+                      <Col>
+                        <Col>
+                          <FormGroup check>
+                            <Label check>
+                              <Input
+                                type="checkbox"
+                                disabled
+                                id="benihPadiInfari42"
+                                checked={this.state.benihPadiInfari42}
+                                onChange={() =>
+                                  this.setState({
+                                    benihPadiInfari42: !this.state
+                                      .benihPadiInfari42,
+                                  })
+                                }
+                              />
+                              INFARI 42
+                            </Label>
+                          </FormGroup>
+                          <FormGroup check>
+                            <Label check>
+                              <Input
+                                type="checkbox"
+                                disabled
+                                id="benihPadiInfari43"
+                                checked={this.state.benihPadiInfari43}
+                                onChange={() =>
+                                  this.setState({
+                                    benihPadiInfari43: !this.state
+                                      .benihPadiInfari43,
+                                  })
+                                }
+                              />
+                              INFARI 43
+                            </Label>
+                          </FormGroup>
+                          <FormGroup check>
+                            <Label check>
+                              <Input
+                                type="checkbox"
+                                disabled
+                                id="benihPadiMembramo"
+                                checked={this.state.benihPadiMembramo}
+                                onChange={() =>
+                                  this.setState({
+                                    benihPadiMembramo: !this.state
+                                      .benihPadiMembramo,
+                                  })
+                                }
+                              />
+                              Membramo
+                            </Label>
+                          </FormGroup>
+                        </Col>
+                      </Col>
+                      <Col>
+                        <Col>
+                          <FormGroup check>
+                            <Label check>
+                              <Input
+                                type="checkbox"
+                                disabled
+                                id="benihPadiInpago12"
+                                checked={this.state.benihPadiInpago12}
+                                onChange={() =>
+                                  this.setState({
+                                    benihPadiInpago12: !this.state
+                                      .benihPadiInpago12,
+                                  })
+                                }
+                              />
+                              Inpago 12
+                            </Label>
+                          </FormGroup>
+                          <FormGroup check>
+                            <Label check>
+                              <Input
+                                type="checkbox"
+                                disabled
+                                id="benihPadiTrabas"
+                                checked={this.state.benihPadiTrabas}
+                                onChange={() =>
+                                  this.setState({
+                                    benihPadiTrabas: !this.state
+                                      .benihPadiTrabas,
+                                  })
+                                }
+                              />
+                              Trabas
+                            </Label>
+                          </FormGroup>
+                          <FormGroup check>
+                            <Label check>
+                              <Input
+                                type="checkbox"
+                                disabled
+                                id="benihPadiRindang"
+                                checked={this.state.benihPadiRindang}
+                                onChange={() =>
+                                  this.setState({
+                                    benihPadiRindang: !this.state
+                                      .benihPadiRindang,
+                                  })
+                                }
+                              />
+                              Rindang
                             </Label>
                           </FormGroup>
                         </Col>

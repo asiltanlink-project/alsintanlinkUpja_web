@@ -1722,7 +1722,7 @@ class Alsin extends React.Component {
         var status = data.status;
         var result = data.result.alsins;
         var message = data.result.message;
-        // console.log('ALSIN DATA', data);
+        console.log('ALSIN DATA', data);
         if (status === 0) {
           this.showNotification(message, 'error');
         } else {
@@ -2378,6 +2378,7 @@ class Alsin extends React.Component {
       alsinTodos.map((todo, i) => {
         return (
           <tr key={i}>
+            {console.log('TODOS', todo)}
             {todo.name !== '' && (
               <td style={{ textAlign: 'left' }}>
                 <Link to={`/alsin/detail/${todo.alsin_type_id}`}>
@@ -2639,9 +2640,9 @@ class Alsin extends React.Component {
         return (
           <tr key={i}>
             <td style={{ textAlign: 'left' }}>{todo.nama}</td>
-            <td style={{ textAlign: 'right' }}>
+            {/* <td style={{ textAlign: 'right' }}>
               {formatter.format(todo.cost)}
-            </td>
+            </td> */}
             <td style={{ textAlign: 'right' }}>
               {formatter.format(todo.total_item)}
             </td>
@@ -2728,18 +2729,18 @@ class Alsin extends React.Component {
                   <thead>
                     <tr>
                       <th>Alsin</th>
-                      <th>Harga</th>
+                      {/* <th>Harga</th> */}
                       <th>Tersedia</th>
-                      <th>Tidak Tersedia</th>
+                      <th>Sedang Digunakan</th>
                       <th>Total Item</th>
                       <th>Edit</th>
                       <th>Hapus</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {!alsinTodos && loadingAlsin === true ? (
+                    {alsinTodos.length === 0 && loadingAlsin === true ? (
                       <LoadingSpinner status={4} />
-                    ) : loadingAlsin === false && !alsinTodos ? (
+                    ) : loadingAlsin === false && alsinTodos.length === 0 ? (
                       (
                         <tr>
                           <td
@@ -3465,7 +3466,7 @@ class Alsin extends React.Component {
                 <thead>
                   <tr>
                     <th>Alsin Type ID</th>
-                    <th>Harga</th>
+                    {/* <th>Harga</th> */}
                     <th>Total Item</th>
                     <th>Edit</th>
                     <th>Hapus</th>
@@ -3571,7 +3572,7 @@ class Alsin extends React.Component {
                   </option>
                   {renderAlsinItem}
                 </Input>
-                <Label>Harga</Label>
+                {/* <Label>Harga</Label>
                 <Input
                   type="number"
                   min={0}
@@ -3587,7 +3588,7 @@ class Alsin extends React.Component {
                     )
                   }
                   value={this.state.cost}
-                />
+                /> */}
                 <Label>Total Alsin</Label>
                 <Input
                   type="number"
@@ -3685,7 +3686,7 @@ class Alsin extends React.Component {
                     this.state.editAlsinList && this.state.editAlsinList.nama
                   }
                 />
-                <Label>Harga</Label>
+                {/* <Label>Harga</Label>
                 <Input
                   type="number"
                   name="cost"
@@ -3705,7 +3706,7 @@ class Alsin extends React.Component {
                     this.state.editAlsinList &&
                     parseInt(this.state.editAlsinList.cost)
                   }
-                />
+                /> */}
                 <Label>Total Item</Label>
                 <Input
                   type="number"

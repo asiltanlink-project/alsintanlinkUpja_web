@@ -2854,7 +2854,7 @@ class Transaksi extends React.Component {
       alsinTodos.map((todo, i) => {
         return (
           <tr key={i}>
-            {todo.transaction_order_id !== '' && (
+            {/* {todo.transaction_order_id !== '' && (
               <td style={{ width: '10%', textAlign: 'left' }}>
                 <Link to={`/transaksi/detail/${todo.transaction_order_id}`}>
                   {
@@ -2871,7 +2871,8 @@ class Transaksi extends React.Component {
                   }
                 </Link>
               </td>
-            )}
+            )} */}
+            <td> {todo.farmer_name}</td>
             <td>{formatter.format(todo.transport_cost)}</td>
             <td>{formatter.format(todo.total_cost)}</td>
             <td>{todo.order_time}</td>
