@@ -30,6 +30,7 @@ import {
   MdList,
   MdAdd,
   MdInsertChart,
+  MdLocationOn,
 } from 'react-icons/md';
 import { MdLoyalty, MdRefresh } from 'react-icons/md';
 import NotificationSystem from 'react-notification-system';
@@ -3594,10 +3595,34 @@ class Transaksi extends React.Component {
 
             <thead>
               <tr>
-                <th>Pesanan yang dipesan Farmer</th>
+                <th
+                // untuk gmaps
+                >
+                  Pesanan yang dipesan Farmer
+                </th>
                 {/* <td>Edit</td> */}
               </tr>
             </thead>
+            <Label
+              style={{
+                marginBottom: 0,
+                fontWeight: 'bold',
+                cursor: 'pointer',
+                textDecoration: 'underline',
+                color: '#009688',
+              }}
+              onClick={() => {
+                window.open(
+                  'https://www.google.com/maps/search/?q=' +
+                    -34.397 +
+                    ',' +
+                    150.644,
+                );
+              }}
+            >
+              <MdLocationOn />
+              Klik untuk Mengetahui Lokasi
+            </Label>
 
             <Table responsive striped id="tableBatasPerPelapak">
               <tbody>{renderPricingHeader}</tbody>
