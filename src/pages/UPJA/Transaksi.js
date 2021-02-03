@@ -698,10 +698,11 @@ class Transaksi extends React.Component {
   updateHeaderData = first_param => {
     const trace = perf.trace('updateHeaderData');
     trace.start();
-    // var url = myUrl.url_updateAlsin;
+    var url = myUrl.url_updateTransaksi;
     const updateHeaderData = first_param;
+    const updateDetailData = this.state.resultPricing;
     var token = window.localStorage.getItem('tokenCookies');
-    // console.log('DATA HEADER', updateHeaderData.statusFarmer);
+    console.log('DATA DETAIL', updateDetailData);
 
     this.fetchData();
     if (updateHeaderData.statusFarmer !== undefined) {
@@ -715,7 +716,18 @@ class Transaksi extends React.Component {
       updateHeaderData.status = updateHeaderData.status;
     }
     var payload = {
-      editPricing: updateHeaderData,
+      // editPricing: updateHeaderData,
+      status: updateHeaderData.status,
+      transaction_order_id: updateHeaderData.transaction_order_id,
+      transport_cost: parseInt(updateHeaderData.transport_cost),
+      alsins: this.state.resultalsin,
+      alsin_items: this.state.resultalsinItem,
+      rmus: this.state.resultRMUS,
+      rice: this.state.resultRices,
+      training: this.state.resultTrainings,
+      reparation: this.state.resultReparation,
+      rice_seed: this.state.resultRiceSeeds,
+      spare_part: this.state.resultSparePart,
     };
 
     console.log('PAYLOAD EDIT', payload);
@@ -733,56 +745,56 @@ class Transaksi extends React.Component {
     this.setState({
       loading: false,
     });
-    // fetch(url, option)
-    //   .then(response => {
-    //     // trace.stop();
-    //     if (response.ok) {
-    //       return response.json();
-    //     } else {
-    //       if (response.status === 401) {
-    //         this.showNotification('Username/Password salah!', 'error');
-    //       } else if (response.status === 500) {
-    //         this.showNotification('Internal Server Error', 'error');
-    //       } else {
-    //         this.showNotification('Response ke server gagal!', 'error');
-    //       }
-    //       this.setState({
-    //         loadingPage: false,
-    //         loading: false,
-    //       });
-    //     }
-    //   })
-    //   .then(data => {
-    //     console.log('DATA EDIT', data);
-    //     var status = data.status;
-    //     var message = data.result.message;
-    //     if (status === 0) {
-    //       this.showNotification(message, 'error');
-    //       this.setState({
-    //         loadingPage: false,
-    //         loading: false,
-    //       });
-    //     } else {
-    //       this.showNotification(message, 'info');
-    //       this.setState(
-    //         {
-    //           loadingPage: false,
-    //           loading: false,
-    //           modal_nested_parent_editAlsin: false,
-    //           modal_nested_editAlsin: false,
-    //         },
-    //         () => this.getTransaksi(),
-    //       );
-    //     }
-    //   })
-    //   .catch(err => {
-    //     // console.log('ERRORNYA', err);
-    //     this.showNotification('Error ke server!', 'error');
-    //     this.setState({
-    //       loadingPage: false,
-    //       loading: false,
-    //     });
-    //   });
+    fetch(url, option)
+      .then(response => {
+        // trace.stop();
+        if (response.ok) {
+          return response.json();
+        } else {
+          if (response.status === 401) {
+            this.showNotification('Username/Password salah!', 'error');
+          } else if (response.status === 500) {
+            this.showNotification('Internal Server Error', 'error');
+          } else {
+            this.showNotification('Response ke server gagal!', 'error');
+          }
+          this.setState({
+            loadingPage: false,
+            loading: false,
+          });
+        }
+      })
+      .then(data => {
+        console.log('DATA EDIT', data);
+        var status = data.status;
+        var message = data.result.message;
+        if (status === 0) {
+          this.showNotification(message, 'error');
+          this.setState({
+            loadingPage: false,
+            loading: false,
+          });
+        } else {
+          this.showNotification(message, 'info');
+          this.setState(
+            {
+              loadingPage: false,
+              loading: false,
+              modal_nested_parent_editAlsin: false,
+              modal_nested_editAlsin: false,
+            },
+            () => this.getTransaksi(),
+          );
+        }
+      })
+      .catch(err => {
+        // console.log('ERRORNYA', err);
+        this.showNotification('Error ke server!', 'error');
+        this.setState({
+          loadingPage: false,
+          loading: false,
+        });
+      });
   };
 
   getListPerOutlet(currPage, currLimit) {
@@ -2450,7 +2462,7 @@ class Transaksi extends React.Component {
       '?transaction_order_id=' +
       todo.transaction_order_id;
     var token = window.localStorage.getItem('tokenCookies');
-    // console.log('URL GET LIST', url);
+    console.log('URL GET LIST', url);
 
     // this.setState({ loadingAlsin: true });
     // console.log("offset", offset, "currLimit", currLimit);
@@ -2494,9 +2506,12 @@ class Transaksi extends React.Component {
           this.showNotification('Data ditemukan!', 'info');
           this.setState({
             resultPricing: result,
-            resultPricingHeader: data.result.headers,
+            resultPricingHeader: data.result.alsin_types,
+            resultHeader: data.result.header,
 
             loadingAlsin: false,
+            resultalsin: data.result.alsin_types,
+            resultalsinItem: data.result.alsins,
             resultReparation: data.result.reparations,
             resultRiceSeeds: data.result.rice_seeds,
             resultRices: data.result.rices,
@@ -2687,11 +2702,15 @@ class Transaksi extends React.Component {
     this.setState(
       { input },
       // () =>
-      // console.log('EDIT ALSIN ', this.state.editAlsin),
+      // console.log('EDIT ALSIN PRICE', this.state.editPricing),
     );
   }
 
   setStatus = event => {
+    console.log(
+      'ATAS',
+      this.state.editPricing && this.state.editPricing.status,
+    );
     if (
       this.state.editPricing &&
       (this.state.editPricing.status === 'Menunggu Penentuan Pembayaran' ||
@@ -2719,26 +2738,30 @@ class Transaksi extends React.Component {
       });
     } else if (
       this.state.editPricing &&
-      (this.state.editPricing.status === 'Menunggu Alsin dikirim' ||
-        this.state.editPricing.status === 'Sedang dikerjakan')
+      // (
+      this.state.editPricing.status === 'Menunggu Alsin dikirim'
+      // ||
+      // this.state.editPricing.status === 'Sedang dikerjakan')
     ) {
+      console.log('ATAS');
       var nama = this.state.resultPricing4.find(function (element) {
         // console.log('ELEMENT TYPE', element);
         return element.status_id === event.target.value;
       });
     } else if (
       this.state.editPricing &&
-      this.state.editPricing.status === 'Sedang dkerjakan'
+      this.state.editPricing.status === 'Sedang dikerjakan'
     ) {
+      console.log('BAWAH');
       var nama = this.state.resultPricing5.find(function (element) {
-        // console.log('ELEMENT TYPE', element);
+        console.log('ELEMENT TYPE', element);
         return element.status_id === event.target.value;
       });
-    } else {
-      var nama = this.state.resultType.find(function (element) {
-        // console.log('ELEMENT TYPE', element);
-        return element.status_id === event.target.value;
-      });
+      // } else {
+      //   var nama = this.state.resultType.find(function (element) {
+      //     // console.log('ELEMENT TYPE', element);
+      //     return element.status_id === event.target.value;
+      //   });
     }
 
     // console.log('NAMA', nama);
@@ -2846,10 +2869,11 @@ class Transaksi extends React.Component {
     const alsinTodos = this.state.resultAlsin;
     const pricingTodos = this.state.resultPricing;
     const pricingHeadersTodos = this.state.resultPricingHeader;
+    const HeaderTodos = this.state.resultHeader;
     const pricingServiceTodos = this.state.resultPricingService;
     const pricingDetailTodos = this.state.resultPricingDetail;
 
-    // console.log('ALSIN', pricingDetailTodos);
+    // console.log('ALSIN', pricingServiceTodos);
     const renderAlsin =
       alsinTodos &&
       alsinTodos.map((todo, i) => {
@@ -2879,20 +2903,23 @@ class Transaksi extends React.Component {
             <td>{todo.order_time}</td>
             <td>{todo.delivery_time}</td>
             <td>{todo.status}</td>
-            <td>
-              <Button
-                style={{ margin: '0px' }}
-                color="secondary"
-                size="sm"
-                onClick={() =>
-                  this.toggleEdit('nested_parent_editAlsin', {
-                    ...todo,
-                  })
-                }
-              >
-                <MdEdit />
-              </Button>
-            </td>
+            {todo.status !== 'Transaksi ditolak Upja' &&
+              todo.status !== 'Menunggu Konfirmasi Petani' && (
+                <td>
+                  <Button
+                    style={{ margin: '0px' }}
+                    color="secondary"
+                    size="sm"
+                    onClick={() =>
+                      this.toggleEdit('nested_parent_editAlsin', {
+                        ...todo,
+                      })
+                    }
+                  >
+                    <MdEdit />
+                  </Button>
+                </td>
+              )}
           </tr>
         );
       });
@@ -3598,11 +3625,14 @@ class Transaksi extends React.Component {
                 <th
                 // untuk gmaps
                 >
-                  Pesanan yang dipesan Farmer
+                  Pesanan yang dipesan Farmer (
+                  {HeaderTodos && HeaderTodos.farmer_name} -{' '}
+                  {HeaderTodos && HeaderTodos.phone_number})
                 </th>
                 {/* <td>Edit</td> */}
               </tr>
             </thead>
+            {/* {console.log('PRICING HEADER', pricingHeadersTodos)} */}
             <Label
               style={{
                 marginBottom: 0,
@@ -3614,19 +3644,70 @@ class Transaksi extends React.Component {
               onClick={() => {
                 window.open(
                   'https://www.google.com/maps/search/?q=' +
-                    -34.397 +
+                    (HeaderTodos && HeaderTodos.latitude) +
                     ',' +
-                    150.644,
+                    (HeaderTodos && HeaderTodos.longtitude),
                 );
               }}
             >
+              {console.log(
+                'LINK GMAPS',
+                'https://www.google.com/maps/search/?q=' +
+                  (HeaderTodos && HeaderTodos.latitude) +
+                  ',' +
+                  (HeaderTodos && HeaderTodos.longtitude),
+              )}
               <MdLocationOn />
               Klik untuk Mengetahui Lokasi
             </Label>
-
+            {this.state.editPricing &&
+              this.state.editPricing.status ===
+                'Menunggu Penentuan Pembayaran' && (
+                <div>
+                  <Label style={{ marginBottom: 0, marginTop: '1%' }}>
+                    Harga Transportasi
+                  </Label>
+                  <Input
+                    name="transport_cost"
+                    type="number"
+                    placeholder="Isi biaya transportasi..."
+                    onChange={evt =>
+                      this.updateInputValue(
+                        evt.target.value,
+                        evt.target.name,
+                        'editPricing',
+                      )
+                    }
+                    value={
+                      this.state.editPricing &&
+                      this.state.editPricing.transport_cost
+                    }
+                  ></Input>
+                  {/* {console.log("EDIT PRICING", this.state.editPricing)} */}
+                </div>
+              )}
+            <hr style={{ borderWidth: 'medium' }}></hr>
+            <thead>
+              <tr>
+                <th>Alsin yang dipesan Petani</th>
+                {/* <td>Edit</td> */}
+              </tr>
+            </thead>
             <Table responsive striped id="tableBatasPerPelapak">
               <tbody>{renderPricingHeader}</tbody>
+              {pricingHeadersTodos && pricingHeadersTodos.length === 0 && (
+                <tr>
+                  <td
+                    style={{ backgroundColor: 'white' }}
+                    colSpan="11"
+                    className="text-center"
+                  >
+                    TIDAK ADA DATA
+                  </td>
+                </tr>
+              )}
             </Table>
+            <hr style={{ borderWidth: 'medium' }}></hr>
             <thead>
               <tr>
                 <th>Alsin tersedia yang dapat dipesan</th>
@@ -3930,11 +4011,10 @@ class Transaksi extends React.Component {
                 this.state.editPricing.status === 'Menungggu Konfirmasi Upja' &&
                 renderStatus3}
               {this.state.editPricing &&
-                (this.state.editPricing.status === 'Menunggu Alsin dikirim' ||
-                  this.state.editPricing.status === 'Sedang dikerjakan') &&
+                this.state.editPricing.status === 'Menunggu Alsin dikirim' &&
                 renderStatus4}
               {this.state.editPricing &&
-                this.state.editPricing.status === 'Sedang dkerjakan' &&
+                this.state.editPricing.status === 'Sedang dikerjakan' &&
                 renderStatus5}
               {this.state.editPricing &&
                 this.state.editPricing.status === 'Selesai' &&
@@ -3954,7 +4034,7 @@ class Transaksi extends React.Component {
               isOpen={this.state.modal_nested_editAlsin}
               toggle={this.toggle('nested_editAlsin')}
             >
-              <ModalHeader>Konfirmasi Penyimpanan</ModalHeader>
+              <ModalHeader>Konfirmasi Penyimpanan Edit alsin</ModalHeader>
               <ModalBody>Apakah Anda yakin ingin menyimpan data ini?</ModalBody>
               <ModalFooter>
                 <Button
@@ -4719,7 +4799,7 @@ class Transaksi extends React.Component {
           </ModalHeader>
           <ModalBody>
             <Form onSubmit={e => e.preventDefault()}>
-              {console.log('EDIT ALSIN DATA', this.state.editAlsinList)}
+              {/* {console.log('EDIT ALSIN DATA', this.state.editAlsinList)} */}
               <FormGroup>
                 <Label>Alsin</Label>
                 <Input

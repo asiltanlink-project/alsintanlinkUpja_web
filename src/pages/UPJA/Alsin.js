@@ -2397,10 +2397,11 @@ class Alsin extends React.Component {
                 </Link>
               </td>
             )}
-            <td>{formatter.format(todo.cost)}</td>
-            <td>{todo.available}</td>
-            <td>{todo.not_available}</td>
-            <td>{todo.total_item}</td>
+            {/* <td>{formatter.format(todo.cost)}</td> */}
+            <td style={{ textAlign: 'right' }}>{todo.available}</td>
+            <td style={{ textAlign: 'right' }}>{todo.not_available}</td>
+            <td style={{ textAlign: 'right' }}>{todo.rusak}</td>
+            <td style={{ textAlign: 'right' }}>{todo.total_item}</td>
             <td>
               <Button
                 style={{ margin: '0px' }}
@@ -2730,9 +2731,10 @@ class Alsin extends React.Component {
                     <tr>
                       <th>Alsin</th>
                       {/* <th>Harga</th> */}
-                      <th>Tersedia</th>
-                      <th>Sedang Digunakan</th>
-                      <th>Total Item</th>
+                      <th style={{ textAlign: 'right' }}>Tersedia</th>
+                      <th style={{ textAlign: 'right' }}>Sedang Digunakan</th>
+                      <th style={{ textAlign: 'right' }}>Rusak</th>
+                      <th style={{ textAlign: 'right' }}>Total Item</th>
                       <th>Edit</th>
                       <th>Hapus</th>
                     </tr>

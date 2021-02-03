@@ -29,6 +29,8 @@ var url_getTransaksiDetail =
 var url_showFormPricing = 'https://alsintanlink.com/api/upja/show_form_pricing';
 var url_showFormPricingDetail =
   'https://alsintanlink.com/api/upja/show_alsin_item_available';
+var url_updateTransaksi =
+  'https://alsintanlink.com/api/upja/update_status_transaction';
 
 export {
   url_resendOTP,
@@ -53,4 +55,5 @@ export {
   url_getTransaksiDetail,
   url_showFormPricing,
   url_showFormPricingDetail,
+  url_updateTransaksi
 };
