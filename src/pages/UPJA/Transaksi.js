@@ -4548,82 +4548,84 @@ class Transaksi extends React.Component {
                       <tbody>{renderPricing}</tbody>
                     </Table>
                   </CardBody>
-                  <Card className="mb-3s">
-                    <ButtonGroup>
-                      {/* <Button
+                  {pricingTodos.length !== 0 && (
+                    <Card className="mb-3s">
+                      <ButtonGroup>
+                        {/* <Button
                         name="FirstButton"
                         value={1}
                         onClick={() => this.getTransactionFormPricingFirstPage()}
                       >
                         &#10092;&#10092;
                       </Button> */}
-                      {this.state.prevPage === null && (
-                        <Button
-                          name="PrevButton"
-                          disabled={true}
-                          value={this.state.currentPage}
-                          onClick={() =>
-                            this.getTransactionFormPricingPrevPage()
-                          }
-                        >
-                          &#10092;
-                        </Button>
-                      )}
-                      {this.state.prevPage !== null && (
-                        <Button
-                          name="PrevButton"
-                          disabled={false}
-                          value={this.state.currentPage}
-                          onClick={() =>
-                            this.getTransactionFormPricingPrevPage()
-                          }
-                        >
-                          &#10092;
-                        </Button>
-                      )}
+                        {this.state.prevPage === null && (
+                          <Button
+                            name="PrevButton"
+                            disabled={true}
+                            value={this.state.currentPage}
+                            onClick={() =>
+                              this.getTransactionFormPricingPrevPage()
+                            }
+                          >
+                            &#10092;
+                          </Button>
+                        )}
+                        {this.state.prevPage !== null && (
+                          <Button
+                            name="PrevButton"
+                            disabled={false}
+                            value={this.state.currentPage}
+                            onClick={() =>
+                              this.getTransactionFormPricingPrevPage()
+                            }
+                          >
+                            &#10092;
+                          </Button>
+                        )}
 
-                      <input
-                        type="text"
-                        placeholder="Page"
-                        disabled={true}
-                        outline="none"
-                        value={this.state.currentPage}
-                        onChange={e =>
-                          this.setState({ currentPage: e.target.value })
-                        }
-                        onKeyPress={e => this.enterPressedPage(e)}
-                        style={{
-                          height: '38px',
-                          width: '75px',
-                          textAlign: 'center',
-                        }}
-                      />
-                      {this.state.nextPage === null && (
-                        <Button
-                          name="NextButton"
+                        <input
+                          type="text"
+                          placeholder="Page"
                           disabled={true}
+                          outline="none"
                           value={this.state.currentPage}
-                          onClick={() =>
-                            this.getTransactionFormPricingNextPage()
+                          onChange={e =>
+                            this.setState({ currentPage: e.target.value })
                           }
-                        >
-                          &#10093;
-                        </Button>
-                      )}
-                      {this.state.nextPage !== null && (
-                        <Button
-                          name="NextButton"
-                          disabled={false}
-                          value={this.state.currentPage}
-                          onClick={() =>
-                            this.getTransactionFormPricingNextPage()
-                          }
-                        >
-                          &#10093;
-                        </Button>
-                      )}
-                    </ButtonGroup>
-                  </Card>
+                          onKeyPress={e => this.enterPressedPage(e)}
+                          style={{
+                            height: '38px',
+                            width: '75px',
+                            textAlign: 'center',
+                          }}
+                        />
+                        {this.state.nextPage === null && (
+                          <Button
+                            name="NextButton"
+                            disabled={true}
+                            value={this.state.currentPage}
+                            onClick={() =>
+                              this.getTransactionFormPricingNextPage()
+                            }
+                          >
+                            &#10093;
+                          </Button>
+                        )}
+                        {this.state.nextPage !== null && (
+                          <Button
+                            name="NextButton"
+                            disabled={false}
+                            value={this.state.currentPage}
+                            onClick={() =>
+                              this.getTransactionFormPricingNextPage()
+                            }
+                          >
+                            &#10093;
+                          </Button>
+                        )}
+                      </ButtonGroup>
+                    </Card>
+                  )}
                 </div>
               )}
             <CardBody>
