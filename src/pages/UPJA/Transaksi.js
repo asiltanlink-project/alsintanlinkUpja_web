@@ -103,6 +103,12 @@ class Transaksi extends React.Component {
       pelapakDetail: [],
       ecommerceDetail: [],
       listEditMasal: [],
+      listEditMasalReparation: [],
+      listEditMasalRMUS: [],
+      listEditMasalSparePart: [],
+      listEditMasalRice: [],
+      listEditMasalRice_Seed: [],
+      listEditMasalTraining: [],
       resultBatasPerPelapak: [],
       resultPricingService: [],
       resultPricingHeader: [],
@@ -721,7 +727,8 @@ class Transaksi extends React.Component {
       transaction_order_id: updateHeaderData.transaction_order_id,
       transport_cost: parseInt(updateHeaderData.transport_cost),
       alsins: this.state.resultalsin,
-      alsin_items: this.state.resultalsinItem,
+      // alsin_items: this.state.resultalsinItem,
+      alsin_items: this.state.listEditMasal,
       rmus: this.state.resultRMUS,
       rice: this.state.resultRices,
       training: this.state.resultTrainings,
@@ -1188,7 +1195,7 @@ class Transaksi extends React.Component {
         var newlistEditMasal = {
           alsin_type_id: this.state.addAlsin.alsin_type_id,
           cost: parseInt(this.state.addAlsin.cost),
-          total_item: parseInt(this.state.addAlsin.total_item),
+          // total_item: parseInt(this.state.addAlsin.total_item),
           alsin_type_name: this.state.addAlsin.alsin_type_name,
           vechile_code: this.state.addAlsin.vechile_code,
           alsin_item_id: this.state.addAlsin.alsin_item_id,
@@ -1203,13 +1210,245 @@ class Transaksi extends React.Component {
           listDetail.push(newlistEditMasal);
         }
 
-        console.log('LIST EDIT MASAL', newArr);
+        // console.log('LIST EDIT MASAL', newArr);
 
         this.setState({
           modal_tambahProduk: false,
           modal_backdrop_tambahProduk: false,
           modal_nested_parent_tambahProduk: false,
           modal_nested_tambahProduk: false,
+        });
+      },
+    );
+  };
+
+  setListEditMassalRMUS = (param, param2) => {
+    var listDetail = this.state.listEditMasalRMUS;
+    console.log('EDIT BATAS BAWAH', param, '@@@', param2);
+    console.log('TERPANGGIL');
+
+    this.setState(
+      {
+        listEditMasalRMUS: listDetail,
+      },
+      () => {
+        var newlistEditMasalRMUS = {
+          alsin_type_id: this.state.addAlsin.alsin_type_id,
+          cost: parseInt(this.state.addAlsin.cost),
+          id: this.state.addAlsin.id,
+          packaging: this.state.addAlsin.packaging,
+          alsin_type_name: this.state.addAlsin.alsin_type_name,
+          vechile_code: this.state.addAlsin.vechile_code,
+          alsin_item_id: this.state.addAlsin.alsin_item_id,
+        };
+
+        var newArr = listDetail.filter(item => item.id === param2.id);
+
+        if (newArr.length > 0) {
+        } else {
+          listDetail.push(newlistEditMasalRMUS);
+        }
+
+        console.log('LIST EDIT MASAL', newArr);
+
+        this.setState({
+          modal_tambahProdukRMU: false,
+          modal_backdrop_tambahProdukRMU: false,
+          modal_nested_parent_tambahProdukRMU: false,
+          modal_nested_tambahProdukRMU: false,
+        });
+      },
+    );
+  };
+  setListEditMassalReparation = (param, param2) => {
+    var listDetail = this.state.listEditMasalReparation;
+    // console.log('EDIT BATAS BAWAH', param, '@@@', param2);
+
+    this.setState(
+      {
+        listEditMasalReparation: listDetail,
+      },
+      () => {
+        var newlistEditMasalReparation = {
+          alsin_type_id: this.state.addAlsin.alsin_type_id,
+          cost: parseInt(this.state.addAlsin.cost),
+          // total_item: parseInt(this.state.addAlsin.total_item),
+          alsin_type_order_name: this.state.addAlsin.alsin_type_order_name,
+          vechile_code: this.state.addAlsin.vechile_code,
+          alsin_item_id: this.state.addAlsin.alsin_item_id,
+        };
+
+        var newArr = listDetail.filter(
+          item => item.alsin_type_order_name === param2.alsin_type_order_name,
+        );
+
+        if (newArr.length > 0) {
+        } else {
+          listDetail.push(newlistEditMasalReparation);
+        }
+
+        console.log('LIST EDIT MASAL', newArr);
+
+        this.setState({
+          modal_tambahProdukReparation: false,
+          modal_backdrop_tambahProdukReparation: false,
+          modal_nested_parent_tambahProdukReparation: false,
+          modal_nested_tambahProdukReparation: false,
+        });
+      },
+    );
+  };
+  setListEditMassalSparePart = (param, param2) => {
+    var listDetail = this.state.listEditMasalSparePart;
+    // console.log('EDIT BATAS BAWAH', param, '@@@', param2);
+
+    this.setState(
+      {
+        listEditMasalSparePart: listDetail,
+      },
+      () => {
+        var newlistEditMasalSparePart = {
+          alsin_type_id: this.state.addAlsin.alsin_type_id,
+          cost: parseInt(this.state.addAlsin.cost),
+          // total_item: parseInt(this.state.addAlsin.total_item),
+          id: this.state.addAlsin.id,
+          name: this.state.addAlsin.name,
+          alsin_type_name: this.state.addAlsin.alsin_type_name,
+          vechile_code: this.state.addAlsin.vechile_code,
+          alsin_item_id: this.state.addAlsin.alsin_item_id,
+        };
+
+        var newArr = listDetail.filter(item => item.id === param2.id);
+
+        if (newArr.length > 0) {
+        } else {
+          listDetail.push(newlistEditMasalSparePart);
+        }
+
+        console.log('LIST EDIT MASAL', newArr);
+
+        this.setState({
+          modal_tambahProdukSparePart: false,
+          modal_backdrop_tambahProdukSparePart: false,
+          modal_nested_parent_tambahProdukSparePart: false,
+          modal_nested_tambahProdukSparePart: false,
+        });
+      },
+    );
+  };
+  setListEditMassalTraining = (param, param2) => {
+    var listDetail = this.state.listEditMasalTraining;
+    // console.log('EDIT BATAS BAWAH', param, '@@@', param2);
+
+    this.setState(
+      {
+        listEditMasalTraining: listDetail,
+      },
+      () => {
+        var newlistEditMasalTraining = {
+          alsin_type_id: this.state.addAlsin.alsin_type_id,
+          cost: parseInt(this.state.addAlsin.cost),
+          // total_item: parseInt(this.state.addAlsin.total_item),
+          id: this.state.addAlsin.id,
+          alsin_type_name: this.state.addAlsin.alsin_type_name,
+          vechile_code: this.state.addAlsin.vechile_code,
+          alsin_item_id: this.state.addAlsin.alsin_item_id,
+        };
+
+        var newArr = listDetail.filter(item => item.id === param2.id);
+
+        if (newArr.length > 0) {
+        } else {
+          listDetail.push(newlistEditMasalTraining);
+        }
+
+        console.log('LIST EDIT MASAL', newArr);
+
+        this.setState({
+          modal_tambahProdukTraining: false,
+          modal_backdrop_tambahProdukTraining: false,
+          modal_nested_parent_tambahProdukTraining: false,
+          modal_nested_tambahProdukTraining: false,
+        });
+      },
+    );
+  };
+  setListEditMassalRice_Seed = (param, param2) => {
+    var listDetail = this.state.listEditMasalRice_Seed;
+    // console.log('EDIT BATAS BAWAH', param, '@@@', param2);
+
+    this.setState(
+      {
+        listEditMasalRice_Seed: listDetail,
+      },
+      () => {
+        var newlistEditMasalRice_Seed = {
+          alsin_type_id: this.state.addAlsin.alsin_type_id,
+          cost: parseInt(this.state.addAlsin.cost),
+          // total_item: parseInt(this.state.addAlsin.total_item),
+          alsin_type_name: this.state.addAlsin.alsin_type_name,
+          name: this.state.addAlsin.name,
+          vechile_code: this.state.addAlsin.vechile_code,
+          alsin_item_id: this.state.addAlsin.alsin_item_id,
+        };
+
+        var newArr = listDetail.filter(item => item.name === param2.name);
+
+        if (newArr.length > 0) {
+        } else {
+          listDetail.push(newlistEditMasalRice_Seed);
+        }
+
+        console.log('LIST EDIT MASAL', newArr);
+
+        this.setState({
+          modal_tambahProdukRice_Seed: false,
+          modal_backdrop_tambahProdukRice_Seed: false,
+          modal_nested_parent_tambahProdukRice_Seed: false,
+          modal_nested_tambahProdukRice_Seed: false,
+        });
+      },
+    );
+  };
+  setListEditMassalRice = (param, param2) => {
+    var listDetail = this.state.listEditMasalRice;
+    // console.log('EDIT BATAS BAWAH', param, '@@@', param2);
+
+    this.setState(
+      {
+        listEditMasalRice: listDetail,
+      },
+      () => {
+        var newlistEditMasalRice = {
+          alsin_type_id: this.state.addAlsin.alsin_type_id,
+          cost: parseInt(this.state.addAlsin.cost),
+          total_rice: parseInt(this.state.addAlsin.total_rice),
+          id: this.state.addAlsin.id,
+          alsin_type_name: this.state.addAlsin.alsin_type_name,
+          vechile_code: this.state.addAlsin.vechile_code,
+          alsin_item_id: this.state.addAlsin.alsin_item_id,
+          land_area_range: parseInt(this.state.addAlsin.land_area_range),
+        };
+
+        console.log('PARAM ID', param2.id, 'ITEM ID', listDetail);
+
+        var newArr = listDetail.filter(
+          item => item.id === param2.id,
+          // item => console.log('ITEM ID', item.id, 'PARAM', param2.id),
+        );
+
+        if (newArr.length > 0) {
+        } else {
+          listDetail.push(newlistEditMasalRice);
+        }
+
+        console.log('LIST EDIT MASAL', newArr);
+
+        this.setState({
+          modal_tambahProdukRice: false,
+          modal_backdrop_tambahProdukRice: false,
+          modal_nested_parent_tambahProdukRice: false,
+          modal_nested_tambahProdukRice: false,
         });
       },
     );
@@ -1252,6 +1491,21 @@ class Transaksi extends React.Component {
       },
     );
   };
+
+  BatalSimpanTransaksi() {
+    this.setState(
+      {
+        listEditMasal: [],
+        listEditMasalRMUS: [],
+        listEditMasalReparation: [],
+        listEditMasalRice: [],
+        listEditMasalRice_Seed: [],
+        listEditMasalSparePart: [],
+        listEditMasalTraining: [],
+      },
+     this.toggle('nested_parent_editAlsin')
+    );
+  }
 
   onEnterSearchProcod = (event, param) => {
     var code = event.keyCode || event.which;
@@ -2166,6 +2420,42 @@ class Transaksi extends React.Component {
         [`modal_${modalType}`]: !this.state[`modal_${modalType}`],
         addAlsin: todo,
       });
+    } else if (modalType === 'nested_parent_tambahProdukReparation') {
+      // console.log('LOG 1');
+      this.setState({
+        [`modal_${modalType}`]: !this.state[`modal_${modalType}`],
+        addAlsin: todo,
+      });
+    } else if (modalType === 'nested_parent_tambahProdukTraining') {
+      // console.log('LOG 1');
+      this.setState({
+        [`modal_${modalType}`]: !this.state[`modal_${modalType}`],
+        addAlsin: todo,
+      });
+    } else if (modalType === 'nested_parent_tambahProdukSparePart') {
+      // console.log('LOG 1');
+      this.setState({
+        [`modal_${modalType}`]: !this.state[`modal_${modalType}`],
+        addAlsin: todo,
+      });
+    } else if (modalType === 'nested_parent_tambahProdukRice_Seed') {
+      // console.log('LOG 1');
+      this.setState({
+        [`modal_${modalType}`]: !this.state[`modal_${modalType}`],
+        addAlsin: todo,
+      });
+    } else if (modalType === 'nested_parent_tambahProdukRice') {
+      // console.log('LOG 1');
+      this.setState({
+        [`modal_${modalType}`]: !this.state[`modal_${modalType}`],
+        addAlsin: todo,
+      });
+    } else if (modalType === 'nested_parent_tambahProdukRMU') {
+      // console.log('LOG 1');
+      this.setState({
+        [`modal_${modalType}`]: !this.state[`modal_${modalType}`],
+        addAlsin: todo,
+      });
     } else {
       this.setState({
         [`modal_${modalType}`]: !this.state[`modal_${modalType}`],
@@ -2324,6 +2614,60 @@ class Transaksi extends React.Component {
     );
     this.setState({
       listEditMasal: newArr,
+    });
+  }
+
+  deleteListEditMassalReparation(todo) {
+    var newArr = this.state.listEditMasalReparation.filter(
+      item => item.alsin_type_order_name !== todo.alsin_type_order_name,
+    );
+    this.setState({
+      listEditMasalReparation: newArr,
+    });
+  }
+
+  deleteListEditMassalRice_Seed(todo) {
+    var newArr = this.state.listEditMasalRice_Seed.filter(
+      item => item.name !== todo.name,
+    );
+    this.setState({
+      listEditMasalRice_Seed: newArr,
+    });
+  }
+
+  deleteListEditMassalRice(todo) {
+    var newArr = this.state.listEditMasalRice.filter(
+      item => item.id !== todo.id,
+    );
+    this.setState({
+      listEditMasalRice: newArr,
+    });
+  }
+
+  deleteListEditMassalRMU(todo) {
+    var newArr = this.state.listEditMasalRMUS.filter(
+      item => item.id !== todo.id,
+    );
+    this.setState({
+      listEditMasalRMUS: newArr,
+    });
+  }
+
+  deleteListEditMassalSparePart(todo) {
+    var newArr = this.state.listEditMasalSparePart.filter(
+      item => item.id !== todo.id,
+    );
+    this.setState({
+      listEditMasalSparePart: newArr,
+    });
+  }
+
+  deleteListEditMassalTraining(todo) {
+    var newArr = this.state.listEditMasalTraining.filter(
+      item => item.id !== todo.id,
+    );
+    this.setState({
+      listEditMasalTraining: newArr,
     });
   }
 
@@ -2930,7 +3274,7 @@ class Transaksi extends React.Component {
         return (
           <tr key={i}>
             <td>
-              {todo.alsin_type_name}({todo.vechile_code})
+              {todo.alsin_type_name}({todo.vechile_code} - {todo.description})
             </td>
             <td>
               <Button
@@ -2972,6 +3316,15 @@ class Transaksi extends React.Component {
                 <MdAdd />
               </Button>
             </td> */}
+            <td>
+              <Button
+                color="secondary"
+                size="sm"
+                onClick={this.toggle('nested_parent_tambahProduk', todo)}
+              >
+                <MdAdd />
+              </Button>
+            </td>
           </tr>
         );
       });
@@ -2983,8 +3336,20 @@ class Transaksi extends React.Component {
           <tr key={i}>
             {/* {console.log('TOTAL REPARATION', todo)} */}
             <td>{todo.alsin_type_order_name}</td>
-            <td style={{ textAlign: 'right' }}>
+            {/* <td style={{ textAlign: 'right' }}>
               {formatter.format(todo.cost)}
+            </td> */}
+            <td style={{ textAlign: 'right' }}>
+              <Button
+                color="secondary"
+                size="sm"
+                onClick={this.toggle(
+                  'nested_parent_tambahProdukReparation',
+                  todo,
+                )}
+              >
+                <MdAdd />
+              </Button>
             </td>
           </tr>
         );
@@ -2998,8 +3363,20 @@ class Transaksi extends React.Component {
             {/* {console.log('TOTAL REPARATION', todo)} */}
             <td>{todo.name}</td>
             <td style={{ textAlign: 'right' }}>{todo.weight} Kg</td>
-            <td style={{ textAlign: 'right' }}>
+            {/* <td style={{ textAlign: 'right' }}>
               {formatter.format(todo.cost)}
+            </td> */}
+            <td style={{ textAlign: 'right' }}>
+              <Button
+                color="secondary"
+                size="sm"
+                onClick={this.toggle(
+                  'nested_parent_tambahProdukRice_Seed',
+                  todo,
+                )}
+              >
+                <MdAdd />
+              </Button>
             </td>
           </tr>
         );
@@ -3015,8 +3392,17 @@ class Transaksi extends React.Component {
             <td style={{ textAlign: 'right' }}>
               {todo.land_area_range} Hektar
             </td>
-            <td style={{ textAlign: 'right' }}>
+            {/* <td style={{ textAlign: 'right' }}>
               {formatter.format(todo.cost)}
+            </td> */}
+            <td style={{ textAlign: 'right' }}>
+              <Button
+                color="secondary"
+                size="sm"
+                onClick={this.toggle('nested_parent_tambahProdukRice', todo)}
+              >
+                <MdAdd />
+              </Button>
             </td>
           </tr>
         );
@@ -3030,8 +3416,17 @@ class Transaksi extends React.Component {
             {/* {console.log('TOTAL REPARATION', todo)} */}
             <td>{todo.packaging} Kg</td>
             <td style={{ textAlign: 'right' }}>{todo.weight} Kg</td>
-            <td style={{ textAlign: 'right' }}>
+            {/* <td style={{ textAlign: 'right' }}>
               {formatter.format(todo.cost)}
+            </td> */}
+            <td style={{ textAlign: 'right' }}>
+              <Button
+                color="secondary"
+                size="sm"
+                onClick={this.toggle('nested_parent_tambahProdukRMU', todo)}
+              >
+                <MdAdd />
+              </Button>
             </td>
           </tr>
         );
@@ -3045,8 +3440,20 @@ class Transaksi extends React.Component {
             {/* {console.log('TOTAL REPARATION', todo)} */}
             <td>{todo.name}</td>
             {/* <td>{todo.weight}</td> */}
-            <td style={{ textAlign: 'right' }}>
+            {/* <td style={{ textAlign: 'right' }}>
               {formatter.format(todo.cost)}
+            </td> */}
+            <td style={{ textAlign: 'right' }}>
+              <Button
+                color="secondary"
+                size="sm"
+                onClick={this.toggle(
+                  'nested_parent_tambahProdukSparePart',
+                  todo,
+                )}
+              >
+                <MdAdd />
+              </Button>
             </td>
           </tr>
         );
@@ -3060,8 +3467,20 @@ class Transaksi extends React.Component {
             {/* {console.log('TOTAL REPARATION', todo)} */}
             <td>{todo.name}</td>
             <td style={{ textAlign: 'right' }}>{todo.total_member}</td>
-            <td style={{ textAlign: 'right' }}>
+            {/* <td style={{ textAlign: 'right' }}>
               {formatter.format(todo.cost)}
+            </td> */}
+            <td style={{ textAlign: 'right' }}>
+              <Button
+                color="secondary"
+                size="sm"
+                onClick={this.toggle(
+                  'nested_parent_tambahProdukTraining',
+                  todo,
+                )}
+              >
+                <MdAdd />
+              </Button>
             </td>
           </tr>
         );
@@ -3307,32 +3726,184 @@ class Transaksi extends React.Component {
             <td style={{ textAlign: 'right' }}>
               {formatter.format(todo.cost)}
             </td>
-            {/* <td style={{ textAlign: 'right' }}>
-              {formatter.format(todo.total_item)}
-            </td> */}
-            {/* <td>
-              <Button
-                color="secondary"
-                size="sm"
-                onClick={() =>
-                  this.toggleEditData('nested_parent_editMassal_edit', {
-                    ...todo,
-                  })
-                }
-              >
-                <MdEdit />
-              </Button>
-            </td> */}
-            <td>
-              <Button
-                color="danger"
-                size="sm"
-                value={todo.nama}
-                onClick={() => this.deleteListEditMassal({ ...todo })}
-              >
-                <MdDelete />
-              </Button>
+            {this.state.editPricing &&
+              this.state.editPricing.status ===
+                'Menunggu Penentuan Pembayaran' && (
+                <td>
+                  <Button
+                    color="danger"
+                    size="sm"
+                    value={todo.nama}
+                    onClick={() => this.deleteListEditMassal({ ...todo })}
+                  >
+                    <MdDelete />
+                  </Button>
+                </td>
+              )}
+          </tr>
+        );
+      });
+    const renderListEditMassalReparation =
+      this.state.listEditMasalReparation &&
+      this.state.listEditMasalReparation.map((todo, i) => {
+        return (
+          <tr key={i}>
+            <td style={{ textAlign: 'left' }}>{todo.alsin_type_order_name}</td>
+            <td style={{ textAlign: 'right' }}>
+              {formatter.format(todo.cost)}
             </td>
+            {this.state.editPricing &&
+              this.state.editPricing.status ===
+                'Menunggu Penentuan Pembayaran' && (
+                <td>
+                  <Button
+                    color="danger"
+                    size="sm"
+                    value={todo.nama}
+                    onClick={() =>
+                      this.deleteListEditMassalReparation({ ...todo })
+                    }
+                  >
+                    <MdDelete />
+                  </Button>
+                </td>
+              )}
+          </tr>
+        );
+      });
+    const renderListEditMassalTraining =
+      this.state.listEditMasalTraining &&
+      this.state.listEditMasalTraining.map((todo, i) => {
+        return (
+          <tr key={i}>
+            <td style={{ textAlign: 'left' }}>{todo.alsin_type_name}</td>
+            <td style={{ textAlign: 'right' }}>
+              {formatter.format(todo.cost)}
+            </td>
+            {this.state.editPricing &&
+              this.state.editPricing.status ===
+                'Menunggu Penentuan Pembayaran' && (
+                <td>
+                  <Button
+                    color="danger"
+                    size="sm"
+                    value={todo.nama}
+                    onClick={() =>
+                      this.deleteListEditMassalTraining({ ...todo })
+                    }
+                  >
+                    <MdDelete />
+                  </Button>
+                </td>
+              )}
+          </tr>
+        );
+      });
+    const renderListEditMassalSparePart =
+      this.state.listEditMasalSparePart &&
+      this.state.listEditMasalSparePart.map((todo, i) => {
+        return (
+          <tr key={i}>
+            <td style={{ textAlign: 'left' }}>{todo.name}</td>
+            <td style={{ textAlign: 'right' }}>
+              {formatter.format(todo.cost)}
+            </td>
+            {this.state.editPricing &&
+              this.state.editPricing.status ===
+                'Menunggu Penentuan Pembayaran' && (
+                <td>
+                  <Button
+                    color="danger"
+                    size="sm"
+                    value={todo.nama}
+                    onClick={() =>
+                      this.deleteListEditMassalSparePart({ ...todo })
+                    }
+                  >
+                    <MdDelete />
+                  </Button>
+                </td>
+              )}
+          </tr>
+        );
+      });
+    const renderListEditMassalRMUS =
+      this.state.listEditMasalRMUS &&
+      this.state.listEditMasalRMUS.map((todo, i) => {
+        return (
+          <tr key={i}>
+            <td style={{ textAlign: 'left' }}>{todo.packaging}</td>
+            <td style={{ textAlign: 'right' }}>
+              {formatter.format(todo.cost)}
+            </td>
+            {this.state.editPricing &&
+              this.state.editPricing.status ===
+                'Menunggu Penentuan Pembayaran' && (
+                <td>
+                  <Button
+                    color="danger"
+                    size="sm"
+                    value={todo.nama}
+                    onClick={() => this.deleteListEditMassalRMU({ ...todo })}
+                  >
+                    <MdDelete />
+                  </Button>
+                </td>
+              )}
+          </tr>
+        );
+      });
+    const renderListEditMassalRice_Seed =
+      this.state.listEditMasalRice_Seed &&
+      this.state.listEditMasalRice_Seed.map((todo, i) => {
+        return (
+          <tr key={i}>
+            <td style={{ textAlign: 'left' }}>{todo.name}</td>
+            <td style={{ textAlign: 'right' }}>
+              {formatter.format(todo.cost)}
+            </td>
+            {this.state.editPricing &&
+              this.state.editPricing.status ===
+                'Menunggu Penentuan Pembayaran' && (
+                <td>
+                  <Button
+                    color="danger"
+                    size="sm"
+                    value={todo.nama}
+                    onClick={() =>
+                      this.deleteListEditMassalRice_Seed({ ...todo })
+                    }
+                  >
+                    <MdDelete />
+                  </Button>
+                </td>
+              )}
+          </tr>
+        );
+      });
+    const renderListEditMassalRice =
+      this.state.listEditMasalRice &&
+      this.state.listEditMasalRice.map((todo, i) => {
+        return (
+          <tr key={i}>
+            <td style={{ textAlign: 'left' }}>{todo.total_rice}</td>
+            <td style={{ textAlign: 'right' }}>
+              {formatter.format(todo.cost)}
+            </td>
+            {this.state.editPricing &&
+              this.state.editPricing.status ===
+                'Menunggu Penentuan Pembayaran' && (
+                <td>
+                  <Button
+                    color="danger"
+                    size="sm"
+                    value={todo.nama}
+                    onClick={() => this.deleteListEditMassalRice({ ...todo })}
+                  >
+                    <MdDelete />
+                  </Button>
+                </td>
+              )}
           </tr>
         );
       });
@@ -3708,21 +4279,34 @@ class Transaksi extends React.Component {
               )}
             </Table>
             <hr style={{ borderWidth: 'medium' }}></hr>
-            <thead>
-              <tr>
-                <th>Alsin tersedia yang dapat dipesan</th>
-                {/* <td>Edit</td> */}
-              </tr>
-            </thead>
-            <Label
-              style={{ marginBottom: '0', fontSize: '0.7em', color: 'red' }}
-            >
-              *klik untuk menginput data dari Alsin yang telah dipesan
-            </Label>
+            {this.state.editPricing &&
+              this.state.editPricing.status ===
+                'Menunggu Penentuan Pembayaran' && (
+                <div>
+                  <thead>
+                    <tr>
+                      <th>Alsin tersedia yang dapat dipesan</th>
+                      {/* <td>Edit</td> */}
+                    </tr>
+                  </thead>
+                  <Label
+                    style={{
+                      marginBottom: '0',
+                      fontSize: '0.7em',
+                      color: 'red',
+                    }}
+                  >
+                    *klik untuk menginput data dari Alsin yang telah dipesan
+                  </Label>
+
+                  <CardBody>
+                    <Table responsive striped id="tableBatasPerPelapak">
+                      <tbody>{renderPricing}</tbody>
+                    </Table>
+                  </CardBody>
+                </div>
+              )}
             <CardBody>
-              <Table responsive striped id="tableBatasPerPelapak">
-                <tbody>{renderPricing}</tbody>
-              </Table>
               <Table responsive striped id="tableBatasPerPelapak">
                 <thead>
                   <tr>
@@ -3730,7 +4314,9 @@ class Transaksi extends React.Component {
                     <th style={{ textAlign: 'right' }}>Harga</th>
                     {/* <th>Total Item</th> */}
                     {/* <th>Edit</th> */}
-                    <th>Hapus</th>
+                    {this.state.editPricing &&
+                      this.state.editPricing.status ===
+                        'Menunggu Penentuan Pembayaran' && <th>Hapus</th>}
                   </tr>
                 </thead>
 
@@ -3765,7 +4351,8 @@ class Transaksi extends React.Component {
               <thead>
                 <tr>
                   <th style={{ width: '50%' }}>Alsin</th>
-                  <th style={{ textAlign: 'right', width: '50%' }}>Harga</th>
+                  <th style={{ textAlign: 'right' }}></th>
+                  {/* <th style={{ textAlign: 'right', width: '50%' }}>Harga</th> */}
                   {/* <th>Edit</th>
                       <th>Hapus</th> */}
                 </tr>
@@ -3793,6 +4380,34 @@ class Transaksi extends React.Component {
                 )}
               </tbody>
             </Table>
+            <CardBody>
+              <Table responsive striped id="tableBatasPerPelapak">
+                <thead>
+                  <tr>
+                    <th>Alsin</th>
+                    <th style={{ textAlign: 'right' }}>Harga</th>
+                    {/* <th>Total Item</th> */}
+                    {/* <th>Edit</th> */}
+                    {this.state.editPricing &&
+                      this.state.editPricing.status ===
+                        'Menunggu Penentuan Pembayaran' && <th>Hapus</th>}
+                  </tr>
+                </thead>
+
+                <tbody>{renderListEditMassalReparation}</tbody>
+                {this.state.listEditMasalReparation.length === 0 && (
+                  <tr>
+                    <td
+                      style={{ backgroundColor: 'white' }}
+                      colSpan="11"
+                      className="text-center"
+                    >
+                      TIDAK ADA DATA
+                    </td>
+                  </tr>
+                )}
+              </Table>
+            </CardBody>
             {/* Untuk Other Service Benih Padi */}
             <hr style={{ borderWidth: 'medium' }}></hr>
             <Label style={{ fontWeight: 'bold' }}>Table Benih Padi</Label>
@@ -3801,7 +4416,8 @@ class Transaksi extends React.Component {
                 <tr>
                   <th style={{ width: '33.3%' }}>Nama</th>
                   <th style={{ textAlign: 'right', width: '33.3%' }}>Berat</th>
-                  <th style={{ textAlign: 'right', width: '33.3%' }}>Harga</th>
+                  <th></th>
+                  {/* <th style={{ textAlign: 'right', width: '33.3%' }}>Harga</th> */}
                   {/* <th>Edit</th>
                       <th>Hapus</th> */}
                 </tr>
@@ -3829,6 +4445,34 @@ class Transaksi extends React.Component {
                 )}
               </tbody>
             </Table>
+            <CardBody>
+              <Table responsive striped id="tableBatasPerPelapak">
+                <thead>
+                  <tr>
+                    <th>Nama</th>
+                    <th style={{ textAlign: 'right' }}>Harga</th>
+                    {/* <th>Total Item</th> */}
+                    {/* <th>Edit</th> */}
+                    {this.state.editPricing &&
+                      this.state.editPricing.status ===
+                        'Menunggu Penentuan Pembayaran' && <th>Hapus</th>}
+                  </tr>
+                </thead>
+
+                <tbody>{renderListEditMassalRice_Seed}</tbody>
+                {this.state.listEditMasalRice_Seed.length === 0 && (
+                  <tr>
+                    <td
+                      style={{ backgroundColor: 'white' }}
+                      colSpan="11"
+                      className="text-center"
+                    >
+                      TIDAK ADA DATA
+                    </td>
+                  </tr>
+                )}
+              </Table>
+            </CardBody>
             {/* Untuk Other Service Bibit */}
             <hr style={{ borderWidth: 'medium' }}></hr>
             <Label style={{ fontWeight: 'bold' }}>Table Bibit Padi</Label>
@@ -3839,7 +4483,8 @@ class Transaksi extends React.Component {
                   <th style={{ textAlign: 'right', width: '33.3%' }}>
                     Luas Lahan
                   </th>
-                  <th style={{ textAlign: 'right', width: '33.3%' }}>Harga</th>
+                  <th></th>
+                  {/* <th style={{ textAlign: 'right', width: '33.3%' }}>Harga</th> */}
                   {/* <th>Edit</th>
                       <th>Hapus</th> */}
                 </tr>
@@ -3867,6 +4512,34 @@ class Transaksi extends React.Component {
                 )}
               </tbody>
             </Table>
+            <CardBody>
+              <Table responsive striped id="tableBatasPerPelapak">
+                <thead>
+                  <tr>
+                    <th>Total Bibit</th>
+                    <th style={{ textAlign: 'right' }}>Harga</th>
+                    {/* <th>Total Item</th> */}
+                    {/* <th>Edit</th> */}
+                    {this.state.editPricing &&
+                      this.state.editPricing.status ===
+                        'Menunggu Penentuan Pembayaran' && <th>Hapus</th>}
+                  </tr>
+                </thead>
+
+                <tbody>{renderListEditMassalRice}</tbody>
+                {this.state.listEditMasalRice.length === 0 && (
+                  <tr>
+                    <td
+                      style={{ backgroundColor: 'white' }}
+                      colSpan="11"
+                      className="text-center"
+                    >
+                      TIDAK ADA DATA
+                    </td>
+                  </tr>
+                )}
+              </Table>
+            </CardBody>
             {/* Untuk Other Service RMUS */}
             <hr style={{ borderWidth: 'medium' }}></hr>
             <Label style={{ fontWeight: 'bold' }}>Table RMUS</Label>
@@ -3875,7 +4548,8 @@ class Transaksi extends React.Component {
                 <tr>
                   <th style={{ width: '33.3%' }}>Packaging</th>
                   <th style={{ textAlign: 'right', width: '33.3%' }}>Berat</th>
-                  <th style={{ textAlign: 'right', width: '33.3%' }}>Harga</th>
+                  <th></th>
+                  {/* <th style={{ textAlign: 'right', width: '33.3%' }}>Harga</th> */}
                   {/* <th>Edit</th>
                       <th>Hapus</th> */}
                 </tr>
@@ -3903,6 +4577,34 @@ class Transaksi extends React.Component {
                 )}
               </tbody>
             </Table>
+            <CardBody>
+              <Table responsive striped id="tableBatasPerPelapak">
+                <thead>
+                  <tr>
+                    <th>Packaging</th>
+                    <th style={{ textAlign: 'right' }}>Harga</th>
+                    {/* <th>Total Item</th> */}
+                    {/* <th>Edit</th> */}
+                    {this.state.editPricing &&
+                      this.state.editPricing.status ===
+                        'Menunggu Penentuan Pembayaran' && <th>Hapus</th>}
+                  </tr>
+                </thead>
+
+                <tbody>{renderListEditMassalRMUS}</tbody>
+                {this.state.listEditMasalRMUS.length === 0 && (
+                  <tr>
+                    <td
+                      style={{ backgroundColor: 'white' }}
+                      colSpan="11"
+                      className="text-center"
+                    >
+                      TIDAK ADA DATA
+                    </td>
+                  </tr>
+                )}
+              </Table>
+            </CardBody>
             {/* Untuk Other Service Spare Part */}
             <hr style={{ borderWidth: 'medium' }}></hr>
             <Label style={{ fontWeight: 'bold' }}>Table Suku Cadang</Label>
@@ -3910,7 +4612,8 @@ class Transaksi extends React.Component {
               <thead>
                 <tr>
                   <th style={{ width: '50%' }}>Nama</th>
-                  <th style={{ textAlign: 'right', width: '50%' }}>Harga</th>
+                  <th></th>
+                  {/* <th style={{ textAlign: 'right', width: '50%' }}>Harga</th> */}
                   {/* <th>Edit</th>
                       <th>Hapus</th> */}
                 </tr>
@@ -3938,6 +4641,34 @@ class Transaksi extends React.Component {
                 )}
               </tbody>
             </Table>
+            <CardBody>
+              <Table responsive striped id="tableBatasPerPelapak">
+                <thead>
+                  <tr>
+                    <th>Nama</th>
+                    <th style={{ textAlign: 'right' }}>Harga</th>
+                    {/* <th>Total Item</th> */}
+                    {/* <th>Edit</th> */}
+                    {this.state.editPricing &&
+                      this.state.editPricing.status ===
+                        'Menunggu Penentuan Pembayaran' && <th>Hapus</th>}
+                  </tr>
+                </thead>
+
+                <tbody>{renderListEditMassalSparePart}</tbody>
+                {this.state.listEditMasalSparePart.length === 0 && (
+                  <tr>
+                    <td
+                      style={{ backgroundColor: 'white' }}
+                      colSpan="11"
+                      className="text-center"
+                    >
+                      TIDAK ADA DATA
+                    </td>
+                  </tr>
+                )}
+              </Table>
+            </CardBody>
             {/* Untuk Other Service Training */}
             <hr style={{ borderWidth: 'medium' }}></hr>
             <Label style={{ fontWeight: 'bold' }}>Table Pelatihan</Label>
@@ -3948,7 +4679,8 @@ class Transaksi extends React.Component {
                   <th style={{ textAlign: 'right', width: '33.3%' }}>
                     Jumlah Anggota
                   </th>
-                  <th style={{ textAlign: 'right', width: '33.3%' }}>Harga</th>
+                  <th></th>
+                  {/* <th style={{ textAlign: 'right', width: '33.3%' }}>Harga</th> */}
                   {/* <th>Edit</th>
                       <th>Hapus</th> */}
                 </tr>
@@ -3976,6 +4708,34 @@ class Transaksi extends React.Component {
                 )}
               </tbody>
             </Table>
+            <CardBody>
+              <Table responsive striped id="tableBatasPerPelapak">
+                <thead>
+                  <tr>
+                    <th>Nama</th>
+                    <th style={{ textAlign: 'right' }}>Harga</th>
+                    {/* <th>Total Item</th> */}
+                    {/* <th>Edit</th> */}
+                    {this.state.editPricing &&
+                      this.state.editPricing.status ===
+                        'Menunggu Penentuan Pembayaran' && <th>Hapus</th>}
+                  </tr>
+                </thead>
+
+                <tbody>{renderListEditMassalTraining}</tbody>
+                {this.state.listEditMasalTraining.length === 0 && (
+                  <tr>
+                    <td
+                      style={{ backgroundColor: 'white' }}
+                      colSpan="11"
+                      className="text-center"
+                    >
+                      TIDAK ADA DATA
+                    </td>
+                  </tr>
+                )}
+              </Table>
+            </CardBody>
             {/* <tbody>{renderListEditMassal}</tbody> */}
             <hr style={{ borderWidth: 'medium' }}></hr>
             {/* {console.log('EDIT TRANSAKSI', this.state.editPricing)} */}
@@ -4059,7 +4819,8 @@ class Transaksi extends React.Component {
             </Modal>
             <Button
               color="secondary"
-              onClick={this.toggle('nested_parent_editAlsin')}
+              onClick={() => this.BatalSimpanTransaksi()}
+              // onClick={this.toggle('nested_parent_editAlsin')}
             >
               Batal
             </Button>
@@ -4599,12 +5360,6 @@ class Transaksi extends React.Component {
                 >
                   List Alsin
                 </Label>
-                {/* <Button
-                  size="sm"
-                  onClick={this.toggle('nested_parent_tambahProduk')}
-                >
-                  Input Alsin
-                </Button> */}
               </Row>
               <Table responsive striped id="tableBatasPerPelapak">
                 <thead>
@@ -4616,7 +5371,7 @@ class Transaksi extends React.Component {
                     <th>Hapus</th>
                   </tr>
                 </thead>
-                <tbody>{renderListEditMassal}</tbody>
+                {/* <tbody>{renderListEditMassal}</tbody> */}
                 {this.state.listEditMasal.length === 0 && (
                   <tr>
                     <td
@@ -4673,7 +5428,7 @@ class Transaksi extends React.Component {
         </Modal>
         {/* Modal Batas Edit Massal */}
 
-        {/* Modal Tambah Alsin Item */}
+        {/* Modal Tambah Alsin Item ALSIN*/}
         <Modal
           onExit={this.handleClose}
           isOpen={this.state.modal_nested_parent_tambahProduk}
@@ -4780,6 +5535,613 @@ class Transaksi extends React.Component {
             <Button
               color="secondary"
               onClick={this.toggle('nested_parent_tambahProduk')}
+            >
+              Batal
+            </Button>
+          </ModalFooter>
+        </Modal>
+        {/* Modal Tambah Alsin Item */}
+
+        {/* Modal Tambah Alsin Item REPARASI */}
+        <Modal
+          onExit={this.handleClose}
+          isOpen={this.state.modal_nested_parent_tambahProdukReparation}
+          toggle={this.toggle('nested_parent_tambahProdukReparation')}
+          className={this.props.className}
+        >
+          <ModalHeader
+            toggle={this.toggle('nested_parent_tambahProdukReparation')}
+          >
+            Tambah Alsin Reparasi
+          </ModalHeader>
+          <ModalBody>
+            <Form onSubmit={e => e.preventDefault()}>
+              <FormGroup>
+                <Label>Alsin</Label>
+                {/* {console.log(
+                  'ISI TAMBAH REPARASI',
+                  this.state.addAlsin && this.state.addAlsin,
+                )} */}
+                <Input
+                  type="text"
+                  disabled={true}
+                  value={
+                    this.state.addAlsin &&
+                    this.state.addAlsin.alsin_type_order_name
+                  }
+                ></Input>
+                <Label>Harga</Label>
+                <Input
+                  type="number"
+                  min={0}
+                  name="cost"
+                  style={{ textAlign: 'right' }}
+                  placeholder="Harga..."
+                  onKeyPress={e => this.numValidate(e)}
+                  onChange={evt =>
+                    this.updateInputValue(
+                      evt.target.value,
+                      evt.target.name,
+                      'addAlsin',
+                    )
+                  }
+                  value={this.state.addAlsin && this.state.addAlsin.cost}
+                />
+                <Label
+                  style={{ fontSize: '0.8em', marginBottom: 0, color: 'red' }}
+                >
+                  *Input nilai dengan satuan angka
+                </Label>
+              </FormGroup>
+            </Form>
+            <br></br>
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              // disabled={!isEnabledAddProduct}
+              color="primary"
+              onClick={this.toggle('nested_tambahProdukReparation')}
+            >
+              Simpan Tambah Alsin
+            </Button>
+            <Modal
+              onExit={this.handleClose}
+              isOpen={this.state.modal_nested_tambahProdukReparation}
+              toggle={this.toggle('nested_tambahProdukReparation')}
+            >
+              <ModalHeader>Konfirmasi Penyimpanan</ModalHeader>
+              <ModalBody>Apakah Anda yakin ingin menyimpan data ini?</ModalBody>
+              <ModalFooter>
+                <Button
+                  color="primary"
+                  onClick={() =>
+                    this.setListEditMassalReparation(this.state.addAlsin, {
+                      ...this.state.addAlsin,
+                    })
+                  }
+                  disabled={loading}
+                >
+                  {!loading && 'Ya'}
+                  {loading && <MdAutorenew />}
+                  {loading && 'Sedang diproses'}
+                </Button>{' '}
+                {!loading && (
+                  <Button
+                    color="secondary"
+                    onClick={this.toggle('nested_tambahProdukReparation')}
+                  >
+                    Tidak
+                  </Button>
+                )}
+              </ModalFooter>
+            </Modal>{' '}
+            <Button
+              color="secondary"
+              onClick={this.toggle('nested_parent_tambahProdukReparation')}
+            >
+              Batal
+            </Button>
+          </ModalFooter>
+        </Modal>
+        {/* Modal Tambah Alsin Item */}
+
+        {/* Modal Tambah Alsin Item Training */}
+        <Modal
+          onExit={this.handleClose}
+          isOpen={this.state.modal_nested_parent_tambahProdukTraining}
+          toggle={this.toggle('nested_parent_tambahProdukTraining')}
+          className={this.props.className}
+        >
+          <ModalHeader
+            toggle={this.toggle('nested_parent_tambahProdukTraining')}
+          >
+            Tambah Pelatihan
+          </ModalHeader>
+          <ModalBody>
+            <Form onSubmit={e => e.preventDefault()}>
+              <FormGroup>
+                <Label>Nama</Label>
+                <Input
+                  type="text"
+                  disabled={true}
+                  value={
+                    this.state.addAlsin && this.state.addAlsin.alsin_type_name
+                  }
+                ></Input>
+                <Label>Harga</Label>
+                <Input
+                  type="number"
+                  min={0}
+                  name="cost"
+                  style={{ textAlign: 'right' }}
+                  placeholder="Harga..."
+                  onKeyPress={e => this.numValidate(e)}
+                  onChange={evt =>
+                    this.updateInputValue(
+                      evt.target.value,
+                      evt.target.name,
+                      'addAlsin',
+                    )
+                  }
+                  value={this.state.addAlsin && this.state.addAlsin.cost}
+                />
+                <Label
+                  style={{ fontSize: '0.8em', marginBottom: 0, color: 'red' }}
+                >
+                  *Input nilai dengan satuan angka
+                </Label>
+              </FormGroup>
+            </Form>
+            <br></br>
+            {/* <Label style={{ fontSize: "12px" }}>CTRL+S untuk simpan</Label> */}
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              // disabled={!isEnabledAddProduct}
+              color="primary"
+              onClick={this.toggle('nested_tambahProdukTraining')}
+            >
+              Simpan Tambah Alsin
+            </Button>
+            <Modal
+              onExit={this.handleClose}
+              isOpen={this.state.modal_nested_tambahProdukTraining}
+              toggle={this.toggle('nested_tambahProdukTraining')}
+            >
+              <ModalHeader>Konfirmasi Penyimpanan</ModalHeader>
+              <ModalBody>Apakah Anda yakin ingin menyimpan data ini?</ModalBody>
+              <ModalFooter>
+                <Button
+                  color="primary"
+                  onClick={() =>
+                    this.setListEditMassalTraining(this.state.addAlsin, {
+                      ...this.state.addAlsin,
+                    })
+                  }
+                  disabled={loading}
+                >
+                  {!loading && 'Ya'}
+                  {loading && <MdAutorenew />}
+                  {loading && 'Sedang diproses'}
+                </Button>{' '}
+                {!loading && (
+                  <Button
+                    color="secondary"
+                    onClick={this.toggle('nested_tambahProdukTraining')}
+                  >
+                    Tidak
+                  </Button>
+                )}
+              </ModalFooter>
+            </Modal>{' '}
+            <Button
+              color="secondary"
+              onClick={this.toggle('nested_parent_tambahProdukTraining')}
+            >
+              Batal
+            </Button>
+          </ModalFooter>
+        </Modal>
+        {/* Modal Tambah Alsin Item */}
+
+        {/* Modal Tambah Alsin Item Rice*/}
+        <Modal
+          onExit={this.handleClose}
+          isOpen={this.state.modal_nested_parent_tambahProdukRice}
+          toggle={this.toggle('nested_parent_tambahProdukRice')}
+          className={this.props.className}
+        >
+          <ModalHeader toggle={this.toggle('nested_parent_tambahProdukRice')}>
+            Tambah Alsin
+          </ModalHeader>
+          <ModalBody>
+            <Form onSubmit={e => e.preventDefault()}>
+              <FormGroup>
+                <Label>Luas Lahan</Label>
+                <Input
+                  type="text"
+                  disabled={true}
+                  value={
+                    this.state.addAlsin && this.state.addAlsin.land_area_range
+                  }
+                ></Input>
+                <Label>Total Bibit</Label>
+                <Input
+                  type="number"
+                  min={0}
+                  name="total_rice"
+                  style={{ textAlign: 'right' }}
+                  placeholder="Total Bibit..."
+                  onKeyPress={e => this.numValidate(e)}
+                  onChange={evt =>
+                    this.updateInputValue(
+                      evt.target.value,
+                      evt.target.name,
+                      'addAlsin',
+                    )
+                  }
+                  value={this.state.addAlsin && this.state.addAlsin.total_rice}
+                />
+                <Label>Harga</Label>
+                <Input
+                  type="number"
+                  min={0}
+                  name="cost"
+                  style={{ textAlign: 'right' }}
+                  placeholder="Harga..."
+                  onKeyPress={e => this.numValidate(e)}
+                  onChange={evt =>
+                    this.updateInputValue(
+                      evt.target.value,
+                      evt.target.name,
+                      'addAlsin',
+                    )
+                  }
+                  value={this.state.addAlsin && this.state.addAlsin.cost}
+                />
+
+                <Label
+                  style={{ fontSize: '0.8em', marginBottom: 0, color: 'red' }}
+                >
+                  *Input nilai dengan satuan angka
+                </Label>
+              </FormGroup>
+            </Form>
+            <br></br>
+            {/* <Label style={{ fontSize: "12px" }}>CTRL+S untuk simpan</Label> */}
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              // disabled={!isEnabledAddProduct}
+              color="primary"
+              onClick={this.toggle('nested_tambahProdukRice')}
+            >
+              Simpan Tambah Alsin
+            </Button>
+            <Modal
+              onExit={this.handleClose}
+              isOpen={this.state.modal_nested_tambahProdukRice}
+              toggle={this.toggle('nested_tambahProdukRice')}
+            >
+              <ModalHeader>Konfirmasi Penyimpanan</ModalHeader>
+              <ModalBody>Apakah Anda yakin ingin menyimpan data ini?</ModalBody>
+              <ModalFooter>
+                <Button
+                  color="primary"
+                  onClick={() =>
+                    this.setListEditMassalRice(this.state.addAlsin, {
+                      ...this.state.addAlsin,
+                    })
+                  }
+                  disabled={loading}
+                >
+                  {!loading && 'Ya'}
+                  {loading && <MdAutorenew />}
+                  {loading && 'Sedang diproses'}
+                </Button>{' '}
+                {!loading && (
+                  <Button
+                    color="secondary"
+                    onClick={this.toggle('nested_tambahProdukRice')}
+                  >
+                    Tidak
+                  </Button>
+                )}
+              </ModalFooter>
+            </Modal>{' '}
+            <Button
+              color="secondary"
+              onClick={this.toggle('nested_parent_tambahProdukRice')}
+            >
+              Batal
+            </Button>
+          </ModalFooter>
+        </Modal>
+        {/* Modal Tambah Alsin Item */}
+
+        {/* Modal Tambah Alsin Item RICE SEED */}
+        <Modal
+          onExit={this.handleClose}
+          isOpen={this.state.modal_nested_parent_tambahProdukRice_Seed}
+          toggle={this.toggle('nested_parent_tambahProdukRice_Seed')}
+          className={this.props.className}
+        >
+          <ModalHeader
+            toggle={this.toggle('nested_parent_tambahProdukRice_Seed')}
+          >
+            Tambah Benih Padi
+          </ModalHeader>
+          <ModalBody>
+            <Form onSubmit={e => e.preventDefault()}>
+              <FormGroup>
+                <Label>Nama</Label>
+                <Input
+                  type="text"
+                  disabled={true}
+                  value={
+                    this.state.addAlsin && this.state.addAlsin.alsin_type_name
+                  }
+                ></Input>
+                <Label>Harga</Label>
+                <Input
+                  type="number"
+                  min={0}
+                  name="cost"
+                  style={{ textAlign: 'right' }}
+                  placeholder="Harga..."
+                  onKeyPress={e => this.numValidate(e)}
+                  onChange={evt =>
+                    this.updateInputValue(
+                      evt.target.value,
+                      evt.target.name,
+                      'addAlsin',
+                    )
+                  }
+                  value={this.state.addAlsin && this.state.addAlsin.cost}
+                />
+                <Label
+                  style={{ fontSize: '0.8em', marginBottom: 0, color: 'red' }}
+                >
+                  *Input nilai dengan satuan angka
+                </Label>
+              </FormGroup>
+            </Form>
+            <br></br>
+            {/* <Label style={{ fontSize: "12px" }}>CTRL+S untuk simpan</Label> */}
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              // disabled={!isEnabledAddProduct}
+              color="primary"
+              onClick={this.toggle('nested_tambahProdukRice_Seed')}
+            >
+              Simpan Tambah Alsin
+            </Button>
+            <Modal
+              onExit={this.handleClose}
+              isOpen={this.state.modal_nested_tambahProdukRice_Seed}
+              toggle={this.toggle('nested_tambahProdukRice_Seed')}
+            >
+              <ModalHeader>Konfirmasi Penyimpanan</ModalHeader>
+              <ModalBody>Apakah Anda yakin ingin menyimpan data ini?</ModalBody>
+              <ModalFooter>
+                <Button
+                  color="primary"
+                  onClick={() =>
+                    this.setListEditMassalRice_Seed(this.state.addAlsin, {
+                      ...this.state.addAlsin,
+                    })
+                  }
+                  disabled={loading}
+                >
+                  {!loading && 'Ya'}
+                  {loading && <MdAutorenew />}
+                  {loading && 'Sedang diproses'}
+                </Button>{' '}
+                {!loading && (
+                  <Button
+                    color="secondary"
+                    onClick={this.toggle('nested_tambahProdukRice_Seed')}
+                  >
+                    Tidak
+                  </Button>
+                )}
+              </ModalFooter>
+            </Modal>{' '}
+            <Button
+              color="secondary"
+              onClick={this.toggle('nested_parent_tambahProdukRice_Seed')}
+            >
+              Batal
+            </Button>
+          </ModalFooter>
+        </Modal>
+        {/* Modal Tambah Alsin Item */}
+
+        {/* Modal Tambah Alsin Item RMUS */}
+        <Modal
+          onExit={this.handleClose}
+          isOpen={this.state.modal_nested_parent_tambahProdukRMU}
+          toggle={this.toggle('nested_parent_tambahProdukRMU')}
+          className={this.props.className}
+        >
+          <ModalHeader toggle={this.toggle('nested_parent_tambahProdukRMU')}>
+            Tambah RMU
+          </ModalHeader>
+          <ModalBody>
+            <Form onSubmit={e => e.preventDefault()}>
+              <FormGroup>
+                <Label>Packaging</Label>
+                <Input
+                  type="text"
+                  disabled={true}
+                  value={this.state.addAlsin && this.state.addAlsin.packaging}
+                ></Input>
+                <Label>Harga</Label>
+                <Input
+                  type="number"
+                  min={0}
+                  name="cost"
+                  style={{ textAlign: 'right' }}
+                  placeholder="Harga..."
+                  onKeyPress={e => this.numValidate(e)}
+                  onChange={evt =>
+                    this.updateInputValue(
+                      evt.target.value,
+                      evt.target.name,
+                      'addAlsin',
+                    )
+                  }
+                  value={this.state.addAlsin && this.state.addAlsin.cost}
+                />
+                <Label
+                  style={{ fontSize: '0.8em', marginBottom: 0, color: 'red' }}
+                >
+                  *Input nilai dengan satuan angka
+                </Label>
+              </FormGroup>
+            </Form>
+            <br></br>
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              // disabled={!isEnabledAddProduct}
+              color="primary"
+              onClick={this.toggle('nested_tambahProdukRMU')}
+            >
+              Simpan Tambah RMU
+            </Button>
+            <Modal
+              onExit={this.handleClose}
+              isOpen={this.state.modal_nested_tambahProdukRMU}
+              toggle={this.toggle('nested_tambahProdukRMU')}
+            >
+              <ModalHeader>Konfirmasi Penyimpanan</ModalHeader>
+              <ModalBody>Apakah Anda yakin ingin menyimpan data ini?</ModalBody>
+              <ModalFooter>
+                <Button
+                  color="primary"
+                  onClick={() =>
+                    this.setListEditMassalRMUS(this.state.addAlsin, {
+                      ...this.state.addAlsin,
+                    })
+                  }
+                  disabled={loading}
+                >
+                  {!loading && 'Ya'}
+                  {loading && <MdAutorenew />}
+                  {loading && 'Sedang diproses'}
+                </Button>{' '}
+                {!loading && (
+                  <Button
+                    color="secondary"
+                    onClick={this.toggle('nested_tambahProdukRMU')}
+                  >
+                    Tidak
+                  </Button>
+                )}
+              </ModalFooter>
+            </Modal>{' '}
+            <Button
+              color="secondary"
+              onClick={this.toggle('nested_parent_tambahProdukRMU')}
+            >
+              Batal
+            </Button>
+          </ModalFooter>
+        </Modal>
+        {/* Modal Tambah Alsin Item */}
+
+        {/* Modal Tambah Alsin Item SPARE PART*/}
+        <Modal
+          onExit={this.handleClose}
+          isOpen={this.state.modal_nested_parent_tambahProdukSparePart}
+          toggle={this.toggle('nested_parent_tambahProdukSparePart')}
+          className={this.props.className}
+        >
+          <ModalHeader
+            toggle={this.toggle('nested_parent_tambahProdukSparePart')}
+          >
+            Tambah Suku Cadang
+          </ModalHeader>
+          <ModalBody>
+            <Form onSubmit={e => e.preventDefault()}>
+              <FormGroup>
+                <Label>Nama</Label>
+                <Input
+                  type="text"
+                  disabled={true}
+                  value={this.state.addAlsin && this.state.addAlsin.name}
+                ></Input>
+                <Label>Harga</Label>
+                <Input
+                  type="number"
+                  min={0}
+                  name="cost"
+                  style={{ textAlign: 'right' }}
+                  placeholder="Harga..."
+                  onKeyPress={e => this.numValidate(e)}
+                  onChange={evt =>
+                    this.updateInputValue(
+                      evt.target.value,
+                      evt.target.name,
+                      'addAlsin',
+                    )
+                  }
+                  value={this.state.addAlsin && this.state.addAlsin.cost}
+                />
+                <Label
+                  style={{ fontSize: '0.8em', marginBottom: 0, color: 'red' }}
+                >
+                  *Input nilai dengan satuan angka
+                </Label>
+              </FormGroup>
+            </Form>
+            <br></br>
+            {/* <Label style={{ fontSize: "12px" }}>CTRL+S untuk simpan</Label> */}
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              // disabled={!isEnabledAddProduct}
+              color="primary"
+              onClick={this.toggle('nested_tambahProdukSparePart')}
+            >
+              Simpan Tambah Alsin
+            </Button>
+            <Modal
+              onExit={this.handleClose}
+              isOpen={this.state.modal_nested_tambahProdukSparePart}
+              toggle={this.toggle('nested_tambahProdukSparePart')}
+            >
+              <ModalHeader>Konfirmasi Penyimpanan</ModalHeader>
+              <ModalBody>Apakah Anda yakin ingin menyimpan data ini?</ModalBody>
+              <ModalFooter>
+                <Button
+                  color="primary"
+                  onClick={() =>
+                    this.setListEditMassalSparePart(this.state.addAlsin, {
+                      ...this.state.addAlsin,
+                    })
+                  }
+                  disabled={loading}
+                >
+                  {!loading && 'Ya'}
+                  {loading && <MdAutorenew />}
+                  {loading && 'Sedang diproses'}
+                </Button>{' '}
+                {!loading && (
+                  <Button
+                    color="secondary"
+                    onClick={this.toggle('nested_tambahProdukSparePart')}
+                  >
+                    Tidak
+                  </Button>
+                )}
+              </ModalFooter>
+            </Modal>{' '}
+            <Button
+              color="secondary"
+              onClick={this.toggle('nested_parent_tambahProdukSparePart')}
             >
               Batal
             </Button>
@@ -4902,6 +6264,7 @@ class Transaksi extends React.Component {
             </Modal>{' '}
             <Button
               color="secondary"
+              // onClick={() => this.BatalSimpanTransaksi()}
               onClick={this.toggle('nested_parent_editMassal_edit')}
             >
               Batal

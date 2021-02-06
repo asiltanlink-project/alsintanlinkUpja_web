@@ -53,6 +53,7 @@ class Profile extends React.Component {
       resultProvinsi: [],
       resultKotaKab: [],
       resultKecamatan: [],
+      resultDesa:[],
       email: '',
       resultClass: [
         {
@@ -69,15 +70,15 @@ class Profile extends React.Component {
         },
       ],
       RMU: false,
-      benihPadiInfari30: false,
-      benihPadiInfari33: false,
+      benihPadiInpari30: false,
+      benihPadiInpari33: false,
       benihPadiIR64: false,
       benihPadiSintanur: false,
       benihPadiCiherang: false,
       benihPadiSitubagendit: false,
       benihPadiMembramo: false,
-      benihPadiInfari42: false,
-      benihPadiInfari43: false,
+      benihPadiInpari42: false,
+      benihPadiInpari43: false,
       benihPadiInpago12: false,
       benihPadiTrabas: false,
       benihPadiRindang: false,
@@ -233,11 +234,31 @@ class Profile extends React.Component {
         keywordList: '',
         domisiliDisabled: false,
       },
-      () => this.getProvinsi(this.state.currentPages, this.state.todosPerPages),
+      () => this.getDesa(this.state.currentPages, this.state.todosPerPages),
     );
     this.state.result.district = nama.name;
     this.state.result.district_id = this.state.pilihKecamatan;
   }
+
+    // untuk pilih Desa
+    setDesa(event, todo) {
+      var nama = this.state.resultDesa.find(function (element) {
+        return element.id === parseInt(event.target.value);
+      });
+  
+      this.setState(
+        {
+          pilihDesa: event.target.value,
+          namaDesa: nama.name,
+          modal_nested_parent_list_desa: false,
+          keywordList: '',
+          domisiliDisabled: false,
+        },
+        () => this.getProvinsi(this.state.currentPages, this.state.todosPerPages),
+      );
+      this.state.result.village = nama.name;
+      this.state.result.village_id = this.state.pilihDesa;
+    }
 
   updateProfileUpja() {
     var url = myUrl.url_updateUpja;
@@ -247,20 +268,21 @@ class Profile extends React.Component {
     var namaProvinsi = document.getElementById('namaProvinsi');
     var namaKotaKab = document.getElementById('namaKotaKab');
     var namaKecamatan = document.getElementById('namaKecamatan');
+    var namaDesa = document.getElementById('namaDesa');
     var namaKepalaDesa = document.getElementById('namaKepalaDesa');
     var namaDesa = document.getElementById('namaDesa');
     var badanHukum = document.getElementById('badanHukum');
     var RMU = document.getElementById('RMU');
-    var benihPadiInfari30 = document.getElementById('benihPadiInfari30');
-    var benihPadiInfari33 = document.getElementById('benihPadiInfari33');
+    var benihPadiInpari30 = document.getElementById('benihPadiInpari30');
+    var benihPadiInpari33 = document.getElementById('benihPadiInpari33');
     var benihPadiIR64 = document.getElementById('benihPadiIR64');
     var benihPadiSintanur = document.getElementById('benihPadiSintanur');
     var benihPadiCiherang = document.getElementById('benihPadiCiherang');
     var benihPadiSitubagendit = document.getElementById(
       'benihPadiSitubagendit',
     );
-    var benihPadiInfari42 = document.getElementById('benihPadiInfari42');
-    var benihPadiInfari43 = document.getElementById('benihPadiInfari43');
+    var benihPadiInpari42 = document.getElementById('benihPadiInpari42');
+    var benihPadiInpari43 = document.getElementById('benihPadiInpari43');
     var benihPadiMembramo = document.getElementById('benihPadiMembramo');
     var benihPadiInpago12 = document.getElementById('benihPadiInpago12');
     var benihPadiTrabas = document.getElementById('benihPadiTrabas');
@@ -288,18 +310,19 @@ class Profile extends React.Component {
       city: input.city_id || parseInt(this.state.pilihKotaKab),
       district: input.district_id || parseInt(this.state.pilihKecamatan),
       leader_name: input.leader_name,
-      village: input.village,
+      // village: input.village,
+      village: input.village_id || parseInt(this.state.pilihDesa),
       class: input.class || this.state.pilihClass,
       legality: input.legality,
       rmu: this.state.RMU === true ? 1 : 0,
-      benihPadiInfari30: this.state.benihPadiInfari30 === true ? 1 : 0,
-      benihPadiInfari33: this.state.benihPadiInfari33 === true ? 1 : 0,
+      benihPadiInpari30: this.state.benihPadiInpari30 === true ? 1 : 0,
+      benihPadiInpari33: this.state.benihPadiInpari33 === true ? 1 : 0,
       benihPadiIR64: this.state.benihPadiIR64 === true ? 1 : 0,
       benihPadiCiherang: this.state.benihPadiCiherang === true ? 1 : 0,
       benihPadiSitubagendit: this.state.benihPadiSitubagendit === true ? 1 : 0,
       benihPadiSintanur: this.state.benihPadiSintanur === true ? 1 : 0,
-      benihPadiInfari42: this.state.benihPadiInfari42 === true ? 1 : 0,
-      benihPadiInfari43: this.state.benihPadiInfari43 === true ? 1 : 0,
+      benihPadiInpari42: this.state.benihPadiInpari42 === true ? 1 : 0,
+      benihPadiInpari43: this.state.benihPadiInpari43 === true ? 1 : 0,
       benihPadiMembramo: this.state.benihPadiMembramo === true ? 1 : 0,
       benihPadiInpago12: this.state.benihPadiInpago12 === true ? 1 : 0,
       benihPadiTrabas: this.state.benihPadiTrabas === true ? 1 : 0,
@@ -351,18 +374,19 @@ class Profile extends React.Component {
           namaProvinsi.style.display = 'none';
           namaKotaKab.style.display = 'none';
           namaKecamatan.style.display = 'none';
+          namaDesa.style.display = 'none';
           namaKepalaDesa.disabled = true;
           namaDesa.disabled = true;
           badanHukum.disabled = true;
           RMU.disabled = true;
-          benihPadiInfari30.disabled = true;
-          benihPadiInfari33.disabled = true;
+          benihPadiInpari30.disabled = true;
+          benihPadiInpari33.disabled = true;
           benihPadiIR64.disabled = true;
           benihPadiCiherang.disabled = true;
           benihPadiSitubagendit.disabled = true;
           benihPadiSintanur.disabled = true;
-          benihPadiInfari42.disabled = true;
-          benihPadiInfari43.disabled = true;
+          benihPadiInpari42.disabled = true;
+          benihPadiInpari43.disabled = true;
           benihPadiMembramo.disabled = true;
           benihPadiInpago12.disabled = true;
           benihPadiTrabas.disabled = true;
@@ -501,6 +525,40 @@ class Profile extends React.Component {
       });
   }
 
+  // Get Kecamatan
+  getDesa(currPage, currLimit) {
+    const urlA = myUrl.url_getVillage + '?district_id=' + this.state.pilihKecamatan;
+    console.log('jalan kecamatan', urlA);
+    this.setState({ loadingDomisili: true });
+    const option = {
+      method: 'GET',
+      json: true,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+        Authorization: window.localStorage.getItem('tokenCookies'),
+      },
+    };
+    fetch(urlA, option)
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        }
+      })
+      .then(data => {
+        console.log('data desa', data.result);
+        if (data.status === 0) {
+          this.showNotification('Data tidak ditemukan!', 'error');
+        } else {
+          this.setState({
+            resultDesa: data.result.villages,
+            // maxPages: data.metadata.pages ? data.metadata.pages : 1,
+            loading: false,
+            loadingDomisili: false,
+          });
+        }
+      });
+  }
+
   getListbyPaging(currPage, currLimit) {
     // const trace = perf.trace('getBundling');
     const url = myUrl.url_showDetailUPJA;
@@ -558,15 +616,15 @@ class Profile extends React.Component {
               } else {
                 this.setState({ RMU: false });
               }
-              if (this.state.result.benihPadiInfari33 === 1) {
-                this.setState({ benihPadiInfari33: true });
+              if (this.state.result.benihPadiInpari33 === 1) {
+                this.setState({ benihPadiInpari33: true });
               } else {
-                this.setState({ benihPadiInfari33: false });
+                this.setState({ benihPadiInpari33: false });
               }
-              if (this.state.result.benihPadiInfari30 === 1) {
-                this.setState({ benihPadiInfari30: true });
+              if (this.state.result.benihPadiInpari30 === 1) {
+                this.setState({ benihPadiInpari30: true });
               } else {
-                this.setState({ benihPadiInfari30: false });
+                this.setState({ benihPadiInpari30: false });
               }
               if (this.state.result.benihPadiIR64 === 1) {
                 this.setState({ benihPadiIR64: true });
@@ -588,15 +646,15 @@ class Profile extends React.Component {
               } else {
                 this.setState({ benihPadiSintanur: false });
               }
-              if (this.state.result.benihPadiInfari42 === 1) {
-                this.setState({ benihPadiInfari42: true });
+              if (this.state.result.benihPadiInpari42 === 1) {
+                this.setState({ benihPadiInpari42: true });
               } else {
-                this.setState({ benihPadiInfari42: false });
+                this.setState({ benihPadiInpari42: false });
               }
-              if (this.state.result.benihPadiInfari43 === 1) {
-                this.setState({ benihPadiInfari43: true });
+              if (this.state.result.benihPadiInpari43 === 1) {
+                this.setState({ benihPadiInpari43: true });
               } else {
-                this.setState({ benihPadiInfari43: false });
+                this.setState({ benihPadiInpari43: false });
               }
               if (this.state.result.benihPadiMembramo === 1) {
                 this.setState({ benihPadiMembramo: true });
@@ -742,18 +800,20 @@ class Profile extends React.Component {
       namaProvinsi,
       namaKotaKab,
       namaKecamatan,
+      namaDesa,
       namaClass,
     } = this.state;
     return (
       input.length !== 0 &&
       input.namaLengkap !== '' &&
       input.namaKepalaDesa !== '' &&
-      input.namaDesa !== '' &&
+      // input.namaDesa !== '' &&
       input.badanHukum !== '' &&
       email !== '' &&
       namaProvinsi !== '' &&
       namaKotaKab !== '' &&
       namaKecamatan !== '' &&
+      namaDesa !=='' &&
       namaClass !== '' &&
       password !== '' &&
       confirm !== '' &&
@@ -870,6 +930,7 @@ class Profile extends React.Component {
     var namaProvinsi = document.getElementById('namaProvinsi');
     var namaKotaKab = document.getElementById('namaKotaKab');
     var namaKecamatan = document.getElementById('namaKecamatan');
+    var namaDesa = document.getElementById('namaDesa');
     var namaKepalaDesa = document.getElementById('namaKepalaDesa');
     var namaDesa = document.getElementById('namaDesa');
     var badanHukum = document.getElementById('badanHukum');
@@ -877,16 +938,16 @@ class Profile extends React.Component {
     var simpan = document.getElementById('simpan');
     var batalsimpan = document.getElementById('batalsimpan');
     var RMU = document.getElementById('RMU');
-    var benihPadiInfari30 = document.getElementById('benihPadiInfari30');
-    var benihPadiInfari33 = document.getElementById('benihPadiInfari33');
+    var benihPadiInpari30 = document.getElementById('benihPadiInpari30');
+    var benihPadiInpari33 = document.getElementById('benihPadiInpari33');
     var benihPadiIR64 = document.getElementById('benihPadiIR64');
     var benihPadiCiherang = document.getElementById('benihPadiCiherang');
     var benihPadiSitubagendit = document.getElementById(
       'benihPadiSitubagendit',
     );
     var benihPadiSintanur = document.getElementById('benihPadiSintanur');
-    var benihPadiInfari42 = document.getElementById('benihPadiInfari42');
-    var benihPadiInfari43 = document.getElementById('benihPadiInfari43');
+    var benihPadiInpari42 = document.getElementById('benihPadiInpari42');
+    var benihPadiInpari43 = document.getElementById('benihPadiInpari43');
     var benihPadiMembramo = document.getElementById('benihPadiMembramo');
     var benihPadiInpago12 = document.getElementById('benihPadiInpago12');
     var benihPadiTrabas = document.getElementById('benihPadiTrabas');
@@ -906,18 +967,19 @@ class Profile extends React.Component {
     namaProvinsi.style.display = 'block';
     namaKotaKab.style.display = 'block';
     namaKecamatan.style.display = 'block';
+    namaDesa.style.display = 'block';
     namaKepalaDesa.disabled = false;
     namaDesa.disabled = false;
     badanHukum.disabled = false;
     RMU.disabled = false;
-    benihPadiInfari30.disabled = false;
-    benihPadiInfari33.disabled = false;
+    benihPadiInpari30.disabled = false;
+    benihPadiInpari33.disabled = false;
     benihPadiIR64.disabled = false;
     benihPadiCiherang.disabled = false;
     benihPadiSitubagendit.disabled = false;
     benihPadiSintanur.disabled = false;
-    benihPadiInfari42.disabled = false;
-    benihPadiInfari43.disabled = false;
+    benihPadiInpari42.disabled = false;
+    benihPadiInpari43.disabled = false;
     benihPadiMembramo.disabled = false;
     benihPadiInpago12.disabled = false;
     benihPadiTrabas.disabled = false;
@@ -941,19 +1003,20 @@ class Profile extends React.Component {
     var namaProvinsi = document.getElementById('namaProvinsi');
     var namaKotaKab = document.getElementById('namaKotaKab');
     var namaKecamatan = document.getElementById('namaKecamatan');
+    var namaDesa = document.getElementById('namaDesa');
     var namaKepalaDesa = document.getElementById('namaKepalaDesa');
     var namaDesa = document.getElementById('namaDesa');
     var badanHukum = document.getElementById('badanHukum');
     var RMU = document.getElementById('RMU');
-    var benihPadiInfari30 = document.getElementById('benihPadiInfari30');
-    var benihPadiInfari33 = document.getElementById('benihPadiInfari33');
+    var benihPadiInpari30 = document.getElementById('benihPadiInpari30');
+    var benihPadiInpari33 = document.getElementById('benihPadiInpari33');
     var benihPadiIR64 = document.getElementById('benihPadiIR64');
     var benihPadiCiherang = document.getElementById('benihPadiCiherang');
     var benihPadiSitubagendit = document.getElementById(
       'benihPadiSitubagendit',
     );
-    var benihPadiInfari42 = document.getElementById('benihPadiInfari42');
-    var benihPadiInfari43 = document.getElementById('benihPadiInfari43');
+    var benihPadiInpari42 = document.getElementById('benihPadiInpari42');
+    var benihPadiInpari43 = document.getElementById('benihPadiInpari43');
     var benihPadiMembramo = document.getElementById('benihPadiMembramo');
     var benihPadiInpago12 = document.getElementById('benihPadiInpago12');
     var benihPadiTrabas = document.getElementById('benihPadiTrabas');
@@ -977,18 +1040,19 @@ class Profile extends React.Component {
     namaProvinsi.style.display = 'none';
     namaKotaKab.style.display = 'none';
     namaKecamatan.style.display = 'none';
+    namaDesa.style.display = 'none';
     namaKepalaDesa.disabled = true;
     namaDesa.disabled = true;
     badanHukum.disabled = true;
     RMU.disabled = true;
-    benihPadiInfari30.disabled = true;
-    benihPadiInfari33.disabled = true;
+    benihPadiInpari30.disabled = true;
+    benihPadiInpari33.disabled = true;
     benihPadiCiherang.disabled = true;
     benihPadiIR64.disabled = true;
     benihPadiSitubagendit.disabled = true;
     benihPadiSintanur.disabled = true;
-    benihPadiInfari42.disabled = true;
-    benihPadiInfari43.disabled = true;
+    benihPadiInpari42.disabled = true;
+    benihPadiInpari43.disabled = true;
     benihPadiMembramo.disabled = true;
     benihPadiInpago12.disabled = true;
     benihPadiTrabas.disabled = true;
@@ -1009,14 +1073,14 @@ class Profile extends React.Component {
       trainingPerbaikan: !trainingPerbaikan,
       trainingPembengkelan: !trainingPembengkelan,
       trainingPembibitan: !trainingPembibitan,
-      benihPadiInfari30: !benihPadiInfari30,
-      benihPadiInfari33: !benihPadiInfari33,
+      benihPadiInpari30: !benihPadiInpari30,
+      benihPadiInpari33: !benihPadiInpari33,
       benihPadiIR64: !benihPadiIR64,
       benihPadiCiherang: !benihPadiCiherang,
       benihPadiSitubagendit: !benihPadiSitubagendit,
       benihPadiSintanur: !benihPadiSintanur,
-      benihPadiInfari42: !benihPadiInfari42,
-      benihPadiInfari42: !benihPadiInfari42,
+      benihPadiInpari42: !benihPadiInpari42,
+      benihPadiInpari42: !benihPadiInpari42,
       benihPadiMembramo: !benihPadiMembramo,
       benihPadiInpago12: !benihPadiInpago12,
       benihPadiTrabas: !benihPadiTrabas,
@@ -1063,6 +1127,7 @@ class Profile extends React.Component {
     const kotakabTodos = this.state.resultKotaKab;
     const kecamatanTodos = this.state.resultKecamatan;
     const classTodos = this.state.resultClass;
+    const desaTodos = this.state.resultDesa;
     var buttonSimpan = document.getElementById('simpan');
 
     const renderClass =
@@ -1144,6 +1209,28 @@ class Profile extends React.Component {
                 value={todo.id}
                 onClick={e => {
                   this.setKecamatan(e, todo);
+                }}
+              >
+                Pilih
+              </Button>
+            </td>
+          </tr>
+        );
+      });
+
+      const renderDesa =
+      desaTodos &&
+      desaTodos.map((todo, i) => {
+        return (
+          <tr key={i}>
+            <td>{todo.name}</td>
+            <td style={{ textAlign: 'right' }}>
+              <Button
+                color="primary"
+                style={{ margin: '0px', fontSize: '15px' }}
+                value={todo.id}
+                onClick={e => {
+                  this.setDesa(e, todo);
                 }}
               >
                 Pilih
@@ -1353,7 +1440,35 @@ class Profile extends React.Component {
                   <br></br>
                   <br></br>
 
-                  {/* untuk isi desa */}
+                  {/* untuk pilih Desa */}
+                  <FormGroup>
+                    <Label style={{ textAlign: 'center' }}>
+                      Nama Desa:
+                    </Label>
+                    <InputGroup style={{ float: 'right' }}>
+                      <Input
+                        disabled
+                        placeholder="Pilih Desa"
+                        style={{ fontWeight: 'bold' }}
+                        value={this.state.result && this.state.result.village}
+                      />
+                      <InputGroupAddon
+                        addonType="append"
+                        id="namaDesa"
+                        style={{ display: 'none' }}
+                      >
+                        <Button
+                          onClick={this.toggle('nested_parent_list_desa')}
+                        >
+                          <MdList />
+                        </Button>
+                      </InputGroupAddon>
+                    </InputGroup>
+                  </FormGroup>
+                  <br></br>
+                  <br></br>
+
+                  {/* untuk isi desa
                   <FormGroup>
                     <Label style={{ textAlign: 'center' }}>Nama Desa:</Label>
                     <Input
@@ -1372,7 +1487,7 @@ class Profile extends React.Component {
                       }
                       value={this.state.result && this.state.result.village}
                     ></Input>
-                  </FormGroup>
+                  </FormGroup> */}
 
                   {/* untuk isi Badan Hukum */}
                   <FormGroup>
@@ -1456,16 +1571,16 @@ class Profile extends React.Component {
                               <Input
                                 type="checkbox"
                                 disabled
-                                id="benihPadiInfari30"
-                                checked={this.state.benihPadiInfari30}
+                                id="benihPadiInpari30"
+                                checked={this.state.benihPadiInpari30}
                                 onChange={() =>
                                   this.setState({
-                                    benihPadiInfari30: !this.state
-                                      .benihPadiInfari30,
+                                    benihPadiInpari30: !this.state
+                                      .benihPadiInpari30,
                                   })
                                 }
                               />
-                              INFARI 30
+                              INPARI 30
                             </Label>
                           </FormGroup>
                           <FormGroup check>
@@ -1473,16 +1588,16 @@ class Profile extends React.Component {
                               <Input
                                 type="checkbox"
                                 disabled
-                                id="benihPadiInfari33"
-                                checked={this.state.benihPadiInfari33}
+                                id="benihPadiInpari33"
+                                checked={this.state.benihPadiInpari33}
                                 onChange={() =>
                                   this.setState({
-                                    benihPadiInfari33: !this.state
-                                      .benihPadiInfari33,
+                                    benihPadiInpari33: !this.state
+                                      .benihPadiInpari33,
                                   })
                                 }
                               />
-                              INFARI 33
+                              INPARI 33
                             </Label>
                           </FormGroup>
                           <FormGroup check>
@@ -1565,16 +1680,16 @@ class Profile extends React.Component {
                               <Input
                                 type="checkbox"
                                 disabled
-                                id="benihPadiInfari42"
-                                checked={this.state.benihPadiInfari42}
+                                id="benihPadiInpari42"
+                                checked={this.state.benihPadiInpari42}
                                 onChange={() =>
                                   this.setState({
-                                    benihPadiInfari42: !this.state
-                                      .benihPadiInfari42,
+                                    benihPadiInpari42: !this.state
+                                      .benihPadiInpari42,
                                   })
                                 }
                               />
-                              INFARI 42
+                              INPARI 42
                             </Label>
                           </FormGroup>
                           <FormGroup check>
@@ -1582,16 +1697,16 @@ class Profile extends React.Component {
                               <Input
                                 type="checkbox"
                                 disabled
-                                id="benihPadiInfari43"
-                                checked={this.state.benihPadiInfari43}
+                                id="benihPadiInpari43"
+                                checked={this.state.benihPadiInpari43}
                                 onChange={() =>
                                   this.setState({
-                                    benihPadiInfari43: !this.state
-                                      .benihPadiInfari43,
+                                    benihPadiInpari43: !this.state
+                                      .benihPadiInpari43,
                                   })
                                 }
                               />
-                              INFARI 43
+                              INPARI 43
                             </Label>
                           </FormGroup>
                           <FormGroup check>
@@ -2049,6 +2164,44 @@ class Profile extends React.Component {
           </ModalBody>
         </Modal>
         {/* Modal List Kecamatan */}
+
+        {/* Modal List Desa */}
+        <Modal
+          onExit={this.handleCloseDomisili}
+          isOpen={this.state.modal_nested_parent_list_desa}
+          toggle={this.toggle('nested_parent_list_desa')}
+          className={this.props.className}
+        >
+          <ModalHeader toggle={this.toggle('nested_parent_list_desa')}>
+            List Desa
+          </ModalHeader>
+          <ModalBody>
+            <Table responsive striped>
+              <tbody>
+                {desaTodos.length === 0 && loadingDomisili === true ? (
+                  <LoadingSpinner status={4} />
+                ) : loadingDomisili === false && desaTodos.length === 0 ? (
+                  (
+                    <tr>
+                      <td
+                        style={{ backgroundColor: 'white' }}
+                        colSpan="17"
+                        className="text-center"
+                      >
+                        TIDAK ADA DATA
+                      </td>
+                    </tr>
+                  ) || <LoadingSpinner status={4} />
+                ) : loadingDomisili === true && desaTodos.length !== 0 ? (
+                  <LoadingSpinner status={4} />
+                ) : (
+                  renderDesa
+                )}
+              </tbody>
+            </Table>
+          </ModalBody>
+        </Modal>
+        {/* Modal List Desa */}
 
         {/* Modal Verifikasi */}
         <Modal

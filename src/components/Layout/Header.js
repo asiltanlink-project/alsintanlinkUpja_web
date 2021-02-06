@@ -137,7 +137,7 @@ class Header extends React.Component {
           <PopoverBody className="p-0 border-light">
             <UserCard
               title={this.state.nama}
-              subtitle={gudangName}
+              // subtitle={gudangName}
               className="border-light"
             >
               <ListGroup flush>

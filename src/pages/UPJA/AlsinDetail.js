@@ -982,6 +982,7 @@ class AlsinDetail extends React.Component {
       alsin_item_id: updateHeaderData.alsin_item_id,
       vechile_code: updateHeaderData.vechile_code,
       status: updateHeaderData.status || this.state.pilihStatus,
+      description: updateHeaderData.description
     };
 
     console.log('PAYLOAD EDIT ALSIN ITEM', payload);
@@ -1173,6 +1174,7 @@ class AlsinDetail extends React.Component {
           <tr key={i}>
             {todo.vechile_code === null && <td>-</td>}
             {todo.vechile_code !== null && <td>{todo.vechile_code}</td>}
+            <td>{todo.description}</td>
 
             {todo.status === 'Rusak' && (
               <td>
@@ -1653,6 +1655,7 @@ class AlsinDetail extends React.Component {
                   <thead>
                     <tr>
                       <th>No. Reg Alsin</th>
+                      <th>Deskripsi</th>
                       <th>Status</th>
                       <th>Edit</th>
                       <th>Hapus</th>
@@ -1745,6 +1748,23 @@ class AlsinDetail extends React.Component {
                   }
                   value={
                     this.state.editAlsin && this.state.editAlsin.vechile_code
+                  }
+                />
+                <Label>Deskripsi</Label>
+                <Input
+                  autoComplete="off"
+                  type="text"
+                  name="description"
+                  placeholder="Deskripsi..."
+                  onChange={evt =>
+                    this.updateInputValue(
+                      evt.target.value,
+                      evt.target.name,
+                      'editAlsin',
+                    )
+                  }
+                  value={
+                    this.state.editAlsin && this.state.editAlsin.description
                   }
                 />
                 {/* <Label>Status</Label>

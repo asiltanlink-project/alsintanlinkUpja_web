@@ -35,6 +35,13 @@ const alsintanlink = [
     exact: false,
     Icon: MdHdrStrong,
   },
+  {
+    to: '/sparePart',
+    id: '5',
+    name: 'Suku Cadang',
+    exact: false,
+    Icon: MdHdrStrong,
+  },
 ];
 
 const bem = bn.create('sidebar');

@@ -13,6 +13,7 @@ var url_showDetailUPJA = 'https://alsintanlink.com/api/upja/show_detail_upja';
 var url_getProvince = 'https://alsintanlink.com/api/location/province';
 var url_getCity = 'https://alsintanlink.com/api/location/city';
 var url_getDistrict = 'https://alsintanlink.com/api/location/district';
+var url_getVillage = 'https://alsintanlink.com/api/location/village';
 var url_updateUpja = 'https://alsintanlink.com/api/upja/update_upja';
 var url_getAllAlsin = 'https://alsintanlink.com/api/upja/show_all_alsin';
 var url_getAllAlsinDetail =
@@ -32,6 +33,11 @@ var url_showFormPricingDetail =
 var url_updateTransaksi =
   'https://alsintanlink.com/api/upja/update_status_transaction';
 
+var url_showAllSparePart =
+  'https://alsintanlink.com/api/upja/show_spare_part_upja';
+var url_deleteSparePart =
+  'https://alsintanlink.com/api/upja/delete_spare_part_upja';
+
 export {
   url_resendOTP,
   url_submitOTP,
@@ -39,6 +45,7 @@ export {
   url_getCity,
   url_forgetPassword,
   url_getDistrict,
+  url_getVillage,
   url_registarsiUpja,
   url_showDetailUPJA,
   url_updateUpja,
@@ -55,5 +62,7 @@ export {
   url_getTransaksiDetail,
   url_showFormPricing,
   url_showFormPricingDetail,
-  url_updateTransaksi
+  url_updateTransaksi,
+  url_showAllSparePart,
+  url_deleteSparePart,
 };

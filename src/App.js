@@ -11,13 +11,13 @@ import { BrowserRouter, Redirect, Switch, Route } from 'react-router-dom';
 import './styles/reduction.scss';
 import * as firebase from 'firebase/app';
 const firebaseConfig = {
-  apiKey: 'AIzaSyDcFIDIdLSPUTGFiKvAq59ZMkwa_ldf3Mw',
-  authDomain: 'alsintanlinkupja.firebaseapp.com',
-  projectId: 'alsintanlinkupja',
-  storageBucket: 'alsintanlinkupja.appspot.com',
-  messagingSenderId: '1042721526157',
-  appId: '1:1042721526157:web:959ff6579d5f6ad1416dc4',
-  measurementId: 'G-5XPEMS1LLR',
+  apiKey: "AIzaSyDRAM87lceSfqDqqOQMvJcMCsxKK6kt-Rg",
+  authDomain: "alsintanlink-57a0f.firebaseapp.com",
+  projectId: "alsintanlink-57a0f",
+  storageBucket: "alsintanlink-57a0f.appspot.com",
+  messagingSenderId: "321136538205",
+  appId: "1:321136538205:web:a55e5fdad405b57c9ad3b4",
+  measurementId: "G-30ZZTDD1VN"
 };
 
 // Initialize Firebase
@@ -27,6 +27,7 @@ const profileUPJA = React.lazy(() => import('pages/UPJA/Profile'));
 const alsinUPJA = React.lazy(() => import('pages/UPJA/Alsin'));
 const alsinUPJADetail = React.lazy(() => import('pages/UPJA/AlsinDetail'));
 const transaksi = React.lazy(() => import('pages/UPJA/Transaksi'));
+const SparePart = React.lazy(() => import('pages/UPJA/SparePart'));
 const transaksiDetail = React.lazy(() => import('pages/UPJA/TransaksiDetail'));
 
 const getBasename = () => {
@@ -72,6 +73,7 @@ class App extends React.Component {
               <React.Suspense fallback={<PageSpinner />}>
                 <Route exact path="/profile" component={profileUPJA} />
                 <Route exact path="/Alsin" component={alsinUPJA} />
+                <Route exact path="/Sparepart" component={SparePart} />
                 <Route exact path="/Transaksi" component={transaksi} />
                 <Route
                   exact

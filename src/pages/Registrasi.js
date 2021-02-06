@@ -48,6 +48,7 @@ class Registrasi extends React.Component {
       resultProvinsi: [],
       resultKotaKab: [],
       resultKecamatan: [],
+      resultDesa: [],
       loadingPage: true,
       email: '',
       resultClass: [
@@ -143,7 +144,7 @@ class Registrasi extends React.Component {
   // untuk pilih Class
   setClass = event => {
     var nama = this.state.resultClass.find(function (element) {
-      return element.class_id === parseInt(event.target.value);
+      return element.class_id === (event.target.value);
     });
     this.setState({
       pilihClass: event.target.value,
@@ -205,6 +206,24 @@ class Registrasi extends React.Component {
         keywordList: '',
         domisiliDisabled: false,
       },
+      () => this.getDesa(this.state.currentPages, this.state.todosPerPages),
+    );
+  };
+
+  // untuk pilih Desa
+  setDesa = event => {
+    var nama = this.state.resultDesa.find(function (element) {
+      return element.id === parseInt(event.target.value);
+    });
+
+    this.setState(
+      {
+        piliihDesa: event.target.value,
+        namaDesa: nama.name,
+        modal_nested_parent_list_desa: false,
+        keywordList: '',
+        domisiliDisabled: false,
+      },
       () => this.getProvinsi(this.state.currentPages, this.state.todosPerPages),
     );
   };
@@ -221,9 +240,10 @@ class Registrasi extends React.Component {
       city: parseInt(this.state.pilihKotaKab),
       district: parseInt(this.state.pilihKecamatan),
       leader_name: input.namaKepalaDesa,
-      village: input.namaDesa,
+      // village: input.namaDesa,
+      village: parseInt(this.state.piliihDesa),
       legality: input.badanHukum,
-      class: parseInt(this.state.pilihClass),
+      class: this.state.pilihClass,
       password: this.state.password,
       rmu: this.state.RMU === true ? 1 : 0,
       rice_seed: this.state.benihPadi === true ? 1 : 0,
@@ -269,7 +289,7 @@ class Registrasi extends React.Component {
       })
       .catch(err => {
         // console.log(err);
-        this.props.showNotification('Koneksi ke server gagal!', 'error');
+        this.showNotification('Koneksi ke server gagal!', 'error');
         this.setState({ loading: false });
       });
   }
@@ -391,6 +411,41 @@ class Registrasi extends React.Component {
       });
   }
 
+  // Get Desa
+  getDesa(currPage, currLimit) {
+    const urlA =
+      myUrl.url_getVillage + '?district_id=' + this.state.pilihKecamatan;
+    console.log('jalan Desa', urlA);
+    this.setState({ loadingPage: true });
+    const option = {
+      method: 'GET',
+      json: true,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+        Authorization: window.localStorage.getItem('tokenCookies'),
+      },
+    };
+    fetch(urlA, option)
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        }
+      })
+      .then(data => {
+        console.log('data Desa', data.result);
+        if (data.status === 0) {
+          this.showNotification('Data tidak ditemukan!', 'error');
+        } else {
+          this.setState({
+            resultDesa: data.result.villages,
+            // maxPages: data.metadata.pages ? data.metadata.pages : 1,
+            loading: false,
+            loadingPage: false,
+          });
+        }
+      });
+  }
+
   componentDidMount() {
     this.getProvinsi();
   }
@@ -455,18 +510,20 @@ class Registrasi extends React.Component {
       namaProvinsi,
       namaKotaKab,
       namaKecamatan,
+      namaDesa,
       namaClass,
     } = this.state;
     return (
       input.length !== 0 &&
       input.namaLengkap !== '' &&
       input.namaKepalaDesa !== '' &&
-      input.namaDesa !== '' &&
+      // input.namaDesa !== '' &&
       input.badanHukum !== '' &&
       email !== '' &&
       namaProvinsi !== '' &&
       namaKotaKab !== '' &&
       namaKecamatan !== '' &&
+      namaDesa !== '' &&
       namaClass !== '' &&
       password !== '' &&
       confirm !== '' &&
@@ -593,6 +650,7 @@ class Registrasi extends React.Component {
     const kotakabTodos = this.state.resultKotaKab;
     const kecamatanTodos = this.state.resultKecamatan;
     const classTodos = this.state.resultClass;
+    const desaTodos = this.state.resultDesa;
 
     const renderClass =
       classTodos &&
@@ -666,6 +724,26 @@ class Registrasi extends React.Component {
                 style={{ margin: '0px', fontSize: '15px' }}
                 value={todo.id}
                 onClick={this.setKecamatan}
+              >
+                Pilih
+              </Button>
+            </td>
+          </tr>
+        );
+      });
+
+    const renderDesa =
+      desaTodos &&
+      desaTodos.map((todo, i) => {
+        return (
+          <tr key={i}>
+            <td>{todo.name}</td>
+            <td style={{ textAlign: 'right' }}>
+              <Button
+                color="primary"
+                style={{ margin: '0px', fontSize: '15px' }}
+                value={todo.id}
+                onClick={this.setDesa}
               >
                 Pilih
               </Button>
@@ -845,8 +923,29 @@ class Registrasi extends React.Component {
                   </FormGroup>
                   <br></br>
                   <br></br>
+                  {/* untuk pilih desa */}
+                  <FormGroup>
+                    <Label style={{ textAlign: 'center' }}>Nama Desa:</Label>
+                    <InputGroup style={{ float: 'right' }}>
+                      <Input
+                        disabled
+                        placeholder="Pilih Kecamatan"
+                        style={{ fontWeight: 'bold' }}
+                        value={this.state.namaDesa}
+                      />
+                      <InputGroupAddon addonType="append">
+                        <Button
+                          onClick={this.toggle('nested_parent_list_desa')}
+                        >
+                          <MdList />
+                        </Button>
+                      </InputGroupAddon>
+                    </InputGroup>
+                  </FormGroup>
+                  <br></br>
+                  <br></br>
 
-                  {/* untuk isi desa */}
+                  {/* untuk isi desa
                   <FormGroup>
                     <Label style={{ textAlign: 'center' }}>Nama Desa:</Label>
                     <Input
@@ -863,7 +962,7 @@ class Registrasi extends React.Component {
                       }
                       value={this.state.namaDesa}
                     ></Input>
-                  </FormGroup>
+                  </FormGroup> */}
 
                   {/* untuk isi Badan Hukum */}
                   <FormGroup>
@@ -1269,6 +1368,44 @@ class Registrasi extends React.Component {
           </ModalBody>
         </Modal>
         {/* Modal List Kecamatan */}
+
+        {/* Modal List Desa */}
+        <Modal
+          onExit={this.handleCloseDomisili}
+          isOpen={this.state.modal_nested_parent_list_desa}
+          toggle={this.toggle('nested_parent_list_desa')}
+          className={this.props.className}
+        >
+          <ModalHeader toggle={this.toggle('nested_parent_list_desa')}>
+            List Desa
+          </ModalHeader>
+          <ModalBody>
+            <Table responsive striped>
+              <tbody>
+                {desaTodos.length === 0 && loadingPage === true ? (
+                  <LoadingSpinner status={4} />
+                ) : loadingPage === false && desaTodos.length === 0 ? (
+                  (
+                    <tr>
+                      <td
+                        style={{ backgroundColor: 'white' }}
+                        colSpan="17"
+                        className="text-center"
+                      >
+                        TIDAK ADA DATA
+                      </td>
+                    </tr>
+                  ) || <LoadingSpinner status={4} />
+                ) : loadingPage === true && desaTodos.length !== 0 ? (
+                  <LoadingSpinner status={4} />
+                ) : (
+                  renderDesa
+                )}
+              </tbody>
+            </Table>
+          </ModalBody>
+        </Modal>
+        {/* Modal List Desa */}
 
         {/* Modal Verifikasi */}
         <Modal
