@@ -143,8 +143,8 @@ class Transaksi extends React.Component {
           status_name: 'Menunggu Penentuan Pembayaran',
         },
         {
-          status_id: 'Menunggu Konfirimasi Petani',
-          status_name: 'Menunggu Konfirimasi Petani',
+          status_id: 'Menunggu Konfirmasi Petani',
+          status_name: 'Menunggu Konfirmasi Petani',
         },
         {
           status_id: 'Menunggu Konfirmasi Upja',
@@ -177,14 +177,14 @@ class Transaksi extends React.Component {
           status_name: 'Menunggu Penentuan Pembayaran',
         },
         {
-          status_id: 'Menunggu Konfirimasi Petani',
-          status_name: 'Menunggu Konfirimasi Petani',
+          status_id: 'Menunggu Konfirmasi Petani',
+          status_name: 'Menunggu Konfirmasi Petani',
         },
       ],
       resultPricing2: [
         {
-          status_id: 'Menunggu Konfirimasi Petani',
-          status_name: 'Menunggu Konfirimasi Petani',
+          status_id: 'Menunggu Konfirmasi Petani',
+          status_name: 'Menunggu Konfirmasi Petani',
         },
         {
           status_id: 'Menungggu Konfirmasi Upja',
