@@ -43,7 +43,10 @@ var url_showAlsinSparePart =
 var url_showAlsinTypeSparePart =
   'https://alsintanlink.com/api/spare_part/show_spare_part_type';
 var url_showSparePartParam =
-  'https://alsintanlink.com/api/spare_part/show_spare_part?spare_part_type_id=1';
+  'https://alsintanlink.com/api/spare_part/show_spare_part';
+
+var url_insertSukuCadang =
+  'https://alsintanlink.com/api/upja/insert_spare_part_upja';
 
 export {
   url_resendOTP,
@@ -75,4 +78,5 @@ export {
   url_showAlsinSparePart,
   url_showAlsinTypeSparePart,
   url_showSparePartParam,
+  url_insertSukuCadang
 };

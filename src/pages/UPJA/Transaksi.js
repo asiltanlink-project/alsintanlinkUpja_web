@@ -229,6 +229,7 @@ class Transaksi extends React.Component {
       resultAlsin: [],
       resultPricing: [],
       resultPricingDetail: [],
+      page: 1,
     };
 
     if (window.localStorage.getItem('accessList')) {
@@ -274,22 +275,28 @@ class Transaksi extends React.Component {
 
   //set Current Page
   paginationButton(event, flag, maxPage = 0) {
-    var currPage = Number(event.target.value);
-    if (currPage + flag > 0 && currPage + flag <= maxPage) {
-      this.setState(
-        {
-          currentPage: currPage + flag,
-          realCurrentPage: currPage + flag,
-        },
-        () => {
-          this.getListbyPaging(
-            this.state.currentPage,
-            this.state.todosPerPage,
-            this.state.keyword,
-          );
-        },
-      );
-    }
+    // var currPage = Number(event.target.value);
+    // if (currPage + flag > 0 && currPage + flag <= maxPage) {
+    //   this.setState(
+    //     {
+    //       currentPage: currPage + flag,
+    //       realCurrentPage: currPage + flag,
+    //     },
+    //     () => {
+    //       this.getTransactionFormPricing(
+    //         this.state.currentPage,
+    //         this.state.todosPerPage,
+    //         this.state.keyword,
+    //       );
+    //     },
+    //   );
+    // }
+    this
+      .getTransactionFormPricing
+      //         this.state.currentPage,
+      //         this.state.todosPerPage,
+      //         this.state.keyword,
+      ();
   }
 
   paginationButtonList(event, flag, maxPages = 0) {
@@ -1503,7 +1510,7 @@ class Transaksi extends React.Component {
         listEditMasalSparePart: [],
         listEditMasalTraining: [],
       },
-     this.toggle('nested_parent_editAlsin')
+      this.toggle('nested_parent_editAlsin'),
     );
   }
 
@@ -2805,6 +2812,10 @@ class Transaksi extends React.Component {
       myUrl.url_showFormPricing +
       '?transaction_order_id=' +
       todo.transaction_order_id;
+    //  +
+    // '&keyword_alsin_item=' +
+    // 'page=' +
+    // this.state.page;
     var token = window.localStorage.getItem('tokenCookies');
     console.log('URL GET LIST', url);
 
@@ -2840,7 +2851,7 @@ class Transaksi extends React.Component {
       })
       .then(data => {
         var status = data.status;
-        var result = data.result.alsins;
+        var result = data.result.alsins.data;
         var message = data.result.message;
         var resultPricingService = data.result.other_service;
         console.log('Data Transaksi', data);
@@ -2862,6 +2873,239 @@ class Transaksi extends React.Component {
             resultRMUS: data.result.rmus,
             resultSparePart: data.result.spare_parts,
             resultTrainings: data.result.trainings,
+
+            fisrtPage: data.result.alsins.first_page_url,
+            nextPage: data.result.alsins.next_page_url,
+            prevPage: data.result.alsins.prev_page_url,
+            currentPage: data.result.alsins.current_page,
+          });
+        }
+      })
+      .catch(err => {
+        // console.log('ERRORNYA', err);
+        this.showNotification('Error ke server!', 'error');
+        // this.setState({
+        //   loadingAlsin: false,
+        // });
+      });
+  }
+
+  getTransactionFormPricingFirstPage(todo) {
+    const url = this.state.firstPage;
+    var token = window.localStorage.getItem('tokenCookies');
+    console.log('URL GET LIST', url);
+
+    // this.setState({ loadingAlsin: true });
+    // console.log("offset", offset, "currLimit", currLimit);
+
+    const option = {
+      method: 'GET',
+      json: true,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+        Authorization: `${'Bearer'} ${token}`,
+      },
+    };
+    // console.log('option', option);
+    fetch(url, option)
+      .then(response => {
+        // trace.stop();
+        if (response.ok) {
+          return response.json();
+        } else {
+          if (response.status === 401) {
+            this.showNotification('Username/Password salah!', 'error');
+          } else if (response.status === 500) {
+            this.showNotification('Internal Server Error', 'error');
+          } else {
+            this.showNotification('Response ke server gagal!', 'error');
+          }
+          this.setState({
+            loadingAlsin: false,
+          });
+        }
+      })
+      .then(data => {
+        var status = data.status;
+        var result = data.result.alsins.data;
+        var message = data.result.message;
+        var resultPricingService = data.result.other_service;
+        console.log('Data Transaksi', data);
+        if (status === 0) {
+          // this.showNotification(message, 'error');
+        } else {
+          this.showNotification('Data ditemukan!', 'info');
+          this.setState({
+            resultPricing: result,
+            resultPricingHeader: data.result.alsin_types,
+            resultHeader: data.result.header,
+
+            loadingAlsin: false,
+            resultalsin: data.result.alsin_types,
+            resultalsinItem: data.result.alsins,
+            resultReparation: data.result.reparations,
+            resultRiceSeeds: data.result.rice_seeds,
+            resultRices: data.result.rices,
+            resultRMUS: data.result.rmus,
+            resultSparePart: data.result.spare_parts,
+            resultTrainings: data.result.trainings,
+
+            fisrtPage: data.result.alsins.first_page_url,
+            nextPage: data.result.alsins.next_page_url,
+            prevPage: data.result.alsins.prev_page_url,
+            currentPage: data.result.alsins.current_page,
+          });
+        }
+      })
+      .catch(err => {
+        // console.log('ERRORNYA', err);
+        this.showNotification('Error ke server!', 'error');
+        // this.setState({
+        //   loadingAlsin: false,
+        // });
+      });
+  }
+
+  getTransactionFormPricingPrevPage(todo) {
+    const url = this.state.prevPage;
+    var token = window.localStorage.getItem('tokenCookies');
+    console.log('URL GET LIST', url);
+
+    // this.setState({ loadingAlsin: true });
+    // console.log("offset", offset, "currLimit", currLimit);
+
+    const option = {
+      method: 'GET',
+      json: true,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+        Authorization: `${'Bearer'} ${token}`,
+      },
+    };
+    // console.log('option', option);
+    fetch(url, option)
+      .then(response => {
+        // trace.stop();
+        if (response.ok) {
+          return response.json();
+        } else {
+          if (response.status === 401) {
+            this.showNotification('Username/Password salah!', 'error');
+          } else if (response.status === 500) {
+            this.showNotification('Internal Server Error', 'error');
+          } else {
+            this.showNotification('Response ke server gagal!', 'error');
+          }
+          this.setState({
+            loadingAlsin: false,
+          });
+        }
+      })
+      .then(data => {
+        var status = data.status;
+        var result = data.result.alsins.data;
+        var message = data.result.message;
+        var resultPricingService = data.result.other_service;
+        console.log('Data Transaksi', data);
+        if (status === 0) {
+          // this.showNotification(message, 'error');
+        } else {
+          this.showNotification('Data ditemukan!', 'info');
+          this.setState({
+            resultPricing: result,
+            resultPricingHeader: data.result.alsin_types,
+            resultHeader: data.result.header,
+
+            loadingAlsin: false,
+            resultalsin: data.result.alsin_types,
+            resultalsinItem: data.result.alsins,
+            resultReparation: data.result.reparations,
+            resultRiceSeeds: data.result.rice_seeds,
+            resultRices: data.result.rices,
+            resultRMUS: data.result.rmus,
+            resultSparePart: data.result.spare_parts,
+            resultTrainings: data.result.trainings,
+
+            fisrtPage: data.result.alsins.first_page_url,
+            nextPage: data.result.alsins.next_page_url,
+            prevPage: data.result.alsins.prev_page_url,
+            currentPage: data.result.alsins.current_page,
+          });
+        }
+      })
+      .catch(err => {
+        // console.log('ERRORNYA', err);
+        this.showNotification('Error ke server!', 'error');
+        // this.setState({
+        //   loadingAlsin: false,
+        // });
+      });
+  }
+
+  getTransactionFormPricingNextPage(todo) {
+    const url = this.state.nextPage;
+    var token = window.localStorage.getItem('tokenCookies');
+    console.log('URL GET LIST', url);
+
+    // this.setState({ loadingAlsin: true });
+    // console.log("offset", offset, "currLimit", currLimit);
+
+    const option = {
+      method: 'GET',
+      json: true,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+        Authorization: `${'Bearer'} ${token}`,
+      },
+    };
+    // console.log('option', option);
+    fetch(url, option)
+      .then(response => {
+        // trace.stop();
+        if (response.ok) {
+          return response.json();
+        } else {
+          if (response.status === 401) {
+            this.showNotification('Username/Password salah!', 'error');
+          } else if (response.status === 500) {
+            this.showNotification('Internal Server Error', 'error');
+          } else {
+            this.showNotification('Response ke server gagal!', 'error');
+          }
+          this.setState({
+            loadingAlsin: false,
+          });
+        }
+      })
+      .then(data => {
+        var status = data.status;
+        var result = data.result.alsins.data;
+        var message = data.result.message;
+        var resultPricingService = data.result.other_service;
+        console.log('Data Transaksi', data);
+        if (status === 0) {
+          // this.showNotification(message, 'error');
+        } else {
+          this.showNotification('Data ditemukan!', 'info');
+          this.setState({
+            resultPricing: result,
+            resultPricingHeader: data.result.alsin_types,
+            resultHeader: data.result.header,
+
+            loadingAlsin: false,
+            resultalsin: data.result.alsin_types,
+            resultalsinItem: data.result.alsins,
+            resultReparation: data.result.reparations,
+            resultRiceSeeds: data.result.rice_seeds,
+            resultRices: data.result.rices,
+            resultRMUS: data.result.rmus,
+            resultSparePart: data.result.spare_parts,
+            resultTrainings: data.result.trainings,
+
+            fisrtPage: data.result.alsins.first_page_url,
+            nextPage: data.result.alsins.next_page_url,
+            prevPage: data.result.alsins.prev_page_url,
+            currentPage: data.result.alsins.current_page,
           });
         }
       })
@@ -4304,6 +4548,82 @@ class Transaksi extends React.Component {
                       <tbody>{renderPricing}</tbody>
                     </Table>
                   </CardBody>
+                  <Card className="mb-3s">
+                    <ButtonGroup>
+                      {/* <Button
+                        name="FirstButton"
+                        value={1}
+                        onClick={() => this.getTransactionFormPricingFirstPage()}
+                      >
+                        &#10092;&#10092;
+                      </Button> */}
+                      {this.state.prevPage === null && (
+                        <Button
+                          name="PrevButton"
+                          disabled={true}
+                          value={this.state.currentPage}
+                          onClick={() =>
+                            this.getTransactionFormPricingPrevPage()
+                          }
+                        >
+                          &#10092;
+                        </Button>
+                      )}
+                      {this.state.prevPage !== null && (
+                        <Button
+                          name="PrevButton"
+                          disabled={false}
+                          value={this.state.currentPage}
+                          onClick={() =>
+                            this.getTransactionFormPricingPrevPage()
+                          }
+                        >
+                          &#10092;
+                        </Button>
+                      )}
+
+                      <input
+                        type="text"
+                        placeholder="Page"
+                        disabled={true}
+                        outline="none"
+                        value={this.state.currentPage}
+                        onChange={e =>
+                          this.setState({ currentPage: e.target.value })
+                        }
+                        onKeyPress={e => this.enterPressedPage(e)}
+                        style={{
+                          height: '38px',
+                          width: '75px',
+                          textAlign: 'center',
+                        }}
+                      />
+                      {this.state.nextPage === null && (
+                        <Button
+                          name="NextButton"
+                          disabled={true}
+                          value={this.state.currentPage}
+                          onClick={() =>
+                            this.getTransactionFormPricingNextPage()
+                          }
+                        >
+                          &#10093;
+                        </Button>
+                      )}
+                      {this.state.nextPage !== null && (
+                        <Button
+                          name="NextButton"
+                          disabled={false}
+                          value={this.state.currentPage}
+                          onClick={() =>
+                            this.getTransactionFormPricingNextPage()
+                          }
+                        >
+                          &#10093;
+                        </Button>
+                      )}
+                    </ButtonGroup>
+                  </Card>
                 </div>
               )}
             <CardBody>

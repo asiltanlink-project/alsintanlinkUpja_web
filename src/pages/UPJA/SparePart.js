@@ -118,6 +118,7 @@ class Sparepart extends React.Component {
       dynamicHeightPelapak: '0px',
       loadingPage: false,
       loadingAlsin: true,
+      loadingAlsinPage: true,
 
       resultAlsin: [],
       resultAllAlsinTypeSukuCadang: [],
@@ -980,7 +981,7 @@ class Sparepart extends React.Component {
 
   // untuk pilih Tipe Suku Cadang
   setAlsinItemTipeSukuCadang = event => {
-    var nama = this.state.resultAllAlsinType.find(function (element) {
+    var nama = this.state.resultAllAlsinTypeSukuCadang.find(function (element) {
       return element.id === parseInt(event.target.value);
     });
 
@@ -996,7 +997,7 @@ class Sparepart extends React.Component {
 
   // untuk pilih Suku Cadang
   setAlsinItemSukuCadang = event => {
-    var nama = this.state.resultAllAlsinType.find(function (element) {
+    var nama = this.state.resultAllAlsinSukuCadang.find(function (element) {
       return element.id === parseInt(event.target.value);
     });
 
@@ -1310,14 +1311,14 @@ class Sparepart extends React.Component {
   insertListEditMasal = () => {
     const trace = perf.trace('insertListEditMasal');
     trace.start();
-    var productDetail = this.state.listEditMasal;
-    var url = myUrl.url_insertAlsin;
+    // var productDetail = this.state.listEditMasal;
+    var url = myUrl.url_insertSukuCadang;
     var token = window.localStorage.getItem('tokenCookies');
     this.setState({ enterButton: true });
 
     this.fetchData();
     var payload = {
-      alsins: productDetail,
+      spare_part_id: parseInt(this.state.pilihSukuCadang),
     };
 
     console.log('PAYLOAD', payload);
@@ -1726,7 +1727,7 @@ class Sparepart extends React.Component {
     var token = window.localStorage.getItem('tokenCookies');
     // console.log('URL GET LIST', url);
 
-    this.setState({ loadingAlsin: true });
+    this.setState({ loadingAlsinPage: true });
     // console.log("offset", offset, "currLimit", currLimit);
 
     const option = {
@@ -1767,7 +1768,7 @@ class Sparepart extends React.Component {
           this.showNotification('Data ditemukan!', 'info');
           this.setState({
             resultAlsin: result,
-            loadingAlsin: false,
+            loadingAlsinPage: false,
           });
         }
       })
@@ -1775,7 +1776,7 @@ class Sparepart extends React.Component {
         // console.log('ERRORNYA', err);
         this.showNotification('Error ke server!', 'error');
         this.setState({
-          loadingAlsin: false,
+          loadingAlsinPage: false,
         });
       });
   }
@@ -1913,7 +1914,10 @@ class Sparepart extends React.Component {
 
   // GET ALSIN TYPE
   getAllSparePart() {
-    const url = myUrl.url_showSparePartParam + '';
+    const url =
+      myUrl.url_showSparePartParam +
+      '?spare_part_type_id=' +
+      this.state.pilihTipeSukuCadang;
     var token = window.localStorage.getItem('tokenCookies');
     // console.log('URL GET LIST', url);
 
@@ -1976,8 +1980,8 @@ class Sparepart extends React.Component {
   }
 
   componentDidMount() {
-    this.getAccess();
-    this.setProfileData();
+    // this.getAccess();
+    // this.setProfileData();
     // this.getAllEcommerce();
     // this.getOutletEcommerce();
     // this.getListDefault();
@@ -2234,6 +2238,9 @@ class Sparepart extends React.Component {
       ecommerceDetail: [],
       dynamicHeightEcommerce: '0px',
       dynamicHeightPelapak: '0px',
+      namaAlsin: '',
+      namaTipeSukuCadang: '',
+      namaSukuCadang: '',
     });
   };
 
@@ -2261,8 +2268,9 @@ class Sparepart extends React.Component {
   handleCloseTambahMasal = () => {
     this.setState(
       {
-        endDate: '',
-        startDate: '',
+        namaAlsin: '',
+        namaTipeSukuCadang: '',
+        namaSukuCadang: '',
       },
       () => this.toggleTambah('nested_parent_editMassal'),
     );
@@ -2522,7 +2530,7 @@ class Sparepart extends React.Component {
   }
 
   render() {
-    const { loading, loadingPage, loadingAlsin } = this.state;
+    const { loading, loadingPage, loadingAlsin, loadingAlsinPage } = this.state;
     const currentTodos = this.state.result.data;
     const alsintItemTodos = this.state.resultAllAlsinType;
     const alsintItemTipeSukuCadangTodos = this.state
@@ -2964,9 +2972,10 @@ class Sparepart extends React.Component {
                     </tr>
                   </thead>
                   <tbody>
-                    {alsinTodos.length === 0 && loadingAlsin === true ? (
+                    {alsinTodos.length === 0 && loadingAlsinPage === true ? (
                       <LoadingSpinner status={4} />
-                    ) : loadingAlsin === false && alsinTodos.length === 0 ? (
+                    ) : loadingAlsinPage === false &&
+                      alsinTodos.length === 0 ? (
                       (
                         <tr>
                           <td
@@ -2978,7 +2987,7 @@ class Sparepart extends React.Component {
                           </td>
                         </tr>
                       ) || <LoadingSpinner status={4} />
-                    ) : loadingAlsin === true && alsinTodos ? (
+                    ) : loadingAlsinPage === true && alsinTodos ? (
                       <LoadingSpinner status={4} />
                     ) : (
                       renderAlsin
@@ -3665,6 +3674,21 @@ class Sparepart extends React.Component {
           centered={true}
         >
           <ModalHeader>Tambah Suku Cadang</ModalHeader>
+          <ModalBody style={{ paddingBottom: 0, paddingTop: 0 }}>
+            <Label
+              style={{
+                marginBottom: 0,
+                color: 'red',
+                fontSize: '0.7em',
+                paddingBottom: 0,
+                paddingTop: 0,
+              }}
+            >
+              *Pilih secara berurutan dari: Jenis Alsin - Tipe Suku Cadang -
+              Suku Cadang
+            </Label>
+          </ModalBody>
+
           <ModalBody>
             {/* untuk pilih kota/kabupaten */}
             <FormGroup>
@@ -3784,7 +3808,7 @@ class Sparepart extends React.Component {
               color="primary"
               onClick={this.toggle('nested_editMassal')}
             >
-              Simpan Penambahan Alsin
+              Simpan Penambahan Suku Cadang
             </Button>
             <Modal
               onExit={this.handleCloseEditMasal}
