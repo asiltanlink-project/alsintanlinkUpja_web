@@ -120,6 +120,8 @@ class Sparepart extends React.Component {
       loadingAlsin: true,
 
       resultAlsin: [],
+      resultAllAlsinTypeSukuCadang: [],
+      resultAllAlsinSukuCadang: [],
     };
 
     if (window.localStorage.getItem('accessList')) {
@@ -526,7 +528,8 @@ class Sparepart extends React.Component {
 
     this.fetchData();
     var payload = {
-      trasansaction_upja_spare_part_id: deleteDataHeader.trasansaction_upja_spare_part_id,
+      trasansaction_upja_spare_part_id:
+        deleteDataHeader.trasansaction_upja_spare_part_id,
     };
 
     console.log('PAYLOAD', payload);
@@ -959,18 +962,53 @@ class Sparepart extends React.Component {
     );
   };
 
-  // untuk pilih Pelapak
+  // untuk pilih Alsin Item
   setAlsinItem = event => {
     var nama = this.state.resultAllAlsinType.find(function (element) {
       return element.id === parseInt(event.target.value);
     });
 
-    this.setState({
-      pilihAlsin: event.target.value,
-      namaAlsin: nama.name,
-    });
+    this.setState(
+      {
+        pilihAlsin: event.target.value,
+        namaAlsin: nama.name,
+        modal_nested_parent_tambahProduk: false,
+      },
+      () => this.getAllTipeSparePart(),
+    );
   };
-  // untuk pilih Outlet
+
+  // untuk pilih Tipe Suku Cadang
+  setAlsinItemTipeSukuCadang = event => {
+    var nama = this.state.resultAllAlsinType.find(function (element) {
+      return element.id === parseInt(event.target.value);
+    });
+
+    this.setState(
+      {
+        pilihTipeSukuCadang: event.target.value,
+        namaTipeSukuCadang: nama.name,
+        modal_nested_parent_tambahProdukTipeSukuCadang: false,
+      },
+      () => this.getAllSparePart(),
+    );
+  };
+
+  // untuk pilih Suku Cadang
+  setAlsinItemSukuCadang = event => {
+    var nama = this.state.resultAllAlsinType.find(function (element) {
+      return element.id === parseInt(event.target.value);
+    });
+
+    this.setState(
+      {
+        pilihSukuCadang: event.target.value,
+        namaSukuCadang: nama.name,
+        modal_nested_parent_tambahProdukSukuCadang: false,
+      },
+      () => this.getAllAlsinSparePart(),
+    );
+  };
 
   // untuk pilih Ecommerce
   setEcommerce = event => {
@@ -1742,8 +1780,9 @@ class Sparepart extends React.Component {
       });
   }
 
-  getAllAlsinType() {
-    const url = myUrl.url_allAlsinType;
+  // GET ALSIN TYPE
+  getAllAlsinSparePart() {
+    const url = myUrl.url_showAlsinSparePart;
     var token = window.localStorage.getItem('tokenCookies');
     // console.log('URL GET LIST', url);
 
@@ -1779,9 +1818,9 @@ class Sparepart extends React.Component {
       })
       .then(data => {
         var status = data.status;
-        var result = data.result.alsins;
+        var result = data.result.alsin_types;
         var message = data.result.message;
-        // console.log('ALSIN TYPE DATA', data);
+        console.log('ALSIN SPARE PART', data);
         if (status === 0) {
           this.showNotification(message, 'error');
         } else {
@@ -1789,6 +1828,137 @@ class Sparepart extends React.Component {
           this.setState(
             {
               resultAllAlsinType: result,
+              loadingAlsin: false,
+            },
+            // () =>
+            //   console.log('RESULT ALSIN ITEM', this.state.resultAllAlsinType),
+          );
+        }
+      })
+      .catch(err => {
+        // console.log('ERRORNYA', err);
+        this.showNotification('Error ke server!', 'error');
+        this.setState({
+          loadingAlsin: false,
+        });
+      });
+  }
+
+  // GET ALSIN TYPE
+  getAllTipeSparePart() {
+    const url =
+      myUrl.url_showAlsinTypeSparePart +
+      '?alsin_type_id=' +
+      this.state.pilihAlsin;
+    var token = window.localStorage.getItem('tokenCookies');
+    console.log('URL GET LIST TIPE ALSIN', url);
+
+    this.setState({ loadingAlsin: true });
+    // console.log("offset", offset, "currLimit", currLimit);
+
+    const option = {
+      method: 'GET',
+      json: true,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+        Authorization: `${'Bearer'} ${token}`,
+      },
+    };
+    // console.log('option', option);
+    fetch(url, option)
+      .then(response => {
+        // trace.stop();
+        if (response.ok) {
+          return response.json();
+        } else {
+          if (response.status === 401) {
+            this.showNotification('Username/Password salah!', 'error');
+          } else if (response.status === 500) {
+            this.showNotification('Internal Server Error', 'error');
+          } else {
+            this.showNotification('Response ke server gagal!', 'error');
+          }
+          this.setState({
+            loadingAlsin: false,
+          });
+        }
+      })
+      .then(data => {
+        var status = data.status;
+        var result = data.result.spare_part_types;
+        var message = data.result.message;
+        console.log('ALSIN SPARE PART', data);
+        if (status === 0) {
+          this.showNotification(message, 'error');
+        } else {
+          this.showNotification('Data ditemukan!', 'info');
+          this.setState(
+            {
+              resultAllAlsinTypeSukuCadang: result,
+              loadingAlsin: false,
+            },
+            // () =>
+            //   console.log('RESULT ALSIN ITEM', this.state.resultAllAlsinType),
+          );
+        }
+      })
+      .catch(err => {
+        // console.log('ERRORNYA', err);
+        this.showNotification('Error ke server!', 'error');
+        this.setState({
+          loadingAlsin: false,
+        });
+      });
+  }
+
+  // GET ALSIN TYPE
+  getAllSparePart() {
+    const url = myUrl.url_showSparePartParam + '';
+    var token = window.localStorage.getItem('tokenCookies');
+    // console.log('URL GET LIST', url);
+
+    this.setState({ loadingAlsin: true });
+    // console.log("offset", offset, "currLimit", currLimit);
+
+    const option = {
+      method: 'GET',
+      json: true,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+        Authorization: `${'Bearer'} ${token}`,
+      },
+    };
+    // console.log('option', option);
+    fetch(url, option)
+      .then(response => {
+        // trace.stop();
+        if (response.ok) {
+          return response.json();
+        } else {
+          if (response.status === 401) {
+            this.showNotification('Username/Password salah!', 'error');
+          } else if (response.status === 500) {
+            this.showNotification('Internal Server Error', 'error');
+          } else {
+            this.showNotification('Response ke server gagal!', 'error');
+          }
+          this.setState({
+            loadingAlsin: false,
+          });
+        }
+      })
+      .then(data => {
+        var status = data.status;
+        var result = data.result.spare_parts;
+        var message = data.result.message;
+        console.log('ALSIN SPARE PART', data);
+        if (status === 0) {
+          this.showNotification(message, 'error');
+        } else {
+          this.showNotification('Data ditemukan!', 'info');
+          this.setState(
+            {
+              resultAllAlsinSukuCadang: result,
               loadingAlsin: false,
             },
             // () =>
@@ -1813,7 +1983,7 @@ class Sparepart extends React.Component {
     // this.getListDefault();
     // this.getListPerOutlet(this.state.currentPage, this.state.todosPerPage);
     // this.getPelapak(this.state.currentPages, this.state.todosPerPages);
-    // this.getAllAlsinType();
+    this.getAllAlsinSparePart();
     this.getAllAlsin();
   }
 
@@ -2355,6 +2525,9 @@ class Sparepart extends React.Component {
     const { loading, loadingPage, loadingAlsin } = this.state;
     const currentTodos = this.state.result.data;
     const alsintItemTodos = this.state.resultAllAlsinType;
+    const alsintItemTipeSukuCadangTodos = this.state
+      .resultAllAlsinTypeSukuCadang;
+    const alsintItemSukuCadangTodos = this.state.resultAllAlsinSukuCadang;
     const alsinTodos = this.state.resultAlsin;
     const pelapakEcommerceTodos = this.state.resultPelapakEcommerce;
     const periodeTodos = this.state.resultPeriode;
@@ -2490,7 +2663,61 @@ class Sparepart extends React.Component {
     const renderAlsinItem =
       alsintItemTodos &&
       alsintItemTodos.map((todo, i) => {
-        return <option value={todo.id}>{todo.name}</option>;
+        return (
+          <tr key={i}>
+            <td>{todo.name}</td>
+            <td style={{ textAlign: 'right' }}>
+              <Button
+                color="primary"
+                style={{ margin: '0px', fontSize: '15px' }}
+                value={todo.id}
+                onClick={this.setAlsinItem}
+              >
+                Pilih
+              </Button>
+            </td>
+          </tr>
+        );
+      });
+
+    const renderAlsinItemTipeSukuCadang =
+      alsintItemTipeSukuCadangTodos &&
+      alsintItemTipeSukuCadangTodos.map((todo, i) => {
+        return (
+          <tr key={i}>
+            <td>{todo.name}</td>
+            <td style={{ textAlign: 'right' }}>
+              <Button
+                color="primary"
+                style={{ margin: '0px', fontSize: '15px' }}
+                value={todo.id}
+                onClick={this.setAlsinItemTipeSukuCadang}
+              >
+                Pilih
+              </Button>
+            </td>
+          </tr>
+        );
+      });
+
+    const renderAlsinItemSukuCadang =
+      alsintItemSukuCadangTodos &&
+      alsintItemSukuCadangTodos.map((todo, i) => {
+        return (
+          <tr key={i}>
+            <td>{todo.name}</td>
+            <td style={{ textAlign: 'right' }}>
+              <Button
+                color="primary"
+                style={{ margin: '0px', fontSize: '15px' }}
+                value={todo.id}
+                onClick={this.setAlsinItemSukuCadang}
+              >
+                Pilih
+              </Button>
+            </td>
+          </tr>
+        );
       });
 
     const renderPelapakEditMasal =
@@ -3437,9 +3664,75 @@ class Sparepart extends React.Component {
           scrollable={true}
           centered={true}
         >
-          <ModalHeader>Tambah Alsin</ModalHeader>
+          <ModalHeader>Tambah Suku Cadang</ModalHeader>
           <ModalBody>
-            <CardBody>
+            {/* untuk pilih kota/kabupaten */}
+            <FormGroup>
+              <Label style={{ textAlign: 'center' }}>Jenis Alsin:</Label>
+              <InputGroup style={{ float: 'right' }}>
+                <Input
+                  disabled
+                  placeholder="Pilih Jenis Alsin"
+                  style={{ fontWeight: 'bold' }}
+                  value={this.state.namaAlsin}
+                />
+                <InputGroupAddon addonType="append">
+                  <Button onClick={this.toggle('nested_parent_tambahProduk')}>
+                    <MdList />
+                  </Button>
+                </InputGroupAddon>
+              </InputGroup>
+            </FormGroup>
+            <br></br>
+            <br></br>
+            {/* untuk pilih kecamatan */}
+            <FormGroup>
+              <Label style={{ textAlign: 'center' }}>Tipe Suku Cadang:</Label>
+              <InputGroup style={{ float: 'right' }}>
+                <Input
+                  disabled
+                  placeholder="Pilih Tipe Suku Cadang"
+                  style={{ fontWeight: 'bold' }}
+                  value={this.state.namaTipeSukuCadang}
+                />
+                <InputGroupAddon addonType="append">
+                  <Button
+                    onClick={this.toggle(
+                      'nested_parent_tambahProdukTipeSukuCadang',
+                    )}
+                  >
+                    <MdList />
+                  </Button>
+                </InputGroupAddon>
+              </InputGroup>
+            </FormGroup>
+            <br></br>
+            <br></br>
+            {/* untuk pilih desa */}
+            <FormGroup>
+              <Label style={{ textAlign: 'center' }}>Suku Cadang:</Label>
+              <InputGroup style={{ float: 'right' }}>
+                <Input
+                  disabled
+                  placeholder="Pilih Suku Cadang"
+                  style={{ fontWeight: 'bold' }}
+                  value={this.state.namaSukuCadang}
+                />
+                <InputGroupAddon addonType="append">
+                  <Button
+                    onClick={this.toggle(
+                      'nested_parent_tambahProdukSukuCadang',
+                    )}
+                  >
+                    <MdList />
+                  </Button>
+                </InputGroupAddon>
+              </InputGroup>
+            </FormGroup>
+            <br></br>
+            <br></br>
+
+            {/* <CardBody>
               <Row
                 className="d-flex justify-content-between"
                 style={{ marginBottom: '1%' }}
@@ -3452,7 +3745,7 @@ class Sparepart extends React.Component {
                     marginTop: '8px',
                   }}
                 >
-                  List Alsin
+                  List Suku cadang
                 </Label>
                 <Button
                   size="sm"
@@ -3465,7 +3758,6 @@ class Sparepart extends React.Component {
                 <thead>
                   <tr>
                     <th>Alsin Type ID</th>
-                    {/* <th>Harga</th> */}
                     <th>Total Item</th>
                     <th>Edit</th>
                     <th>Hapus</th>
@@ -3484,7 +3776,7 @@ class Sparepart extends React.Component {
                   </tr>
                 )}
               </Table>
-            </CardBody>
+            </CardBody> */}
           </ModalBody>
           <ModalFooter>
             <Button
@@ -3528,7 +3820,7 @@ class Sparepart extends React.Component {
         </Modal>
         {/* Modal Batas Edit Massal */}
 
-        {/* Modal Tambah Alsin Item */}
+        {/* Modal Tambah Alsin Item  ALSIN*/}
         <Modal
           onExit={this.handleClose}
           isOpen={this.state.modal_nested_parent_tambahProduk}
@@ -3536,133 +3828,121 @@ class Sparepart extends React.Component {
           className={this.props.className}
         >
           <ModalHeader toggle={this.toggle('nested_parent_tambahProduk')}>
-            Tambah Alsin
+            Jenis Alsin
           </ModalHeader>
           <ModalBody>
-            <Form onSubmit={e => e.preventDefault()}>
-              <FormGroup>
-                <Label>Alsin Type ID</Label>
-                {/* <Input
-                  type="number"
-                  min={0}
-                  name="alsin_type_id"
-                  style={{ textAlign: 'right' }}
-                  placeholder="Type ID"
-                  onKeyPress={e => this.numValidate(e)}
-                  onChange={evt =>
-                    this.updateInputValue(
-                      evt.target.value,
-                      evt.target.name,
-                      'currentDimen',
-                    )
-                  }
-                  value={this.state.alsin_type_id}
-                /> */}
-                <Input
-                  type="select"
-                  autoComplete="off"
-                  name="select"
-                  color="primary"
-                  style={{ marginRight: '1px' }}
-                  onChange={this.setAlsinItem}
-                >
-                  <option value={''} disabled selected hidden id="pilih">
-                    Pilih Alsin Item
-                  </option>
-                  {renderAlsinItem}
-                </Input>
-                {/* <Label>Harga</Label>
-                <Input
-                  type="number"
-                  min={0}
-                  name="cost"
-                  style={{ textAlign: 'right' }}
-                  placeholder="Harga..."
-                  onKeyPress={e => this.numValidate(e)}
-                  onChange={evt =>
-                    this.updateInputValue(
-                      evt.target.value,
-                      evt.target.name,
-                      'currentDimen',
-                    )
-                  }
-                  value={this.state.cost}
-                /> */}
-                <Label>Total Alsin</Label>
-                <Input
-                  type="number"
-                  min={0}
-                  name="total_item"
-                  style={{ textAlign: 'right' }}
-                  placeholder="Total Item..."
-                  onKeyPress={e => this.numValidate(e)}
-                  onChange={evt =>
-                    this.updateInputValue(
-                      evt.target.value,
-                      evt.target.name,
-                      'currentDimen',
-                    )
-                  }
-                  value={this.state.total_item}
-                />
-                <Label
-                  style={{ fontSize: '0.8em', marginBottom: 0, color: 'red' }}
-                >
-                  *Input nilai dengan satuan angka
-                </Label>
-              </FormGroup>
-            </Form>
-            <br></br>
-            {/* <Label style={{ fontSize: "12px" }}>CTRL+S untuk simpan</Label> */}
-          </ModalBody>
-          <ModalFooter>
-            <Button
-              // disabled={!isEnabledAddProduct}
-              color="primary"
-              onClick={this.toggle('nested_tambahProduk')}
-            >
-              Simpan Tambah Alsin
-            </Button>
-            <Modal
-              onExit={this.handleClose}
-              isOpen={this.state.modal_nested_tambahProduk}
-              toggle={this.toggle('nested_tambahProduk')}
-            >
-              <ModalHeader>Konfirmasi Penyimpanan</ModalHeader>
-              <ModalBody>Apakah Anda yakin ingin menyimpan data ini?</ModalBody>
-              <ModalFooter>
-                <Button
-                  color="primary"
-                  onClick={() =>
-                    this.setListEditMassal(this.state.editBatasBawah, {
-                      ...this.state.editBatasBawah,
-                    })
-                  }
-                  disabled={loading}
-                >
-                  {!loading && 'Ya'}
-                  {loading && <MdAutorenew />}
-                  {loading && 'Sedang diproses'}
-                </Button>{' '}
-                {!loading && (
-                  <Button
-                    color="secondary"
-                    onClick={this.toggle('nested_tambahProduk')}
-                  >
-                    Tidak
-                  </Button>
+            <Table responsive striped>
+              <tbody>
+                {alsintItemTodos.length === 0 && loadingAlsin === true ? (
+                  <LoadingSpinner status={4} />
+                ) : loadingAlsin === false && alsintItemTodos.length === 0 ? (
+                  (
+                    <tr>
+                      <td
+                        style={{ backgroundColor: 'white' }}
+                        colSpan="17"
+                        className="text-center"
+                      >
+                        TIDAK ADA DATA
+                      </td>
+                    </tr>
+                  ) || <LoadingSpinner status={4} />
+                ) : loadingAlsin === true && alsintItemTodos.length !== 0 ? (
+                  <LoadingSpinner status={4} />
+                ) : (
+                  renderAlsinItem
                 )}
-              </ModalFooter>
-            </Modal>{' '}
-            <Button
-              color="secondary"
-              onClick={this.toggle('nested_parent_tambahProduk')}
-            >
-              Batal
-            </Button>
-          </ModalFooter>
+              </tbody>
+            </Table>
+          </ModalBody>
         </Modal>
-        {/* Modal Tambah Alsin Item */}
+        {/* Modal Tambah Alsin Item  Alsin*/}
+
+        {/* Modal Tambah Alsin Item  TIPE SUKU CADANG*/}
+        <Modal
+          onExit={this.handleClose}
+          isOpen={this.state.modal_nested_parent_tambahProdukTipeSukuCadang}
+          toggle={this.toggle('nested_parent_tambahProdukTipeSukuCadang')}
+          className={this.props.className}
+        >
+          <ModalHeader
+            toggle={this.toggle('nested_parent_tambahProdukTipeSukuCadang')}
+          >
+            Tipe Suku Cadang
+          </ModalHeader>
+          <ModalBody>
+            <Table responsive striped>
+              <tbody>
+                {alsintItemTipeSukuCadangTodos.length === 0 &&
+                loadingAlsin === true ? (
+                  <LoadingSpinner status={4} />
+                ) : loadingAlsin === false &&
+                  alsintItemTipeSukuCadangTodos.length === 0 ? (
+                  (
+                    <tr>
+                      <td
+                        style={{ backgroundColor: 'white' }}
+                        colSpan="17"
+                        className="text-center"
+                      >
+                        TIDAK ADA DATA
+                      </td>
+                    </tr>
+                  ) || <LoadingSpinner status={4} />
+                ) : loadingAlsin === true &&
+                  alsintItemTipeSukuCadangTodos.length !== 0 ? (
+                  <LoadingSpinner status={4} />
+                ) : (
+                  renderAlsinItemTipeSukuCadang
+                )}
+              </tbody>
+            </Table>
+          </ModalBody>
+        </Modal>
+        {/* Modal Tambah Alsin Item  TIPE SUKU CADANG*/}
+
+        {/* Modal Tambah Alsin Item  SUKU CADANG*/}
+        <Modal
+          onExit={this.handleClose}
+          isOpen={this.state.modal_nested_parent_tambahProdukSukuCadang}
+          toggle={this.toggle('nested_parent_tambahProdukSukuCadang')}
+          className={this.props.className}
+        >
+          <ModalHeader
+            toggle={this.toggle('nested_parent_tambahProdukSukuCadang')}
+          >
+            Suku Cadang
+          </ModalHeader>
+          <ModalBody>
+            <Table responsive striped>
+              <tbody>
+                {alsintItemSukuCadangTodos.length === 0 &&
+                loadingAlsin === true ? (
+                  <LoadingSpinner status={4} />
+                ) : loadingAlsin === false &&
+                  alsintItemSukuCadangTodos.length === 0 ? (
+                  (
+                    <tr>
+                      <td
+                        style={{ backgroundColor: 'white' }}
+                        colSpan="17"
+                        className="text-center"
+                      >
+                        TIDAK ADA DATA
+                      </td>
+                    </tr>
+                  ) || <LoadingSpinner status={4} />
+                ) : loadingAlsin === true &&
+                  alsintItemSukuCadangTodos.length !== 0 ? (
+                  <LoadingSpinner status={4} />
+                ) : (
+                  renderAlsinItemSukuCadang
+                )}
+              </tbody>
+            </Table>
+          </ModalBody>
+        </Modal>
+        {/* Modal Tambah Alsin Item  SUKU CADANG*/}
 
         {/* Modal Edit - Edit Masal */}
         <Modal

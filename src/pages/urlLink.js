@@ -38,6 +38,13 @@ var url_showAllSparePart =
 var url_deleteSparePart =
   'https://alsintanlink.com/api/upja/delete_spare_part_upja';
 
+var url_showAlsinSparePart =
+  'https://alsintanlink.com/api/spare_part/show_alsin_type';
+var url_showAlsinTypeSparePart =
+  'https://alsintanlink.com/api/spare_part/show_spare_part_type';
+var url_showSparePartParam =
+  'https://alsintanlink.com/api/spare_part/show_spare_part?spare_part_type_id=1';
+
 export {
   url_resendOTP,
   url_submitOTP,
@@ -65,4 +72,7 @@ export {
   url_updateTransaksi,
   url_showAllSparePart,
   url_deleteSparePart,
+  url_showAlsinSparePart,
+  url_showAlsinTypeSparePart,
+  url_showSparePartParam,
 };
