@@ -1206,6 +1206,7 @@ class Transaksi extends React.Component {
           alsin_type_name: this.state.addAlsin.alsin_type_name,
           vechile_code: this.state.addAlsin.vechile_code,
           alsin_item_id: this.state.addAlsin.alsin_item_id,
+          transaction_order_type_id: this.state.addAlsin.transaction_order_type_id,
         };
 
         var newArr = listDetail.filter(
