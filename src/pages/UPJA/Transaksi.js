@@ -391,11 +391,7 @@ class Transaksi extends React.Component {
           realCurrentPage: 1,
         },
         () => {
-          this.getListbyPaging(
-            this.state.currentPage,
-            this.state.todosPerPage,
-            this.state.keyword,
-          );
+          this.getTransactionFormPricingKeyword(this.state.keyword);
         },
       );
     }
@@ -1206,7 +1202,8 @@ class Transaksi extends React.Component {
           alsin_type_name: this.state.addAlsin.alsin_type_name,
           vechile_code: this.state.addAlsin.vechile_code,
           alsin_item_id: this.state.addAlsin.alsin_item_id,
-          transaction_order_type_id: this.state.addAlsin.transaction_order_type_id,
+          transaction_order_type_id: this.state.addAlsin
+            .transaction_order_type_id,
         };
 
         var newArr = listDetail.filter(
@@ -2807,6 +2804,91 @@ class Transaksi extends React.Component {
       () => this.getTransactionFormPricing(this.state.editPricing),
     );
   };
+
+  getTransactionFormPricingKeyword(keyword) {
+    const url =
+      myUrl.url_showFormPricing +
+      '?transaction_order_id=' +
+      this.state.editPricing.transaction_order_id +
+      '&keyword_alsin_item=' +
+      keyword;
+    //  +
+    // '&keyword_alsin_item=' +
+    // 'page=' +
+    // this.state.page;
+    var token = window.localStorage.getItem('tokenCookies');
+    console.log('URL GET LIST KEYWORD', url);
+
+    // this.setState({ loadingAlsin: true });
+    // console.log("offset", offset, "currLimit", currLimit);
+
+    const option = {
+      method: 'GET',
+      json: true,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+        Authorization: `${'Bearer'} ${token}`,
+      },
+    };
+    // console.log('option', option);
+    fetch(url, option)
+      .then(response => {
+        // trace.stop();
+        if (response.ok) {
+          return response.json();
+        } else {
+          if (response.status === 401) {
+            this.showNotification('Username/Password salah!', 'error');
+          } else if (response.status === 500) {
+            this.showNotification('Internal Server Error', 'error');
+          } else {
+            this.showNotification('Response ke server gagal!', 'error');
+          }
+          this.setState({
+            loadingAlsin: false,
+          });
+        }
+      })
+      .then(data => {
+        var status = data.status;
+        var result = data.result.alsins.data;
+        var message = data.result.message;
+        var resultPricingService = data.result.other_service;
+        console.log('Data Transaksi', data);
+        if (status === 0) {
+          // this.showNotification(message, 'error');
+        } else {
+          this.showNotification('Data ditemukan!', 'info');
+          this.setState({
+            resultPricing: result,
+            resultPricingHeader: data.result.alsin_types,
+            resultHeader: data.result.header,
+
+            loadingAlsin: false,
+            resultalsin: data.result.alsin_types,
+            resultalsinItem: data.result.alsins,
+            resultReparation: data.result.reparations,
+            resultRiceSeeds: data.result.rice_seeds,
+            resultRices: data.result.rices,
+            resultRMUS: data.result.rmus,
+            resultSparePart: data.result.spare_parts,
+            resultTrainings: data.result.trainings,
+
+            fisrtPage: data.result.alsins.first_page_url,
+            nextPage: data.result.alsins.next_page_url,
+            prevPage: data.result.alsins.prev_page_url,
+            currentPage: data.result.alsins.current_page,
+          });
+        }
+      })
+      .catch(err => {
+        // console.log('ERRORNYA', err);
+        this.showNotification('Error ke server!', 'error');
+        // this.setState({
+        //   loadingAlsin: false,
+        // });
+      });
+  }
 
   getTransactionFormPricing(todo) {
     const url =
@@ -4528,10 +4610,48 @@ class Transaksi extends React.Component {
               this.state.editPricing.status ===
                 'Menunggu Penentuan Pembayaran' && (
                 <div>
+                  <div
+                    className="d-flex justify-content-between"
+                    style={{ marginTop: 0, paddingTop: 0 }}
+                  >
+                    {/* <Col style={{ paddingLeft: 0 }}> */}
+                    <Form
+                      inline
+                      className="cr-search-form"
+                      onSubmit={e => e.preventDefault()}
+                    >
+                      <MdSearch
+                        size="20"
+                        className="cr-search-form__icon-search text-secondary"
+                      />
+                      <Input
+                        autoComplete="off"
+                        type="search"
+                        className="cr-search-form__input"
+                        placeholder="Cari Alsin..."
+                        id="search"
+                        onChange={evt => this.updateSearchValue(evt)}
+                        onKeyPress={event =>
+                          this.enterPressedSearch(event, true)
+                        }
+                        style={{ width: '100%' }}
+                      />
+                    </Form>
+                    {/* </Col> */}
+                  </div>
+                  <Label
+                    style={{
+                      marginBottom: '0',
+                      fontSize: '0.7em',
+                      color: 'red',
+                    }}
+                  >
+                    *Jika data yang dicari tidak ada, untuk mengembalikan data
+                    silakan kosongkan inputan dan tekan enter
+                  </Label>
                   <thead>
                     <tr>
                       <th>Alsin tersedia yang dapat dipesan</th>
-                      {/* <td>Edit</td> */}
                     </tr>
                   </thead>
                   <Label
@@ -4546,19 +4666,106 @@ class Transaksi extends React.Component {
 
                   <CardBody>
                     <Table responsive striped id="tableBatasPerPelapak">
-                      <tbody>{renderPricing}</tbody>
+                      {pricingTodos.length !== 0 && (
+                        <tbody>{renderPricing}</tbody>
+                      )}
+                      {pricingTodos.length === 0 && (
+                        <tr>
+                          <td
+                            style={{ backgroundColor: 'white' }}
+                            colSpan="17"
+                            className="text-center"
+                          >
+                            TIDAK ADA DATA
+                          </td>
+                        </tr>
+                      )}
+                      {pricingTodos.length === 0 && (
+                        <tr>
+                          <td
+                            style={{ backgroundColor: 'white' }}
+                            colSpan="17"
+                            className="text-center"
+                          >
+                            <Card className="mb-3s">
+                              <ButtonGroup>
+                                {this.state.prevPage === null && (
+                                  <Button
+                                    name="PrevButton"
+                                    disabled={true}
+                                    value={this.state.currentPage}
+                                    onClick={() =>
+                                      this.getTransactionFormPricingPrevPage()
+                                    }
+                                  >
+                                    &#10092;
+                                  </Button>
+                                )}
+                                {this.state.prevPage !== null && (
+                                  <Button
+                                    name="PrevButton"
+                                    disabled={false}
+                                    value={this.state.currentPage}
+                                    onClick={() =>
+                                      this.getTransactionFormPricingPrevPage()
+                                    }
+                                  >
+                                    &#10092;
+                                  </Button>
+                                )}
+
+                                <input
+                                  type="text"
+                                  placeholder="Page"
+                                  disabled={true}
+                                  outline="none"
+                                  value={this.state.currentPage}
+                                  onChange={e =>
+                                    this.setState({
+                                      currentPage: e.target.value,
+                                    })
+                                  }
+                                  onKeyPress={e => this.enterPressedPage(e)}
+                                  style={{
+                                    height: '38px',
+                                    width: '75px',
+                                    textAlign: 'center',
+                                  }}
+                                />
+                                {this.state.nextPage === null && (
+                                  <Button
+                                    name="NextButton"
+                                    disabled={true}
+                                    value={this.state.currentPage}
+                                    onClick={() =>
+                                      this.getTransactionFormPricingNextPage()
+                                    }
+                                  >
+                                    &#10093;
+                                  </Button>
+                                )}
+                                {this.state.nextPage !== null && (
+                                  <Button
+                                    name="NextButton"
+                                    disabled={false}
+                                    value={this.state.currentPage}
+                                    onClick={() =>
+                                      this.getTransactionFormPricingNextPage()
+                                    }
+                                  >
+                                    &#10093;
+                                  </Button>
+                                )}
+                              </ButtonGroup>
+                            </Card>
+                          </td>
+                        </tr>
+                      )}
                     </Table>
                   </CardBody>
                   {pricingTodos.length !== 0 && (
                     <Card className="mb-3s">
                       <ButtonGroup>
-                        {/* <Button
-                        name="FirstButton"
-                        value={1}
-                        onClick={() => this.getTransactionFormPricingFirstPage()}
-                      >
-                        &#10092;&#10092;
-                      </Button> */}
                         {this.state.prevPage === null && (
                           <Button
                             name="PrevButton"
@@ -5108,8 +5315,14 @@ class Transaksi extends React.Component {
             <Button
               color="primary"
               // disabled={!isEnabledEdit}
+              disabled={
+                this.state.editPricing &&
+                this.state.editPricing.transport_cost === null
+              }
               onClick={this.toggle('nested_editAlsin')}
             >
+              {/* {console.log("COST",this.state.editPricing &&
+                this.state.editPricing.transport_cost)} */}
               Simpan Edit Alsin
             </Button>
             <Modal
