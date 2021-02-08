@@ -53,7 +53,7 @@ class Profile extends React.Component {
       resultProvinsi: [],
       resultKotaKab: [],
       resultKecamatan: [],
-      resultDesa:[],
+      resultDesa: [],
       email: '',
       resultClass: [
         {
@@ -71,6 +71,13 @@ class Profile extends React.Component {
       ],
       RMU: false,
       benihPadiInpari30: false,
+      traktorRoda2: false,
+      traktorRoda4: false,
+      pompa: false,
+      transplanter: false,
+      powerWeeder: false,
+      combineHarvester: false,
+      dryer: false,
       benihPadiInpari33: false,
       benihPadiIR64: false,
       benihPadiSintanur: false,
@@ -240,25 +247,25 @@ class Profile extends React.Component {
     this.state.result.district_id = this.state.pilihKecamatan;
   }
 
-    // untuk pilih Desa
-    setDesa(event, todo) {
-      var nama = this.state.resultDesa.find(function (element) {
-        return element.id === parseInt(event.target.value);
-      });
-  
-      this.setState(
-        {
-          pilihDesa: event.target.value,
-          namaDesa: nama.name,
-          modal_nested_parent_list_desa: false,
-          keywordList: '',
-          domisiliDisabled: false,
-        },
-        () => this.getProvinsi(this.state.currentPages, this.state.todosPerPages),
-      );
-      this.state.result.village = nama.name;
-      this.state.result.village_id = this.state.pilihDesa;
-    }
+  // untuk pilih Desa
+  setDesa(event, todo) {
+    var nama = this.state.resultDesa.find(function (element) {
+      return element.id === parseInt(event.target.value);
+    });
+
+    this.setState(
+      {
+        pilihDesa: event.target.value,
+        namaDesa: nama.name,
+        modal_nested_parent_list_desa: false,
+        keywordList: '',
+        domisiliDisabled: false,
+      },
+      () => this.getProvinsi(this.state.currentPages, this.state.todosPerPages),
+    );
+    this.state.result.village = nama.name;
+    this.state.result.village_id = this.state.pilihDesa;
+  }
 
   updateProfileUpja() {
     var url = myUrl.url_updateUpja;
@@ -300,6 +307,13 @@ class Profile extends React.Component {
     var namaKelas = document.getElementById('namaKelas');
     var simpan = document.getElementById('simpan');
     var batalsimpan = document.getElementById('batalsimpan');
+    var traktorRoda2= document.getElementById('traktorRoda2');
+    var traktorRoda4= document.getElementById('traktorRoda4');
+    var pompa= document.getElementById('pompa');
+    var transplanter= document.getElementById('transplanter');
+    var powerWeeder= document.getElementById('powerWeeder');
+    var combineHarvester= document.getElementById('combineHarvester');
+    var dryer= document.getElementById('dryer');
     console.log('ISI INPUT', input);
 
     this.setState({ loading: true });
@@ -337,6 +351,14 @@ class Profile extends React.Component {
       trainingPerbaikan: this.state.trainingPerbaikan === true ? 1 : 0,
       trainingPembengkelan: this.state.trainingPembengkelan === true ? 1 : 0,
       trainingPembibitan: this.state.trainingPembibitan === true ? 1 : 0,
+
+      traktorRoda2: this.state.traktorRoda2 === true ? 1 : 0,
+      traktorRoda4: this.state.traktorRoda4 === true ? 1 : 0,
+      pompa: this.state.pompa === true ? 1 : 0,
+      transplanter: this.state.transplanter === true ? 1 : 0,
+      powerWeeder: this.state.powerWeeder === true ? 1 : 0,
+      combineHarvester: this.state.combineHarvester === true ? 1 : 0,
+      dryer: this.state.dryer === true ? 1 : 0,
     };
 
     console.log('PAYLOAD SAVE', payload);
@@ -379,6 +401,13 @@ class Profile extends React.Component {
           namaDesa.disabled = true;
           badanHukum.disabled = true;
           RMU.disabled = true;
+          traktorRoda2.disabled = true;
+          traktorRoda4.disabled = true;
+          pompa.disabled = true;
+          transplanter.disabled = true;
+          powerWeeder.disabled = true;
+          combineHarvester.disabled = true;
+          dryer.disabled = true;
           benihPadiInpari30.disabled = true;
           benihPadiInpari33.disabled = true;
           benihPadiIR64.disabled = true;
@@ -393,7 +422,7 @@ class Profile extends React.Component {
           benihPadiRindang.disabled = true;
           // benihPadi.disabled = true;
           bibitPadi.disabled = true;
-          reparasi.disabled = true;
+          // reparasi.disabled = true;
           sukuCadang.disabled = true;
           // training.disabled = true;
           trainingOperator.disabled = true;
@@ -527,7 +556,8 @@ class Profile extends React.Component {
 
   // Get Kecamatan
   getDesa(currPage, currLimit) {
-    const urlA = myUrl.url_getVillage + '?district_id=' + this.state.pilihKecamatan;
+    const urlA =
+      myUrl.url_getVillage + '?district_id=' + this.state.pilihKecamatan;
     console.log('jalan kecamatan', urlA);
     this.setState({ loadingDomisili: true });
     const option = {
@@ -615,6 +645,41 @@ class Profile extends React.Component {
                 this.setState({ RMU: true });
               } else {
                 this.setState({ RMU: false });
+              }
+              if (this.state.result.traktorRoda2 === 1) {
+                this.setState({ traktorRoda2: true });
+              } else {
+                this.setState({ traktorRoda2: false });
+              }
+              if (this.state.result.traktorRoda4 === 1) {
+                this.setState({ traktorRoda4: true });
+              } else {
+                this.setState({ traktorRoda4: false });
+              }
+              if (this.state.result.pompa === 1) {
+                this.setState({ pompa: true });
+              } else {
+                this.setState({ pompa: false });
+              }
+              if (this.state.result.transplanter === 1) {
+                this.setState({ transplanter: true });
+              } else {
+                this.setState({ transplanter: false });
+              }
+              if (this.state.result.powerWeeder === 1) {
+                this.setState({ powerWeeder: true });
+              } else {
+                this.setState({ powerWeeder: false });
+              }
+              if (this.state.result.combineHarvester === 1) {
+                this.setState({ combineHarvester: true });
+              } else {
+                this.setState({ combineHarvester: false });
+              }
+              if (this.state.result.dryer === 1) {
+                this.setState({ dryer: true });
+              } else {
+                this.setState({ dryer: false });
               }
               if (this.state.result.benihPadiInpari33 === 1) {
                 this.setState({ benihPadiInpari33: true });
@@ -813,7 +878,7 @@ class Profile extends React.Component {
       namaProvinsi !== '' &&
       namaKotaKab !== '' &&
       namaKecamatan !== '' &&
-      namaDesa !=='' &&
+      namaDesa !== '' &&
       namaClass !== '' &&
       password !== '' &&
       confirm !== '' &&
@@ -962,6 +1027,13 @@ class Profile extends React.Component {
     var trainingPerbaikan = document.getElementById('trainingPerbaikan');
     var trainingPembengkelan = document.getElementById('trainingPembengkelan');
     var trainingPembibitan = document.getElementById('trainingPembibitan');
+    var traktorRoda2= document.getElementById('traktorRoda2');
+    var traktorRoda4= document.getElementById('traktorRoda4');
+    var pompa= document.getElementById('pompa');
+    var transplanter= document.getElementById('transplanter');
+    var powerWeeder= document.getElementById('powerWeeder');
+    var combineHarvester= document.getElementById('combineHarvester');
+    var dryer= document.getElementById('dryer');
 
     namaLengkap.disabled = false;
     namaProvinsi.style.display = 'block';
@@ -972,6 +1044,13 @@ class Profile extends React.Component {
     namaDesa.disabled = false;
     badanHukum.disabled = false;
     RMU.disabled = false;
+    traktorRoda2.disabled = false;
+    traktorRoda4.disabled = false;
+    pompa.disabled = false;
+    transplanter.disabled = false;
+    powerWeeder.disabled = false;
+    combineHarvester.disabled = false;
+    dryer.disabled = false;
     benihPadiInpari30.disabled = false;
     benihPadiInpari33.disabled = false;
     benihPadiIR64.disabled = false;
@@ -986,7 +1065,7 @@ class Profile extends React.Component {
     benihPadiRindang.disabled = false;
     // benihPadi.disabled = false;
     bibitPadi.disabled = false;
-    reparasi.disabled = false;
+    // reparasi.disabled = false;
     sukuCadang.disabled = false;
     // training.disabled = false;
     trainingOperator.disabled = false;
@@ -1035,6 +1114,13 @@ class Profile extends React.Component {
     var namaKelas = document.getElementById('namaKelas');
     var simpan = document.getElementById('simpan');
     var batalsimpan = document.getElementById('batalsimpan');
+    var traktorRoda2= document.getElementById('traktorRoda2');
+    var traktorRoda4= document.getElementById('traktorRoda4');
+    var pompa= document.getElementById('pompa');
+    var transplanter= document.getElementById('transplanter');
+    var powerWeeder= document.getElementById('powerWeeder');
+    var combineHarvester= document.getElementById('combineHarvester');
+    var dryer= document.getElementById('dryer');
 
     namaLengkap.disabled = true;
     namaProvinsi.style.display = 'none';
@@ -1045,6 +1131,13 @@ class Profile extends React.Component {
     namaDesa.disabled = true;
     badanHukum.disabled = true;
     RMU.disabled = true;
+    traktorRoda2.disabled = true;
+    traktorRoda4.disabled = true;
+    pompa.disabled = true;
+    transplanter.disabled = true;
+    powerWeeder.disabled = true;
+    combineHarvester.disabled = true;
+    dryer.disabled = true;
     benihPadiInpari30.disabled = true;
     benihPadiInpari33.disabled = true;
     benihPadiCiherang.disabled = true;
@@ -1089,6 +1182,13 @@ class Profile extends React.Component {
       sukuCadang: !sukuCadang,
       bibitPadi: !bibitPadi,
       reparasi: !reparasi,
+      traktorRoda2: !traktorRoda2,
+      traktorRoda4: !traktorRoda4,
+      pompa: !pompa,
+      transplanter: !transplanter,
+      powerWeeder: !powerWeeder,
+      combineHarvester: !combineHarvester,
+      dryer: !dryer,
     });
     namaKelas.style.display = 'none';
     simpan.style.display = 'none';
@@ -1218,7 +1318,7 @@ class Profile extends React.Component {
         );
       });
 
-      const renderDesa =
+    const renderDesa =
       desaTodos &&
       desaTodos.map((todo, i) => {
         return (
@@ -1442,9 +1542,7 @@ class Profile extends React.Component {
 
                   {/* untuk pilih Desa */}
                   <FormGroup>
-                    <Label style={{ textAlign: 'center' }}>
-                      Nama Desa:
-                    </Label>
+                    <Label style={{ textAlign: 'center' }}>Nama Desa:</Label>
                     <InputGroup style={{ float: 'right' }}>
                       <Input
                         disabled
@@ -1544,20 +1642,80 @@ class Profile extends React.Component {
                       Layanan Lainnya:
                     </Label>
                     <Row>
+                      <Col style={{ marginBottom: 0, paddingBottom: 0 }}>
+                        <FormGroup check>
+                          <Label check>
+                            <Input
+                              type="checkbox"
+                              disabled
+                              id="RMU"
+                              checked={this.state.RMU}
+                              onChange={() =>
+                                this.setState({
+                                  RMU: !this.state.RMU,
+                                })
+                              }
+                            />
+                            RMU
+                          </Label>
+                        </FormGroup>
+                        <FormGroup check>
+                          <Label check>
+                            <Input
+                              type="checkbox"
+                              disabled
+                              id="bibitPadi"
+                              checked={this.state.bibitPadi}
+                              onChange={() =>
+                                this.setState({
+                                  bibitPadi: !this.state.bibitPadi,
+                                })
+                              }
+                            />
+                            Bibit Padi
+                          </Label>
+                        </FormGroup>
+                        {/* <FormGroup check>
+                          <Label check>
+                            <Input
+                              type="checkbox"
+                              disabled
+                              id="reparasi"
+                              checked={this.state.reparasi}
+                              onChange={() =>
+                                this.setState({
+                                  reparasi: !this.state.reparasi,
+                                })
+                              }
+                            />
+                            Reparasi
+                          </Label>
+                        </FormGroup> */}
+                      </Col>
+                      <Col style={{ marginBottom: 0, paddingBottom: 0 }}>
+                        <FormGroup check>
+                          <Label check>
+                            <Input
+                              type="checkbox"
+                              disabled
+                              id="sukuCadang"
+                              checked={this.state.sukuCadang}
+                              onChange={() =>
+                                this.setState({
+                                  sukuCadang: !this.state.sukuCadang,
+                                })
+                              }
+                            />
+                            Suku Cadang
+                          </Label>
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                    <br></br>
+                    <Row>
                       <Col>
                         <FormGroup check>
                           <Label check style={{ fontWeight: 'bold' }}>
-                            {/* <Input
-                              type="checkbox"
-                              disabled
-                              id="benihPadi"
-                              checked={this.state.benihPadi}
-                              onChange={() =>
-                                this.setState({
-                                  benihPadi: !this.state.benihPadi,
-                                })
-                              }
-                            /> */}
                             Benih Padi
                           </Label>
                         </FormGroup>
@@ -1841,23 +1999,6 @@ class Profile extends React.Component {
                               Perawatan
                             </Label>
                           </FormGroup>
-                          <FormGroup check>
-                            <Label check>
-                              <Input
-                                type="checkbox"
-                                disabled
-                                id="trainingPerbaikan"
-                                checked={this.state.trainingPerbaikan}
-                                onChange={() =>
-                                  this.setState({
-                                    trainingPerbaikan: !this.state
-                                      .trainingPerbaikan,
-                                  })
-                                }
-                              />
-                              Perbaikan
-                            </Label>
-                          </FormGroup>
                         </Col>
                       </Col>
                       <Col>
@@ -1898,94 +2039,167 @@ class Profile extends React.Component {
                           </FormGroup>
                         </Col>
                       </Col>
+                      <Col>
+                        <Col>
+                          <FormGroup check>
+                            <Label check>
+                              <Input
+                                type="checkbox"
+                                disabled
+                                id="trainingPerbaikan"
+                                checked={this.state.trainingPerbaikan}
+                                onChange={() =>
+                                  this.setState({
+                                    trainingPerbaikan: !this.state
+                                      .trainingPerbaikan,
+                                  })
+                                }
+                              />
+                              Perbaikan
+                            </Label>
+                          </FormGroup>
+                        </Col>
+                      </Col>
                     </Row>
 
+                    {/* REPARASI */}
                     <Row>
-                      <Col style={{ marginBottom: 0, paddingBottom: 0 }}>
+                      <Col>
                         <FormGroup check>
-                          <Label check>
-                            <Input
-                              type="checkbox"
-                              disabled
-                              id="RMU"
-                              checked={this.state.RMU}
-                              onChange={() =>
-                                this.setState({
-                                  RMU: !this.state.RMU,
-                                })
-                              }
-                            />
-                            RMU
-                          </Label>
-                        </FormGroup>
-                        {/* <FormGroup check>
-                          <Label check>
-                            <Input
-                              type="checkbox"
-                              disabled
-                              id="benihPadi"
-                              checked={this.state.benihPadi}
-                              onChange={() =>
-                                this.setState({
-                                  benihPadi: !this.state.benihPadi,
-                                })
-                              }
-                            />
-                            Benih Padi
-                          </Label>
-                        </FormGroup> */}
-                        <FormGroup check>
-                          <Label check>
-                            <Input
-                              type="checkbox"
-                              disabled
-                              id="bibitPadi"
-                              checked={this.state.bibitPadi}
-                              onChange={() =>
-                                this.setState({
-                                  bibitPadi: !this.state.bibitPadi,
-                                })
-                              }
-                            />
-                            Bibit Padi
-                          </Label>
-                        </FormGroup>
-                        <FormGroup check>
-                          <Label check>
-                            <Input
-                              type="checkbox"
-                              disabled
-                              id="reparasi"
-                              checked={this.state.reparasi}
-                              onChange={() =>
-                                this.setState({
-                                  reparasi: !this.state.reparasi,
-                                })
-                              }
-                            />
+                          <Label check style={{ fontWeight: 'bold' }}>
                             Reparasi
                           </Label>
                         </FormGroup>
                       </Col>
-                      <Col style={{ marginBottom: 0, paddingBottom: 0 }}>
-                        <FormGroup check>
-                          <Label check>
-                            <Input
-                              type="checkbox"
-                              disabled
-                              id="sukuCadang"
-                              checked={this.state.sukuCadang}
-                              onChange={() =>
-                                this.setState({
-                                  sukuCadang: !this.state.sukuCadang,
-                                })
-                              }
-                            />
-                            Suku Cadang
-                          </Label>
-                        </FormGroup>
+                    </Row>
+                    <Row>
+                      <Col>
+                        <Col>
+                          <FormGroup check>
+                            <Label check>
+                              <Input
+                                type="checkbox"
+                                disabled
+                                id="traktorRoda2"
+                                checked={this.state.traktorRoda2}
+                                onChange={() =>
+                                  this.setState({
+                                    traktorRoda2: !this.state.traktorRoda2,
+                                  })
+                                }
+                              />
+                              Traktor Roda 2
+                            </Label>
+                          </FormGroup>
+                          <FormGroup check>
+                            <Label check>
+                              <Input
+                                type="checkbox"
+                                disabled
+                                id="traktorRoda4"
+                                checked={this.state.traktorRoda4}
+                                onChange={() =>
+                                  this.setState({
+                                    traktorRoda4: !this.state.traktorRoda4,
+                                  })
+                                }
+                              />
+                              Traktor Roda 4
+                            </Label>
+                          </FormGroup>
+                          <FormGroup check>
+                            <Label check>
+                              <Input
+                                type="checkbox"
+                                disabled
+                                id="pompa"
+                                checked={this.state.pompa}
+                                onChange={() =>
+                                  this.setState({
+                                    pompa: !this.state.pompa,
+                                  })
+                                }
+                              />
+                              Pompa
+                            </Label>
+                          </FormGroup>
+                        </Col>
+                      </Col>
+                      <Col>
+                        <Col>
+                          <FormGroup check>
+                            <Label check>
+                              <Input
+                                type="checkbox"
+                                disabled
+                                id="transplanter"
+                                checked={this.state.transplanter}
+                                onChange={() =>
+                                  this.setState({
+                                    transplanter: !this.state.transplanter,
+                                  })
+                                }
+                              />
+                              Transplanter
+                            </Label>
+                          </FormGroup>
+                          <FormGroup check>
+                            <Label check>
+                              <Input
+                                type="checkbox"
+                                disabled
+                                id="powerWeeder"
+                                checked={this.state.powerWeeder}
+                                onChange={() =>
+                                  this.setState({
+                                    powerWeeder: !this.state.powerWeeder,
+                                  })
+                                }
+                              />
+                              Power Weeder
+                            </Label>
+                          </FormGroup>
+                          <FormGroup check>
+                            <Label check>
+                              <Input
+                                type="checkbox"
+                                disabled
+                                id="combineHarvester"
+                                checked={this.state.combineHarvester}
+                                onChange={() =>
+                                  this.setState({
+                                    combineHarvester: !this.state
+                                      .combineHarvester,
+                                  })
+                                }
+                              />
+                              Combine Harvester
+                            </Label>
+                          </FormGroup>
+                        </Col>
+                      </Col>
+                      <Col>
+                        <Col>
+                          <FormGroup check>
+                            <Label check>
+                              <Input
+                                type="checkbox"
+                                disabled
+                                id="dryer"
+                                checked={this.state.dryer}
+                                onChange={() =>
+                                  this.setState({
+                                    dryer: !this.state.dryer,
+                                  })
+                                }
+                              />
+                              Dryer
+                            </Label>
+                          </FormGroup>
+                        </Col>
                       </Col>
                     </Row>
+                    {/* REPARASI */}
                   </FormGroup>
                 </Form>
               </CardBody>

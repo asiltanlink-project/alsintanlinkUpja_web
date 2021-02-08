@@ -230,6 +230,13 @@ class Transaksi extends React.Component {
       resultPricing: [],
       resultPricingDetail: [],
       page: 1,
+      resultItemSelected: [],
+      resultItemSelectedReparasi: [],
+      // resultItemSelectedBenihPadi: [],
+      // resultItemSelectedBibitPadi: [],
+      // resultItemSelectedRMU: [],
+      // resultItemSelectedSukuCadang: [],
+      // resultItemSelectedPelatihan: [],
     };
 
     if (window.localStorage.getItem('accessList')) {
@@ -792,6 +799,13 @@ class Transaksi extends React.Component {
               loading: false,
               modal_nested_parent_editAlsin: false,
               modal_nested_editAlsin: false,
+              listEditMasal: [],
+              listEditMasalRMUS: [],
+              listEditMasalReparation: [],
+              listEditMasalRice: [],
+              listEditMasalRice_Seed: [],
+              listEditMasalSparePart: [],
+              listEditMasalTraining: [],
             },
             () => this.getTransaksi(),
           );
@@ -1188,7 +1202,7 @@ class Transaksi extends React.Component {
 
   setListEditMassal = (param, param2) => {
     var listDetail = this.state.listEditMasal;
-    // console.log('EDIT BATAS BAWAH', param, '@@@', param2);
+    console.log('EDIT BATAS BAWAH', param, '@@@', param2);
 
     this.setState(
       {
@@ -1196,6 +1210,7 @@ class Transaksi extends React.Component {
       },
       () => {
         var newlistEditMasal = {
+          description: param2.description,
           alsin_type_id: this.state.addAlsin.alsin_type_id,
           cost: parseInt(this.state.addAlsin.cost),
           // total_item: parseInt(this.state.addAlsin.total_item),
@@ -1468,6 +1483,7 @@ class Transaksi extends React.Component {
       },
       () => {
         var newresultPricing = {
+          description: this.state.editAlsinList.description,
           alsin_type_id: this.state.editAlsinList.alsin_type_id,
           alsin_type_name: this.state.editAlsinList.alsin_type_name,
           cost: parseInt(this.state.editAlsinList.cost),
@@ -2956,6 +2972,7 @@ class Transaksi extends React.Component {
             resultRMUS: data.result.rmus,
             resultSparePart: data.result.spare_parts,
             resultTrainings: data.result.trainings,
+            resultItemSelected: data.result.alsin_item_selected,
 
             fisrtPage: data.result.alsins.first_page_url,
             nextPage: data.result.alsins.next_page_url,
@@ -3539,6 +3556,7 @@ class Transaksi extends React.Component {
     const listEcommerce = this.state.resultEcommerce;
     const alsinTodos = this.state.resultAlsin;
     const pricingTodos = this.state.resultPricing;
+    const pricingResultSelected = this.state.resultItemSelected;
     const pricingHeadersTodos = this.state.resultPricingHeader;
     const HeaderTodos = this.state.resultHeader;
     const pricingServiceTodos = this.state.resultPricingService;
@@ -3595,6 +3613,17 @@ class Transaksi extends React.Component {
         );
       });
 
+    const renderPricingResultSelected =
+      pricingResultSelected &&
+      pricingResultSelected.map((todo, i) => {
+        return (
+          <tr key={i}>
+            <td>{todo.vechile_code} </td>
+            <td>{todo.description}</td>
+          </tr>
+        );
+      });
+
     const renderPricing =
       pricingTodos &&
       pricingTodos.map((todo, i) => {
@@ -3621,7 +3650,9 @@ class Transaksi extends React.Component {
       pricingHeadersTodos.map((todo, i) => {
         return (
           <tr key={i}>
+            {console.log('TODOS', todo)}
             <td>{todo.alsin_type_name}</td>
+            <td>{todo.alsin_item_selected}</td>
             <td>{todo.land_area_range} Hektar</td>
           </tr>
         );
@@ -3666,18 +3697,29 @@ class Transaksi extends React.Component {
             {/* <td style={{ textAlign: 'right' }}>
               {formatter.format(todo.cost)}
             </td> */}
-            <td style={{ textAlign: 'right' }}>
-              <Button
-                color="secondary"
-                size="sm"
-                onClick={this.toggle(
-                  'nested_parent_tambahProdukReparation',
-                  todo,
-                )}
-              >
-                <MdAdd />
-              </Button>
-            </td>
+            {this.state.editPricing &&
+              this.state.editPricing.status !==
+                'Menunggu Penentuan Pembayaran' && (
+                <td style={{ textAlign: 'right' }}>
+                  {formatter.format(todo.cost)}
+                </td>
+              )}
+            {this.state.editPricing &&
+              this.state.editPricing.status ===
+                'Menunggu Penentuan Pembayaran' && (
+                <td style={{ textAlign: 'right' }}>
+                  <Button
+                    color="secondary"
+                    size="sm"
+                    onClick={this.toggle(
+                      'nested_parent_tambahProdukReparation',
+                      todo,
+                    )}
+                  >
+                    <MdAdd />
+                  </Button>
+                </td>
+              )}
           </tr>
         );
       });
@@ -3693,18 +3735,29 @@ class Transaksi extends React.Component {
             {/* <td style={{ textAlign: 'right' }}>
               {formatter.format(todo.cost)}
             </td> */}
-            <td style={{ textAlign: 'right' }}>
-              <Button
-                color="secondary"
-                size="sm"
-                onClick={this.toggle(
-                  'nested_parent_tambahProdukRice_Seed',
-                  todo,
-                )}
-              >
-                <MdAdd />
-              </Button>
-            </td>
+            {this.state.editPricing &&
+              this.state.editPricing.status !==
+                'Menunggu Penentuan Pembayaran' && (
+                <td style={{ textAlign: 'right' }}>
+                  {formatter.format(todo.cost)}
+                </td>
+              )}
+            {this.state.editPricing &&
+              this.state.editPricing.status ===
+                'Menunggu Penentuan Pembayaran' && (
+                <td style={{ textAlign: 'right' }}>
+                  <Button
+                    color="secondary"
+                    size="sm"
+                    onClick={this.toggle(
+                      'nested_parent_tambahProdukRice_Seed',
+                      todo,
+                    )}
+                  >
+                    <MdAdd />
+                  </Button>
+                </td>
+              )}
           </tr>
         );
       });
@@ -3722,15 +3775,29 @@ class Transaksi extends React.Component {
             {/* <td style={{ textAlign: 'right' }}>
               {formatter.format(todo.cost)}
             </td> */}
-            <td style={{ textAlign: 'right' }}>
-              <Button
-                color="secondary"
-                size="sm"
-                onClick={this.toggle('nested_parent_tambahProdukRice', todo)}
-              >
-                <MdAdd />
-              </Button>
-            </td>
+            {this.state.editPricing &&
+              this.state.editPricing.status !==
+                'Menunggu Penentuan Pembayaran' && (
+                <td style={{ textAlign: 'right' }}>
+                  {formatter.format(todo.cost)}
+                </td>
+              )}
+            {this.state.editPricing &&
+              this.state.editPricing.status ===
+                'Menunggu Penentuan Pembayaran' && (
+                <td style={{ textAlign: 'right' }}>
+                  <Button
+                    color="secondary"
+                    size="sm"
+                    onClick={this.toggle(
+                      'nested_parent_tambahProdukRice',
+                      todo,
+                    )}
+                  >
+                    <MdAdd />
+                  </Button>
+                </td>
+              )}
           </tr>
         );
       });
@@ -3746,15 +3813,26 @@ class Transaksi extends React.Component {
             {/* <td style={{ textAlign: 'right' }}>
               {formatter.format(todo.cost)}
             </td> */}
-            <td style={{ textAlign: 'right' }}>
-              <Button
-                color="secondary"
-                size="sm"
-                onClick={this.toggle('nested_parent_tambahProdukRMU', todo)}
-              >
-                <MdAdd />
-              </Button>
-            </td>
+            {this.state.editPricing &&
+              this.state.editPricing.status !==
+                'Menunggu Penentuan Pembayaran' && (
+                <td style={{ textAlign: 'right' }}>
+                  {formatter.format(todo.cost)}
+                </td>
+              )}
+            {this.state.editPricing &&
+              this.state.editPricing.status ===
+                'Menunggu Penentuan Pembayaran' && (
+                <td style={{ textAlign: 'right' }}>
+                  <Button
+                    color="secondary"
+                    size="sm"
+                    onClick={this.toggle('nested_parent_tambahProdukRMU', todo)}
+                  >
+                    <MdAdd />
+                  </Button>
+                </td>
+              )}
           </tr>
         );
       });
@@ -3770,18 +3848,29 @@ class Transaksi extends React.Component {
             {/* <td style={{ textAlign: 'right' }}>
               {formatter.format(todo.cost)}
             </td> */}
-            <td style={{ textAlign: 'right' }}>
-              <Button
-                color="secondary"
-                size="sm"
-                onClick={this.toggle(
-                  'nested_parent_tambahProdukSparePart',
-                  todo,
-                )}
-              >
-                <MdAdd />
-              </Button>
-            </td>
+            {this.state.editPricing &&
+              this.state.editPricing.status !==
+                'Menunggu Penentuan Pembayaran' && (
+                <td style={{ textAlign: 'right' }}>
+                  {formatter.format(todo.cost)}
+                </td>
+              )}
+            {this.state.editPricing &&
+              this.state.editPricing.status ===
+                'Menunggu Penentuan Pembayaran' && (
+                <td style={{ textAlign: 'right' }}>
+                  <Button
+                    color="secondary"
+                    size="sm"
+                    onClick={this.toggle(
+                      'nested_parent_tambahProdukSparePart',
+                      todo,
+                    )}
+                  >
+                    <MdAdd />
+                  </Button>
+                </td>
+              )}
           </tr>
         );
       });
@@ -3797,18 +3886,29 @@ class Transaksi extends React.Component {
             {/* <td style={{ textAlign: 'right' }}>
               {formatter.format(todo.cost)}
             </td> */}
-            <td style={{ textAlign: 'right' }}>
-              <Button
-                color="secondary"
-                size="sm"
-                onClick={this.toggle(
-                  'nested_parent_tambahProdukTraining',
-                  todo,
-                )}
-              >
-                <MdAdd />
-              </Button>
-            </td>
+            {this.state.editPricing &&
+              this.state.editPricing.status !==
+                'Menunggu Penentuan Pembayaran' && (
+                <td style={{ textAlign: 'right' }}>
+                  {formatter.format(todo.cost)}
+                </td>
+              )}
+            {this.state.editPricing &&
+              this.state.editPricing.status ===
+                'Menunggu Penentuan Pembayaran' && (
+                <td style={{ textAlign: 'right' }}>
+                  <Button
+                    color="secondary"
+                    size="sm"
+                    onClick={this.toggle(
+                      'nested_parent_tambahProdukTraining',
+                      todo,
+                    )}
+                  >
+                    <MdAdd />
+                  </Button>
+                </td>
+              )}
           </tr>
         );
       });
@@ -4048,7 +4148,7 @@ class Transaksi extends React.Component {
         return (
           <tr key={i}>
             <td style={{ textAlign: 'left' }}>
-              {todo.alsin_type_name}({todo.vechile_code})
+              {todo.alsin_type_name}({todo.vechile_code} - {todo.description})
             </td>
             <td style={{ textAlign: 'right' }}>
               {formatter.format(todo.cost)}
@@ -4836,6 +4936,21 @@ class Transaksi extends React.Component {
                   )}
                 </div>
               )}
+            {this.state.editPricing &&
+              this.state.editPricing.status !==
+                'Menunggu Penentuan Pembayaran' && (
+                <CardBody>
+                  <thead>
+                    <tr>
+                      <th>Alsin tersedia yang dipesan Petani</th>
+                      {/* <td>Edit</td> */}
+                    </tr>
+                  </thead>
+                  <Table responsive striped id="tableBatasPerPelapak">
+                    <tbody>{renderPricingResultSelected}</tbody>
+                  </Table>
+                </CardBody>
+              )}
             <CardBody>
               <Table responsive striped id="tableBatasPerPelapak">
                 <thead>
@@ -4881,7 +4996,16 @@ class Transaksi extends React.Component {
               <thead>
                 <tr>
                   <th style={{ width: '50%' }}>Alsin</th>
-                  <th style={{ textAlign: 'right' }}></th>
+                  {this.state.editPricing &&
+                    this.state.editPricing.status !==
+                      'Menunggu Penentuan Pembayaran' && (
+                      <th style={{ textAlign: 'right' }}>Harga</th>
+                    )}
+                  {this.state.editPricing &&
+                    this.state.editPricing.status ===
+                      'Menunggu Penentuan Pembayaran' && (
+                      <th style={{ textAlign: 'right' }}></th>
+                    )}
                   {/* <th style={{ textAlign: 'right', width: '50%' }}>Harga</th> */}
                   {/* <th>Edit</th>
                       <th>Hapus</th> */}
@@ -4914,8 +5038,14 @@ class Transaksi extends React.Component {
               <Table responsive striped id="tableBatasPerPelapak">
                 <thead>
                   <tr>
-                    <th>Alsin</th>
-                    <th style={{ textAlign: 'right' }}>Harga</th>
+                    {this.state.editPricing &&
+                      this.state.editPricing.status ===
+                        'Menunggu Penentuan Pembayaran' && <th>Alsin</th>}
+                    {this.state.editPricing &&
+                      this.state.editPricing.status ===
+                        'Menunggu Penentuan Pembayaran' && (
+                        <th style={{ textAlign: 'right' }}>Harga</th>
+                      )}
                     {/* <th>Total Item</th> */}
                     {/* <th>Edit</th> */}
                     {this.state.editPricing &&
@@ -4923,18 +5053,12 @@ class Transaksi extends React.Component {
                         'Menunggu Penentuan Pembayaran' && <th>Hapus</th>}
                   </tr>
                 </thead>
-
-                <tbody>{renderListEditMassalReparation}</tbody>
-                {this.state.listEditMasalReparation.length === 0 && (
-                  <tr>
-                    <td
-                      style={{ backgroundColor: 'white' }}
-                      colSpan="11"
-                      className="text-center"
-                    >
-                      TIDAK ADA DATA
-                    </td>
-                  </tr>
+                {this.state.editPricing &&
+                this.state.editPricing.status !==
+                  'Menunggu Penentuan Pembayaran' ? (
+                  <tbody></tbody>
+                ) : (
+                  <tbody>{renderListEditMassalReparation}</tbody>
                 )}
               </Table>
             </CardBody>
@@ -4946,7 +5070,14 @@ class Transaksi extends React.Component {
                 <tr>
                   <th style={{ width: '33.3%' }}>Nama</th>
                   <th style={{ textAlign: 'right', width: '33.3%' }}>Berat</th>
-                  <th></th>
+                  {this.state.editPricing &&
+                    this.state.editPricing.status !==
+                      'Menunggu Penentuan Pembayaran' && (
+                      <th style={{ textAlign: 'right' }}>Harga</th>
+                    )}
+                  {this.state.editPricing &&
+                    this.state.editPricing.status ===
+                      'Menunggu Penentuan Pembayaran' && <th></th>}
                   {/* <th style={{ textAlign: 'right', width: '33.3%' }}>Harga</th> */}
                   {/* <th>Edit</th>
                       <th>Hapus</th> */}
@@ -4979,8 +5110,14 @@ class Transaksi extends React.Component {
               <Table responsive striped id="tableBatasPerPelapak">
                 <thead>
                   <tr>
-                    <th>Nama</th>
-                    <th style={{ textAlign: 'right' }}>Harga</th>
+                    {this.state.editPricing &&
+                      this.state.editPricing.status ===
+                        'Menunggu Penentuan Pembayaran' && <th>Nama</th>}
+                    {this.state.editPricing &&
+                      this.state.editPricing.status ===
+                        'Menunggu Penentuan Pembayaran' && (
+                        <th style={{ textAlign: 'right' }}>Harga</th>
+                      )}
                     {/* <th>Total Item</th> */}
                     {/* <th>Edit</th> */}
                     {this.state.editPricing &&
@@ -4989,17 +5126,12 @@ class Transaksi extends React.Component {
                   </tr>
                 </thead>
 
-                <tbody>{renderListEditMassalRice_Seed}</tbody>
-                {this.state.listEditMasalRice_Seed.length === 0 && (
-                  <tr>
-                    <td
-                      style={{ backgroundColor: 'white' }}
-                      colSpan="11"
-                      className="text-center"
-                    >
-                      TIDAK ADA DATA
-                    </td>
-                  </tr>
+                {this.state.editPricing &&
+                this.state.editPricing.status !==
+                  'Menunggu Penentuan Pembayaran' ? (
+                  <tbody></tbody>
+                ) : (
+                  <tbody>{renderListEditMassalRice_Seed}</tbody>
                 )}
               </Table>
             </CardBody>
@@ -5013,7 +5145,14 @@ class Transaksi extends React.Component {
                   <th style={{ textAlign: 'right', width: '33.3%' }}>
                     Luas Lahan
                   </th>
-                  <th></th>
+                  {this.state.editPricing &&
+                    this.state.editPricing.status !==
+                      'Menunggu Penentuan Pembayaran' && (
+                      <th style={{ textAlign: 'right' }}>Harga</th>
+                    )}
+                  {this.state.editPricing &&
+                    this.state.editPricing.status ===
+                      'Menunggu Penentuan Pembayaran' && <th></th>}
                   {/* <th style={{ textAlign: 'right', width: '33.3%' }}>Harga</th> */}
                   {/* <th>Edit</th>
                       <th>Hapus</th> */}
@@ -5046,8 +5185,14 @@ class Transaksi extends React.Component {
               <Table responsive striped id="tableBatasPerPelapak">
                 <thead>
                   <tr>
-                    <th>Total Bibit</th>
-                    <th style={{ textAlign: 'right' }}>Harga</th>
+                    {this.state.editPricing &&
+                      this.state.editPricing.status ===
+                        'Menunggu Penentuan Pembayaran' && <th>Total Bibit</th>}
+                    {this.state.editPricing &&
+                      this.state.editPricing.status ===
+                        'Menunggu Penentuan Pembayaran' && (
+                        <th style={{ textAlign: 'right' }}>Harga</th>
+                      )}
                     {/* <th>Total Item</th> */}
                     {/* <th>Edit</th> */}
                     {this.state.editPricing &&
@@ -5056,17 +5201,12 @@ class Transaksi extends React.Component {
                   </tr>
                 </thead>
 
-                <tbody>{renderListEditMassalRice}</tbody>
-                {this.state.listEditMasalRice.length === 0 && (
-                  <tr>
-                    <td
-                      style={{ backgroundColor: 'white' }}
-                      colSpan="11"
-                      className="text-center"
-                    >
-                      TIDAK ADA DATA
-                    </td>
-                  </tr>
+                {this.state.editPricing &&
+                this.state.editPricing.status !==
+                  'Menunggu Penentuan Pembayaran' ? (
+                  <tbody></tbody>
+                ) : (
+                  <tbody>{renderListEditMassalRice}</tbody>
                 )}
               </Table>
             </CardBody>
@@ -5078,7 +5218,14 @@ class Transaksi extends React.Component {
                 <tr>
                   <th style={{ width: '33.3%' }}>Packaging</th>
                   <th style={{ textAlign: 'right', width: '33.3%' }}>Berat</th>
-                  <th></th>
+                  {this.state.editPricing &&
+                    this.state.editPricing.status !==
+                      'Menunggu Penentuan Pembayaran' && (
+                      <th style={{ textAlign: 'right' }}>Harga</th>
+                    )}
+                  {this.state.editPricing &&
+                    this.state.editPricing.status ===
+                      'Menunggu Penentuan Pembayaran' && <th></th>}
                   {/* <th style={{ textAlign: 'right', width: '33.3%' }}>Harga</th> */}
                   {/* <th>Edit</th>
                       <th>Hapus</th> */}
@@ -5111,8 +5258,14 @@ class Transaksi extends React.Component {
               <Table responsive striped id="tableBatasPerPelapak">
                 <thead>
                   <tr>
-                    <th>Packaging</th>
-                    <th style={{ textAlign: 'right' }}>Harga</th>
+                    {this.state.editPricing &&
+                      this.state.editPricing.status ===
+                        'Menunggu Penentuan Pembayaran' && <th>Packaging</th>}
+                    {this.state.editPricing &&
+                      this.state.editPricing.status ===
+                        'Menunggu Penentuan Pembayaran' && (
+                        <th style={{ textAlign: 'right' }}>Harga</th>
+                      )}
                     {/* <th>Total Item</th> */}
                     {/* <th>Edit</th> */}
                     {this.state.editPricing &&
@@ -5121,17 +5274,12 @@ class Transaksi extends React.Component {
                   </tr>
                 </thead>
 
-                <tbody>{renderListEditMassalRMUS}</tbody>
-                {this.state.listEditMasalRMUS.length === 0 && (
-                  <tr>
-                    <td
-                      style={{ backgroundColor: 'white' }}
-                      colSpan="11"
-                      className="text-center"
-                    >
-                      TIDAK ADA DATA
-                    </td>
-                  </tr>
+                {this.state.editPricing &&
+                this.state.editPricing.status !==
+                  'Menunggu Penentuan Pembayaran' ? (
+                  <tbody></tbody>
+                ) : (
+                  <tbody>{renderListEditMassalRMUS}</tbody>
                 )}
               </Table>
             </CardBody>
@@ -5142,7 +5290,14 @@ class Transaksi extends React.Component {
               <thead>
                 <tr>
                   <th style={{ width: '50%' }}>Nama</th>
-                  <th></th>
+                  {this.state.editPricing &&
+                    this.state.editPricing.status !==
+                      'Menunggu Penentuan Pembayaran' && (
+                      <th style={{ textAlign: 'right' }}>Harga</th>
+                    )}
+                  {this.state.editPricing &&
+                    this.state.editPricing.status ===
+                      'Menunggu Penentuan Pembayaran' && <th></th>}
                   {/* <th style={{ textAlign: 'right', width: '50%' }}>Harga</th> */}
                   {/* <th>Edit</th>
                       <th>Hapus</th> */}
@@ -5175,8 +5330,14 @@ class Transaksi extends React.Component {
               <Table responsive striped id="tableBatasPerPelapak">
                 <thead>
                   <tr>
-                    <th>Nama</th>
-                    <th style={{ textAlign: 'right' }}>Harga</th>
+                    {this.state.editPricing &&
+                      this.state.editPricing.status ===
+                        'Menunggu Penentuan Pembayaran' && <th>Nama</th>}
+                    {this.state.editPricing &&
+                      this.state.editPricing.status ===
+                        'Menunggu Penentuan Pembayaran' && (
+                        <th style={{ textAlign: 'right' }}>Harga</th>
+                      )}
                     {/* <th>Total Item</th> */}
                     {/* <th>Edit</th> */}
                     {this.state.editPricing &&
@@ -5185,17 +5346,12 @@ class Transaksi extends React.Component {
                   </tr>
                 </thead>
 
-                <tbody>{renderListEditMassalSparePart}</tbody>
-                {this.state.listEditMasalSparePart.length === 0 && (
-                  <tr>
-                    <td
-                      style={{ backgroundColor: 'white' }}
-                      colSpan="11"
-                      className="text-center"
-                    >
-                      TIDAK ADA DATA
-                    </td>
-                  </tr>
+                {this.state.editPricing &&
+                this.state.editPricing.status !==
+                  'Menunggu Penentuan Pembayaran' ? (
+                  <tbody></tbody>
+                ) : (
+                  <tbody>{renderListEditMassalSparePart}</tbody>
                 )}
               </Table>
             </CardBody>
@@ -5209,7 +5365,14 @@ class Transaksi extends React.Component {
                   <th style={{ textAlign: 'right', width: '33.3%' }}>
                     Jumlah Anggota
                   </th>
-                  <th></th>
+                  {this.state.editPricing &&
+                    this.state.editPricing.status !==
+                      'Menunggu Penentuan Pembayaran' && (
+                      <th style={{ textAlign: 'right' }}>Harga</th>
+                    )}
+                  {this.state.editPricing &&
+                    this.state.editPricing.status ===
+                      'Menunggu Penentuan Pembayaran' && <th></th>}
                   {/* <th style={{ textAlign: 'right', width: '33.3%' }}>Harga</th> */}
                   {/* <th>Edit</th>
                       <th>Hapus</th> */}
@@ -5242,8 +5405,14 @@ class Transaksi extends React.Component {
               <Table responsive striped id="tableBatasPerPelapak">
                 <thead>
                   <tr>
-                    <th>Nama</th>
-                    <th style={{ textAlign: 'right' }}>Harga</th>
+                    {this.state.editPricing &&
+                      this.state.editPricing.status ===
+                        'Menunggu Penentuan Pembayaran' && <th>Nama</th>}
+                    {this.state.editPricing &&
+                      this.state.editPricing.status ===
+                        'Menunggu Penentuan Pembayaran' && (
+                        <th style={{ textAlign: 'right' }}>Harga</th>
+                      )}
                     {/* <th>Total Item</th> */}
                     {/* <th>Edit</th> */}
                     {this.state.editPricing &&
@@ -5252,17 +5421,12 @@ class Transaksi extends React.Component {
                   </tr>
                 </thead>
 
-                <tbody>{renderListEditMassalTraining}</tbody>
-                {this.state.listEditMasalTraining.length === 0 && (
-                  <tr>
-                    <td
-                      style={{ backgroundColor: 'white' }}
-                      colSpan="11"
-                      className="text-center"
-                    >
-                      TIDAK ADA DATA
-                    </td>
-                  </tr>
+                {this.state.editPricing &&
+                this.state.editPricing.status !==
+                  'Menunggu Penentuan Pembayaran' ? (
+                  <tbody></tbody>
+                ) : (
+                  <tbody>{renderListEditMassalTraining}</tbody>
                 )}
               </Table>
             </CardBody>
