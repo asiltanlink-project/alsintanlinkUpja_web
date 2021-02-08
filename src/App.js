@@ -11,13 +11,13 @@ import { BrowserRouter, Redirect, Switch, Route } from 'react-router-dom';
 import './styles/reduction.scss';
 import * as firebase from 'firebase/app';
 const firebaseConfig = {
-  apiKey: "AIzaSyDRAM87lceSfqDqqOQMvJcMCsxKK6kt-Rg",
-  authDomain: "alsintanlink-57a0f.firebaseapp.com",
-  projectId: "alsintanlink-57a0f",
-  storageBucket: "alsintanlink-57a0f.appspot.com",
-  messagingSenderId: "321136538205",
-  appId: "1:321136538205:web:a55e5fdad405b57c9ad3b4",
-  measurementId: "G-30ZZTDD1VN"
+  apiKey: "AIzaSyDcFIDIdLSPUTGFiKvAq59ZMkwa_ldf3Mw",
+  authDomain: "alsintanlinkupja.firebaseapp.com",
+  projectId: "alsintanlinkupja",
+  storageBucket: "alsintanlinkupja.appspot.com",
+  messagingSenderId: "1042721526157",
+  appId: "1:1042721526157:web:959ff6579d5f6ad1416dc4",
+  measurementId: "G-5XPEMS1LLR"
 };
 
 // Initialize Firebase
