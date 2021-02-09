@@ -438,6 +438,8 @@ class Alsin extends React.Component {
                 loading: false,
                 loadingPage: false,
               });
+              firebase.analytics().logEvent('get Data Utama');
+
             }
           }
         }
@@ -580,6 +582,8 @@ class Alsin extends React.Component {
             },
             () => this.getAllAlsin(),
           );
+          firebase.analytics().logEvent('menghapus Data');
+
         }
       })
       .catch(err => {
@@ -658,6 +662,8 @@ class Alsin extends React.Component {
             },
             () => this.getAllAlsin(),
           );
+          firebase.analytics().logEvent('update Data');
+
         }
       })
       .catch(err => {

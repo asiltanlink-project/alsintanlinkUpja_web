@@ -10,18 +10,23 @@ import componentQueries from 'react-component-queries';
 import { BrowserRouter, Redirect, Switch, Route } from 'react-router-dom';
 import './styles/reduction.scss';
 import * as firebase from 'firebase/app';
+import 'firebase/analytics'
 const firebaseConfig = {
-  apiKey: "AIzaSyDcFIDIdLSPUTGFiKvAq59ZMkwa_ldf3Mw",
-  authDomain: "alsintanlinkupja.firebaseapp.com",
-  projectId: "alsintanlinkupja",
-  storageBucket: "alsintanlinkupja.appspot.com",
-  messagingSenderId: "1042721526157",
-  appId: "1:1042721526157:web:959ff6579d5f6ad1416dc4",
-  measurementId: "G-5XPEMS1LLR"
+  apiKey: 'AIzaSyDcFIDIdLSPUTGFiKvAq59ZMkwa_ldf3Mw',
+  authDomain: 'alsintanlinkupja.firebaseapp.com',
+  projectId: 'alsintanlinkupja',
+  storageBucket: 'alsintanlinkupja.appspot.com',
+  messagingSenderId: '1042721526157',
+  appId: '1:1042721526157:web:959ff6579d5f6ad1416dc4',
+  measurementId: 'G-5XPEMS1LLR',
 };
 
 // Initialize Firebase
+
 firebase.initializeApp(firebaseConfig);
+const analytics = firebase.analytics()
+
+
 const Dashboard = React.lazy(() => import('pages/template/DashboardPage'));
 const profileUPJA = React.lazy(() => import('pages/UPJA/Profile'));
 const alsinUPJA = React.lazy(() => import('pages/UPJA/Alsin'));
