@@ -5484,8 +5484,7 @@ class Transaksi extends React.Component {
               disabled={
                 this.state.editPricing &&
                 this.state.editPricing.transport_cost === null
-              }
-              onClick={this.toggle('nested_editAlsin')}
+              }              onClick={this.toggle('nested_editAlsin')}
             >
               {/* {console.log("COST",this.state.editPricing &&
                 this.state.editPricing.transport_cost)} */}
@@ -7378,13 +7377,84 @@ class Transaksi extends React.Component {
   }
 
   canBeSubmittedEdit() {
-    const { currentDimen, editDimen, tempEditDimen } = this.state;
-    const nilaiLama = currentDimen && currentDimen.limitpriceecommerce;
-    const nilaiBaru = editDimen && editDimen.limitpriceecommerce;
-    const nilaiTemp = tempEditDimen && tempEditDimen[0];
+    const {
+      editPricing,
+      listEditMasal,
+      listEditMasalReparation,
+      listEditMasalTraining,
+      listEditMasalSparePart,
+      listEditMasalRMUS,
+      listEditMasalRice_Seed,
+      listEditMasalRice,
+      resultReparation,
+      resultRiceSeeds,
+      resultRices,
+      resultRMUS,
+      resultSparePart,
+      resultTrainings,
+      resultPricing,
+    } = this.state;
+    var transportCost = editPricing && editPricing.transport_cost;
+    var listAlsin = listEditMasal && listEditMasal;
+    var listReparation = listEditMasalReparation && listEditMasalReparation;
+    var listTraining = listEditMasalTraining && listEditMasalTraining;
+    var listSparePart = listEditMasalSparePart && listEditMasalSparePart;
+    var listRMUS = listEditMasalRMUS && listEditMasalRMUS;
+    var listRiceSeed = listEditMasalRice_Seed && listEditMasalRice_Seed;
+    var listRice = listEditMasalRice && listEditMasalRice;
+
+    console.log('ISINYA ALSIN', listAlsin, 'ALSIN SAVE', resultPricing);
+    console.log('ISINYA RMUS', listRMUS, 'RMUS SAVE', resultRMUS);
+    console.log(
+      'ISINYA TRAINING',
+      listTraining,
+      'TRAINING SAVE',
+      resultTrainings,
+    );
+    console.log(
+      'ISINYA REPARATION',
+      listReparation,
+      'REPARATION SAVE',
+      resultReparation,
+    );
+    console.log('ISINYA RICE', listRice, 'RICE SAVE', resultRices);
+    console.log(
+      'ISINYA RICE SEED',
+      listRiceSeed,
+      'RICE SEED SAVE',
+      resultRiceSeeds,
+    );
+    console.log(
+      'ISINYA SPARE PART',
+      listSparePart,
+      'SPARE PART SAVE',
+      resultSparePart,
+      'VALIDASI',
+      listSparePart.length === 0,
+      resultSparePart === 0,
+    );
+
+    console.log(
+      'VALIDASI',
+      transportCost !== null &&
+        (listAlsin.length !== 0 || resultPricing.length !== 0) &&
+        (listReparation.length !== 0 || resultReparation.length !== 0) &&
+        (listTraining.length !== 0 || resultTrainings.length !== 0) &&
+        (listSparePart.length !== 0 || resultSparePart !== 0) &&
+        (listRMUS.length !== 0 || resultRMUS !== 0) &&
+        (listRiceSeed.length !== 0 || resultRiceSeeds.length !== 0) &&
+        (listRice.length !== 0 || resultRices !== 0),
+    );
 
     return (
-      nilaiLama === nilaiBaru && nilaiBaru !== '' && nilaiBaru !== nilaiTemp
+      transportCost !== null &&
+      (listAlsin.length !== 0 || resultPricing.length !== 0) &&
+      (listReparation.length !== 0 || resultReparation.length !== 0) &&
+      (listTraining.length !== 0 || resultTrainings.length !== 0) &&
+      (listSparePart.length !== 0 || resultSparePart !== 0) &&
+      (listRMUS.length !== 0 || resultRMUS !== 0) &&
+      (listRiceSeed.length !== 0 || resultRiceSeeds.length !== 0) &&
+      (listRice.length !== 0 || resultRices !== 0)
     );
   }
 
