@@ -93,7 +93,7 @@ class Profile extends React.Component {
       benihPadiRindang: false,
       // benihPadi: false,
       bibitPadi: false,
-      reparasi: false,
+      // reparasi: false,
       sukuCadang: false,
       training: false,
       trainingOperator: false,
@@ -298,7 +298,7 @@ class Profile extends React.Component {
     var benihPadiRindang = document.getElementById('benihPadiRindang');
     // var benihPadi = document.getElementById('benihPadi');
     var bibitPadi = document.getElementById('bibitPadi');
-    var reparasi = document.getElementById('reparasi');
+    // var reparasi = document.getElementById('reparasi');
     var sukuCadang = document.getElementById('sukuCadang');
     // var training = document.getElementById('training');
     var trainingOperator = document.getElementById('trainingOperator');
@@ -345,7 +345,7 @@ class Profile extends React.Component {
       benihPadiRindang: this.state.benihPadiRindang === true ? 1 : 0,
       // rice_seed: this.state.benihPadi === true ? 1 : 0,
       rice: this.state.bibitPadi === true ? 1 : 0,
-      reparation: this.state.reparasi === true ? 1 : 0,
+      // reparation: this.state.reparasi === true ? 1 : 0,
       spare_part: this.state.sukuCadang === true ? 1 : 0,
       // training: this.state.training === true ? 1 : 0,
       trainingOperator: this.state.trainingOperator === true ? 1 : 0,
@@ -788,11 +788,11 @@ class Profile extends React.Component {
               } else {
                 this.setState({ trainingPembibitan: false });
               }
-              if (this.state.result.reparation === 1) {
-                this.setState({ reparasi: true });
-              } else {
-                this.setState({ reparasi: false });
-              }
+              // if (this.state.result.reparation === 1) {
+              //   this.setState({ reparasi: true });
+              // } else {
+              //   this.setState({ reparasi: false });
+              // }
             },
           );
         }
@@ -1022,7 +1022,7 @@ class Profile extends React.Component {
     var benihPadiRindang = document.getElementById('benihPadiRindang');
     // var benihPadi = document.getElementById('benihPadi');
     var bibitPadi = document.getElementById('bibitPadi');
-    var reparasi = document.getElementById('reparasi');
+    // var reparasi = document.getElementById('reparasi');
     var sukuCadang = document.getElementById('sukuCadang');
     // var training = document.getElementById('training');
     var trainingOperator = document.getElementById('trainingOperator');
@@ -1106,7 +1106,7 @@ class Profile extends React.Component {
     var benihPadiSintanur = document.getElementById('benihPadiSintanur');
     // var benihPadi = document.getElementById('benihPadi');
     var bibitPadi = document.getElementById('bibitPadi');
-    var reparasi = document.getElementById('reparasi');
+    // var reparasi = document.getElementById('reparasi');
     var sukuCadang = document.getElementById('sukuCadang');
     // var training = document.getElementById('training');
     var trainingOperator = document.getElementById('trainingOperator');
@@ -1155,7 +1155,7 @@ class Profile extends React.Component {
     benihPadiRindang.disabled = true;
     // benihPadi.disabled = true;
     bibitPadi.disabled = true;
-    reparasi.disabled = true;
+    // reparasi.disabled = true;
     sukuCadang.disabled = true;
     // training.disabled = true;
     trainingOperator.disabled = true;
@@ -1184,7 +1184,7 @@ class Profile extends React.Component {
       RMU: !RMU,
       sukuCadang: !sukuCadang,
       bibitPadi: !bibitPadi,
-      reparasi: !reparasi,
+      // reparasi: !reparasi,
       traktorRoda2: !traktorRoda2,
       traktorRoda4: !traktorRoda4,
       pompa: !pompa,
