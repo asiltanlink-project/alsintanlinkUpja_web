@@ -5484,10 +5484,11 @@ class Transaksi extends React.Component {
               disabled={
                 this.state.editPricing &&
                 this.state.editPricing.transport_cost === null
-              }              onClick={this.toggle('nested_editAlsin')}
+              }
+              onClick={this.toggle('nested_editAlsin')}
             >
-              {/* {console.log("COST",this.state.editPricing &&
-                this.state.editPricing.transport_cost)} */}
+              {console.log("COST PRICING",this.state.editPricing &&
+                this.state.editPricing.transport_cost)}
               Simpan Edit Alsin
             </Button>
             <Modal
