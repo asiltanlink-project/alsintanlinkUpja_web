@@ -40,6 +40,9 @@ import * as firebase from 'firebase/app';
 import { Scrollbar } from 'react-scrollbars-custom';
 import LoadingSpinner from 'pages/LoadingSpinner.js';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import 'firebase/analytics'
+const analytics = firebase.analytics()
+
 class AlsinDetail extends React.Component {
   constructor(props) {
     super(props);
@@ -635,6 +638,7 @@ class AlsinDetail extends React.Component {
       window.location.replace('/login');
     }
     this.getListbypagingAlsin();
+    analytics.logEvent("Halaman Alsin Detail")
   }
 
   //modal batas standar

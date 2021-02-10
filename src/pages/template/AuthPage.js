@@ -7,6 +7,9 @@ import NotificationSystem from 'react-notification-system';
 import { NOTIFICATION_SYSTEM_STYLE } from 'utils/constants';
 
 import { MdLoyalty } from 'react-icons/md';
+import * as firebase from 'firebase/app';
+// import 'firebase/analytics'
+// const analytics = firebase.analytics()
 
 class AuthPage extends React.Component {
   handleAuthState = authState => {
@@ -114,6 +117,7 @@ class AuthPage extends React.Component {
           alignItems: 'center',
         }}
       >
+        {/* {analytics.logEvent('Halaman Login')} */}
         <Col md={6} lg={4}>
           <Card body>
             <NotificationSystem

@@ -40,7 +40,9 @@ import { Scrollbar } from 'react-scrollbars-custom';
 import LoadingSpinner from 'pages/template/LoadingSpinner.js';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 
+
 const perf = firebase.performance();
+const analytics = firebase.analytics()
 
 const initialCurrentDimen = {
   procod: '',
@@ -438,7 +440,7 @@ class Alsin extends React.Component {
                 loading: false,
                 loadingPage: false,
               });
-              firebase.analytics().logEvent('get Data Utama');
+              // firebase.analytics().logEvent('get Data Utama');
 
             }
           }
@@ -582,7 +584,7 @@ class Alsin extends React.Component {
             },
             () => this.getAllAlsin(),
           );
-          firebase.analytics().logEvent('menghapus Data');
+          // firebase.analytics().logEvent('menghapus Data');
 
         }
       })
@@ -662,7 +664,7 @@ class Alsin extends React.Component {
             },
             () => this.getAllAlsin(),
           );
-          firebase.analytics().logEvent('update Data');
+          // firebase.analytics().logEvent('update Data');
 
         }
       })
@@ -1821,6 +1823,7 @@ class Alsin extends React.Component {
     // this.getPelapak(this.state.currentPages, this.state.todosPerPages);
     this.getAllAlsinType();
     this.getAllAlsin();
+    analytics.logEvent("Halaman Alsin")
   }
 
   // KHUSUS STATE MODAL

@@ -39,7 +39,8 @@ import * as myUrl from '../urlLink';
 import * as firebase from 'firebase/app';
 import LoadingSpinner from 'pages/template/LoadingSpinner.js';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
-
+import 'firebase/analytics';
+const analytics = firebase.analytics();
 const perf = firebase.performance();
 
 const initialCurrentDimen = {
@@ -2242,6 +2243,7 @@ class Transaksi extends React.Component {
     // this.getPelapak(this.state.currentPages, this.state.todosPerPages);
     this.getAllAlsinType();
     this.getTransaksi();
+    analytics.logEvent('Halaman Transaksi');
   }
 
   // KHUSUS STATE MODAL

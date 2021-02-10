@@ -31,6 +31,8 @@ import { NOTIFICATION_SYSTEM_STYLE } from 'utils/constants';
 import CardBody from 'reactstrap/lib/CardBody';
 import { doc } from 'prettier';
 import CardFooter from 'reactstrap/lib/CardFooter';
+import * as firebase from 'firebase/app';
+const analytics = firebase.analytics()
 
 const colors = getThemeColors();
 
@@ -307,13 +309,13 @@ class Profile extends React.Component {
     var namaKelas = document.getElementById('namaKelas');
     var simpan = document.getElementById('simpan');
     var batalsimpan = document.getElementById('batalsimpan');
-    var traktorRoda2= document.getElementById('traktorRoda2');
-    var traktorRoda4= document.getElementById('traktorRoda4');
-    var pompa= document.getElementById('pompa');
-    var transplanter= document.getElementById('transplanter');
-    var powerWeeder= document.getElementById('powerWeeder');
-    var combineHarvester= document.getElementById('combineHarvester');
-    var dryer= document.getElementById('dryer');
+    var traktorRoda2 = document.getElementById('traktorRoda2');
+    var traktorRoda4 = document.getElementById('traktorRoda4');
+    var pompa = document.getElementById('pompa');
+    var transplanter = document.getElementById('transplanter');
+    var powerWeeder = document.getElementById('powerWeeder');
+    var combineHarvester = document.getElementById('combineHarvester');
+    var dryer = document.getElementById('dryer');
     console.log('ISI INPUT', input);
 
     this.setState({ loading: true });
@@ -807,6 +809,7 @@ class Profile extends React.Component {
   componentDidMount() {
     this.getListbyPaging();
     this.getProvinsi();
+    analytics.logEvent('Halaman Profile');
   }
 
   state = {
@@ -1027,13 +1030,13 @@ class Profile extends React.Component {
     var trainingPerbaikan = document.getElementById('trainingPerbaikan');
     var trainingPembengkelan = document.getElementById('trainingPembengkelan');
     var trainingPembibitan = document.getElementById('trainingPembibitan');
-    var traktorRoda2= document.getElementById('traktorRoda2');
-    var traktorRoda4= document.getElementById('traktorRoda4');
-    var pompa= document.getElementById('pompa');
-    var transplanter= document.getElementById('transplanter');
-    var powerWeeder= document.getElementById('powerWeeder');
-    var combineHarvester= document.getElementById('combineHarvester');
-    var dryer= document.getElementById('dryer');
+    var traktorRoda2 = document.getElementById('traktorRoda2');
+    var traktorRoda4 = document.getElementById('traktorRoda4');
+    var pompa = document.getElementById('pompa');
+    var transplanter = document.getElementById('transplanter');
+    var powerWeeder = document.getElementById('powerWeeder');
+    var combineHarvester = document.getElementById('combineHarvester');
+    var dryer = document.getElementById('dryer');
 
     namaLengkap.disabled = false;
     namaProvinsi.style.display = 'block';
@@ -1114,13 +1117,13 @@ class Profile extends React.Component {
     var namaKelas = document.getElementById('namaKelas');
     var simpan = document.getElementById('simpan');
     var batalsimpan = document.getElementById('batalsimpan');
-    var traktorRoda2= document.getElementById('traktorRoda2');
-    var traktorRoda4= document.getElementById('traktorRoda4');
-    var pompa= document.getElementById('pompa');
-    var transplanter= document.getElementById('transplanter');
-    var powerWeeder= document.getElementById('powerWeeder');
-    var combineHarvester= document.getElementById('combineHarvester');
-    var dryer= document.getElementById('dryer');
+    var traktorRoda2 = document.getElementById('traktorRoda2');
+    var traktorRoda4 = document.getElementById('traktorRoda4');
+    var pompa = document.getElementById('pompa');
+    var transplanter = document.getElementById('transplanter');
+    var powerWeeder = document.getElementById('powerWeeder');
+    var combineHarvester = document.getElementById('combineHarvester');
+    var dryer = document.getElementById('dryer');
 
     namaLengkap.disabled = true;
     namaProvinsi.style.display = 'none';

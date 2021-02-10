@@ -39,6 +39,8 @@ import * as firebase from 'firebase/app';
 import { Scrollbar } from 'react-scrollbars-custom';
 import LoadingSpinner from 'pages/template/LoadingSpinner.js';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import 'firebase/analytics';
+const analytics = firebase.analytics();
 
 const perf = firebase.performance();
 
@@ -1836,6 +1838,7 @@ class Transaksi extends React.Component {
     // this.getPelapak(this.state.currentPages, this.state.todosPerPages);
     this.getAllAlsinType();
     this.getTransaksi();
+    analytics.logEvent('Halaman Transaksi Detail');
   }
 
   // KHUSUS STATE MODAL
@@ -3019,7 +3022,8 @@ class Transaksi extends React.Component {
                   <tbody>
                     {!this.state.resultRices && loadingAlsin === true ? (
                       <LoadingSpinner status={4} />
-                    ) : loadingAlsin === false && this.state.resultRices.length === 0 ? (
+                    ) : loadingAlsin === false &&
+                      this.state.resultRices.length === 0 ? (
                       (
                         <tr>
                           <td
@@ -3058,7 +3062,8 @@ class Transaksi extends React.Component {
                   <tbody>
                     {!this.state.resultRMUS && loadingAlsin === true ? (
                       <LoadingSpinner status={4} />
-                    ) : loadingAlsin === false && this.state.resultRMUS.length === 0 ? (
+                    ) : loadingAlsin === false &&
+                      this.state.resultRMUS.length === 0 ? (
                       (
                         <tr>
                           <td
