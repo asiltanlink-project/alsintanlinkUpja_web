@@ -40,8 +40,8 @@ import * as firebase from 'firebase/app';
 import { Scrollbar } from 'react-scrollbars-custom';
 import LoadingSpinner from 'pages/LoadingSpinner.js';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
-import 'firebase/analytics'
-const analytics = firebase.analytics()
+import 'firebase/analytics';
+const analytics = firebase.analytics();
 
 class AlsinDetail extends React.Component {
   constructor(props) {
@@ -131,6 +131,14 @@ class AlsinDetail extends React.Component {
   //set Current Page
   paginationButton(event, flag, maxPage = 0) {
     var currPage = Number(event.target.value);
+    console.log(
+      'LOLOS',
+      currPage,
+      flag,
+      currPage,
+      maxPage,
+      currPage + flag <= maxPage,
+    );
     if (currPage + flag > 0 && currPage + flag <= maxPage) {
       this.setState(
         {
@@ -138,11 +146,7 @@ class AlsinDetail extends React.Component {
           realCurrentPage: currPage + flag,
         },
         () => {
-          this.getListbyPaging(
-            this.state.currentPage,
-            this.state.todosPerPage,
-            this.state.keyword,
-          );
+          this.getListbypagingAlsin(this.state.currentPage);
         },
       );
     }
@@ -269,9 +273,14 @@ class AlsinDetail extends React.Component {
   // get data upja
   getListbypagingAlsin(currPage, currLimit) {
     var alsin_type_id = this.state.alsin_type_id;
-    const url = myUrl.url_getAllAlsinDetail + '?alsin_type_id=' + alsin_type_id;
+    const url =
+      myUrl.url_getAllAlsinDetail +
+      '?alsin_type_id=' +
+      alsin_type_id +
+      '&page=' +
+      currPage;
     var token = window.localStorage.getItem('tokenCookies');
-    // console.log('URL GET LIST', url);
+    console.log('URL GET LIST ALSIN DETAIL', url);
 
     this.setState({ loadingPage: true });
     // console.log("offset", offset, "currLimit", currLimit);
@@ -304,10 +313,10 @@ class AlsinDetail extends React.Component {
         }
       })
       .then(data => {
-        // console.log('DATA ALSIN DETAIL', data);
+        console.log('DATA ALSIN DETAIL', data);
         var status = data.status;
         var resultAlsin = data.result.alsin;
-        var resultAlsinItem = data.result.alsin_items;
+        var resultAlsinItem = data.result.alsin_items.data;
         var message = data.result.message;
         if (status === 0) {
           this.showNotification(message, 'error');
@@ -320,6 +329,7 @@ class AlsinDetail extends React.Component {
             resultAlsin: resultAlsin,
             resultAlsinItem: resultAlsinItem,
             loadingPage: false,
+            maxPage: data.result.max_page,
           });
         }
       })
@@ -637,8 +647,8 @@ class AlsinDetail extends React.Component {
     if (token === '' || token === null || token === undefined) {
       window.location.replace('/login');
     }
-    this.getListbypagingAlsin();
-    analytics.logEvent("Halaman Alsin Detail")
+    this.getListbypagingAlsin(this.state.currentPage);
+    analytics.logEvent('Halaman Alsin Detail');
   }
 
   //modal batas standar
@@ -986,7 +996,7 @@ class AlsinDetail extends React.Component {
       alsin_item_id: updateHeaderData.alsin_item_id,
       vechile_code: updateHeaderData.vechile_code,
       status: updateHeaderData.status || this.state.pilihStatus,
-      description: updateHeaderData.description
+      description: updateHeaderData.description,
     };
 
     console.log('PAYLOAD EDIT ALSIN ITEM', payload);
@@ -1657,13 +1667,32 @@ class AlsinDetail extends React.Component {
 
                 <Table responsive striped id="tableUtama">
                   <thead>
-                    <tr>
-                      <th>No. Reg Alsin</th>
-                      <th>Deskripsi</th>
-                      <th>Status</th>
-                      <th>Edit</th>
-                      <th>Hapus</th>
-                    </tr>
+                    {
+                      <tr>
+                        <td
+                          colSpan="6"
+                          className="text-right"
+                          style={{ border: 'none' }}
+                        >
+                          <Label style={{ width: '50%', textAlign: 'right' }}>
+                            {' '}
+                            {'Halaman : ' +
+                              this.state.realCurrentPage +
+                              ' / ' +
+                              this.state.maxPage}
+                          </Label>
+                        </td>
+                      </tr>
+                    }
+                    {
+                      <tr>
+                        <th>No. Reg Alsin</th>
+                        <th>Deskripsi</th>
+                        <th>Status</th>
+                        <th>Edit</th>
+                        <th>Hapus</th>
+                      </tr>
+                    }
                   </thead>
 
                   <tbody>
@@ -1690,6 +1719,69 @@ class AlsinDetail extends React.Component {
                     )}
                   </tbody>
                 </Table>
+              </CardBody>
+              <CardBody>
+                <Row>
+                  <Col md="9" sm="12" xs="12"></Col>
+                  <Col md="3" sm="12" xs="12">
+                    <Card className="mb-3s">
+                      <ButtonGroup>
+                        <Button
+                          name="FirstButton"
+                          value={1}
+                          onClick={e =>
+                            this.paginationButton(e, 0, this.state.maxPage)
+                          }
+                        >
+                          &#10092;&#10092;
+                        </Button>
+                        <Button
+                          name="PrevButton"
+                          value={this.state.currentPage}
+                          onClick={e =>
+                            this.paginationButton(e, -1, this.state.maxPage)
+                          }
+                        >
+                          &#10092;
+                        </Button>
+                        <input
+                          type="text"
+                          placeholder="Page"
+                          disabled={true}
+                          outline="none"
+                          value={this.state.currentPage}
+                          onChange={e =>
+                            this.setState({ currentPage: e.target.value })
+                          }
+                          onKeyPress={e => this.enterPressedPage(e)}
+                          style={{
+                            height: '38px',
+                            width: '75px',
+                            textAlign: 'center',
+                          }}
+                        />
+                        <Button
+                          name="NextButton"
+                          value={this.state.currentPage}
+                          onClick={e =>
+                            this.paginationButton(e, 1, this.state.maxPage)
+                          }
+                        >
+                          &#10093;
+                        </Button>
+                        <Button
+                          name="LastButton"
+                          value={this.state.maxPage}
+                          onClick={e =>
+                            this.paginationButton(e, 0, this.state.maxPage)
+                          }
+                        >
+                          &#10093;&#10093;
+                        </Button>
+                      </ButtonGroup>
+                    </Card>
+                  </Col>
+                </Row>
               </CardBody>
             </Card>
           </Col>

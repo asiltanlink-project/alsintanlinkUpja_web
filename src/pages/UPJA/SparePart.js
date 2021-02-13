@@ -39,8 +39,8 @@ import * as firebase from 'firebase/app';
 import { Scrollbar } from 'react-scrollbars-custom';
 import LoadingSpinner from 'pages/template/LoadingSpinner.js';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
-import 'firebase/analytics'
-const analytics = firebase.analytics()
+import 'firebase/analytics';
+const analytics = firebase.analytics();
 
 const perf = firebase.performance();
 
@@ -178,11 +178,7 @@ class Sparepart extends React.Component {
           realCurrentPage: currPage + flag,
         },
         () => {
-          this.getListbyPaging(
-            this.state.currentPage,
-            this.state.todosPerPage,
-            this.state.keyword,
-          );
+          this.getAllAlsin(this.state.currentPage);
         },
       );
     }
@@ -1724,8 +1720,8 @@ class Sparepart extends React.Component {
     }
   };
 
-  getAllAlsin() {
-    const url = myUrl.url_showAllSparePart;
+  getAllAlsin(currentPage) {
+    const url = myUrl.url_showAllSparePart + '?page=' + currentPage;
     var token = window.localStorage.getItem('tokenCookies');
     // console.log('URL GET LIST', url);
 
@@ -1769,8 +1765,9 @@ class Sparepart extends React.Component {
         } else {
           this.showNotification('Data ditemukan!', 'info');
           this.setState({
-            resultAlsin: result,
+            resultAlsin: result.data,
             loadingAlsinPage: false,
+            maxPage: data.result.max_page,
           });
         }
       })
@@ -1990,8 +1987,8 @@ class Sparepart extends React.Component {
     // this.getListPerOutlet(this.state.currentPage, this.state.todosPerPage);
     // this.getPelapak(this.state.currentPages, this.state.todosPerPages);
     this.getAllAlsinSparePart();
-    this.getAllAlsin();
-    analytics.logEvent("Halaman Spare Part")
+    this.getAllAlsin(this.state.currentPage);
+    analytics.logEvent('Halaman Spare Part');
   }
 
   // KHUSUS STATE MODAL
@@ -2953,26 +2950,47 @@ class Sparepart extends React.Component {
                 <Col sm={7} style={{ textAlign: 'right', paddingRight: 0 }}></Col>
               </CardHeader> */}
               <CardBody>
-                <Row>
-                  <Col style={{ textAlign: 'right' }}>
-                    <Button
-                      color="primary"
-                      onClick={this.toggle('nested_parent_editMassal')}
-                    >
-                      Tambah Suku Cadang
-                    </Button>
-                  </Col>
-                </Row>
                 <Table responsive striped id="tableUtama">
                   <thead>
-                    <tr>
-                      {/* <th>Alsin</th> */}
-                      {/* <th>Harga</th> */}
-                      <th style={{ textAlign: 'left' }}>Suku Cadang</th>
-                      <th style={{ textAlign: 'left' }}>Tipe Suku Cadang</th>
-                      <th style={{ textAlign: 'left' }}>Alsin</th>
-                      <th>Hapus</th>
-                    </tr>
+                    {
+                      <tr>
+                        <td style={{ borderTop: 'none', paddingBottom: 0 }}>
+                          <Row>
+                            <Col style={{ textAlign: 'left' }}>
+                              <Button
+                                color="primary"
+                                onClick={this.toggle(
+                                  'nested_parent_editMassal',
+                                )}
+                              >
+                                Tambah Suku Cadang
+                              </Button>
+                            </Col>
+                          </Row>
+                        </td>
+                        <td
+                          colSpan="6"
+                          className="text-right"
+                          style={{ border: 'none', paddingBottom: 0 }}
+                        >
+                          <Label style={{ width: '50%', textAlign: 'right' }}>
+                            {' '}
+                            {'Halaman : ' +
+                              this.state.realCurrentPage +
+                              ' / ' +
+                              this.state.maxPage}
+                          </Label>
+                        </td>
+                      </tr>
+                    }
+                    {
+                      <tr>
+                        <th style={{ textAlign: 'left' }}>Suku Cadang</th>
+                        <th style={{ textAlign: 'left' }}>Tipe Suku Cadang</th>
+                        <th style={{ textAlign: 'left' }}>Alsin</th>
+                        <th>Hapus</th>
+                      </tr>
+                    }
                   </thead>
                   <tbody>
                     {alsinTodos.length === 0 && loadingAlsinPage === true ? (
@@ -2998,48 +3016,69 @@ class Sparepart extends React.Component {
                   </tbody>
                 </Table>
               </CardBody>
-              {/* <CardBody>
+              <CardBody>
                 <Row>
-                  <Col>
-                    <Button
-                      name="firstPageHeader"
-                      value={1}
-                      onClick={() => this.actionPage('firstPageHeader')}
-                      disabled={
-                        this.state.result.length === 0 ||
-                        this.state.result === null
-                      }
-                    >
-                      First &#10092;&#10092;
-                    </Button>
-                    <ButtonGroup style={{ float: 'right' }}>
-                      <Button
-                        name="prevPageHeader"
-                        style={{ float: 'right' }}
-                        onClick={() => this.actionPage('prevPageHeader')}
-                        disabled={
-                          this.state.result.length === 0 ||
-                          this.state.result === null
-                        }
-                      >
-                        Prev &#10092;
-                      </Button>
-                      <Button
-                        name="nextPageHeader"
-                        // value={this.state.currentPage}
-                        style={{ float: 'right' }}
-                        onClick={() => this.actionPage('nextPageHeader')}
-                        disabled={
-                          this.state.result.length === 0 ||
-                          this.state.result === null
-                        }
-                      >
-                        Next &#10093;
-                      </Button>
-                    </ButtonGroup>
+                  <Col md="9" sm="12" xs="12"></Col>
+                  <Col md="3" sm="12" xs="12">
+                    <Card className="mb-3s">
+                      <ButtonGroup>
+                        <Button
+                          name="FirstButton"
+                          value={1}
+                          onClick={e =>
+                            this.paginationButton(e, 0, this.state.maxPage)
+                          }
+                        >
+                          &#10092;&#10092;
+                        </Button>
+                        <Button
+                          name="PrevButton"
+                          value={this.state.currentPage}
+                          onClick={e =>
+                            this.paginationButton(e, -1, this.state.maxPage)
+                          }
+                        >
+                          &#10092;
+                        </Button>
+                        <input
+                          type="text"
+                          placeholder="Page"
+                          disabled={true}
+                          outline="none"
+                          value={this.state.currentPage}
+                          onChange={e =>
+                            this.setState({ currentPage: e.target.value })
+                          }
+                          onKeyPress={e => this.enterPressedPage(e)}
+                          style={{
+                            height: '38px',
+                            width: '75px',
+                            textAlign: 'center',
+                          }}
+                        />
+                        <Button
+                          name="NextButton"
+                          value={this.state.currentPage}
+                          onClick={e =>
+                            this.paginationButton(e, 1, this.state.maxPage)
+                          }
+                        >
+                          &#10093;
+                        </Button>
+                        <Button
+                          name="LastButton"
+                          value={this.state.maxPage}
+                          onClick={e =>
+                            this.paginationButton(e, 0, this.state.maxPage)
+                          }
+                        >
+                          &#10093;&#10093;
+                        </Button>
+                      </ButtonGroup>
+                    </Card>
                   </Col>
                 </Row>
-              </CardBody> */}
+              </CardBody>
             </Card>
           </Col>
         </Row>

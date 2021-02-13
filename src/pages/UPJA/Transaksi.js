@@ -283,28 +283,26 @@ class Transaksi extends React.Component {
 
   //set Current Page
   paginationButton(event, flag, maxPage = 0) {
-    // var currPage = Number(event.target.value);
-    // if (currPage + flag > 0 && currPage + flag <= maxPage) {
-    //   this.setState(
-    //     {
-    //       currentPage: currPage + flag,
-    //       realCurrentPage: currPage + flag,
-    //     },
-    //     () => {
-    //       this.getTransactionFormPricing(
-    //         this.state.currentPage,
-    //         this.state.todosPerPage,
-    //         this.state.keyword,
-    //       );
-    //     },
-    //   );
-    // }
-    this
-      .getTransactionFormPricing
-      //         this.state.currentPage,
-      //         this.state.todosPerPage,
-      //         this.state.keyword,
-      ();
+    var currPage = Number(event.target.value);
+    console.log(
+      'LOLOS',
+      currPage,
+      flag,
+      currPage,
+      maxPage,
+      currPage + flag <= maxPage,
+    );
+    if (currPage + flag > 0 && currPage + flag <= maxPage) {
+      this.setState(
+        {
+          currentPage: currPage + flag,
+          realCurrentPage: currPage + flag,
+        },
+        () => {
+          this.getTransaksi(this.state.currentPage);
+        },
+      );
+    }
   }
 
   paginationButtonList(event, flag, maxPages = 0) {
@@ -2110,9 +2108,14 @@ class Transaksi extends React.Component {
     }
   };
 
-  getTransaksi() {
+  getTransaksi(currentPage) {
     var pilihStatus = this.state.pilihStatus;
-    const url = myUrl.url_getTransaksi + '?status=' + pilihStatus;
+    const url =
+      myUrl.url_getTransaksi +
+      '?status=' +
+      pilihStatus +
+      '&page=' +
+      currentPage;
     var token = window.localStorage.getItem('tokenCookies');
     console.log('URL GET LIST TRANSAKSI', url);
 
@@ -2150,19 +2153,20 @@ class Transaksi extends React.Component {
         var status = data.status;
         var result = data.result.transactions;
         var message = data.result.message;
-        console.log('Data Transaksi', data);
+        console.log('Data keseluruhan Transaksi', data);
         if (status === 0) {
           this.showNotification(message, 'error');
         } else {
           this.showNotification('Data ditemukan!', 'info');
           this.setState({
-            resultAlsin: result,
+            resultAlsin: result.data,
             loadingAlsin: false,
+            maxPage: data.result.max_page,
           });
         }
       })
       .catch(err => {
-        // console.log('ERRORNYA', err);
+        console.log('ERRORNYA', err);
         this.showNotification('Error ke server!', 'error');
         this.setState({
           loadingAlsin: false,
@@ -2242,7 +2246,7 @@ class Transaksi extends React.Component {
     // this.getListPerOutlet(this.state.currentPage, this.state.todosPerPage);
     // this.getPelapak(this.state.currentPages, this.state.todosPerPages);
     this.getAllAlsinType();
-    this.getTransaksi();
+    this.getTransaksi(this.state.currentPage);
     analytics.logEvent('Halaman Transaksi');
   }
 
@@ -4417,34 +4421,67 @@ class Transaksi extends React.Component {
                 </Col>
               </CardHeader>
               <CardBody>
-                <Row>
-                  <Col style={{ textAlign: 'left' }}>
-                    <Label style={{ marginBottom: 0, fontWeight: 'bold' }}>
-                      Status:&nbsp;
-                    </Label>
-                    {this.state.namaStatusSave === undefined ? (
-                      <Label style={{ marginBottom: 0, fontWeight: 'bold' }}>
-                        Semuanya
-                      </Label>
-                    ) : (
-                      <Label style={{ marginBottom: 0, fontWeight: 'bold' }}>
-                        {this.state.namaStatusSave}
-                      </Label>
-                    )}
-                  </Col>
-                </Row>
                 <Table responsive striped id="tableUtama">
                   <thead>
-                    <tr>
-                      <th>Farmer</th>
-                      <th>Harga Transport</th>
-                      <th>Total Harga</th>
-                      <th>Waktu Order</th>
-                      <th>Waktu Kirim</th>
-                      <th>Status</th>
-                      <th>Edit</th>
-                      {/* <th>Hapus</th> */}
-                    </tr>
+                    {
+                      <tr>
+                        <td style={{borderTop:'none'}}>
+                          <Row>
+                            <Col style={{ textAlign: 'left' }}>
+                              <Label
+                                style={{ marginBottom: 0, fontWeight: 'bold' }}
+                              >
+                                Status:&nbsp;
+                              </Label>
+                              {this.state.namaStatusSave === undefined ? (
+                                <Label
+                                  style={{
+                                    marginBottom: 0,
+                                    fontWeight: 'bold',
+                                  }}
+                                >
+                                  Semuanya
+                                </Label>
+                              ) : (
+                                <Label
+                                  style={{
+                                    marginBottom: 0,
+                                    fontWeight: 'bold',
+                                  }}
+                                >
+                                  {this.state.namaStatusSave}
+                                </Label>
+                              )}
+                            </Col>
+                          </Row>
+                        </td>
+                        <td
+                          colSpan="6"
+                          className="text-right"
+                          style={{ border: 'none' }}
+                        >
+                          <Label style={{ width: '50%', textAlign: 'right' }}>
+                            {' '}
+                            {'Halaman : ' +
+                              this.state.realCurrentPage +
+                              ' / ' +
+                              this.state.maxPage}
+                          </Label>
+                        </td>
+                      </tr>
+                    }
+                    {
+                      <tr>
+                        <th>Farmer</th>
+                        <th>Harga Transport</th>
+                        <th>Total Harga</th>
+                        <th>Waktu Order</th>
+                        <th>Waktu Kirim</th>
+                        <th>Status</th>
+                        <th>Edit</th>
+                        {/* <th>Hapus</th> */}
+                      </tr>
+                    }
                   </thead>
                   <tbody>
                     {!alsinTodos && loadingAlsin === true ? (
@@ -4470,48 +4507,69 @@ class Transaksi extends React.Component {
                   </tbody>
                 </Table>
               </CardBody>
-              {/* <CardBody>
+              <CardBody>
                 <Row>
-                  <Col>
-                    <Button
-                      name="firstPageHeader"
-                      value={1}
-                      onClick={() => this.actionPage('firstPageHeader')}
-                      disabled={
-                        this.state.result.length === 0 ||
-                        this.state.result === null
-                      }
-                    >
-                      First &#10092;&#10092;
-                    </Button>
-                    <ButtonGroup style={{ float: 'right' }}>
-                      <Button
-                        name="prevPageHeader"
-                        style={{ float: 'right' }}
-                        onClick={() => this.actionPage('prevPageHeader')}
-                        disabled={
-                          this.state.result.length === 0 ||
-                          this.state.result === null
-                        }
-                      >
-                        Prev &#10092;
-                      </Button>
-                      <Button
-                        name="nextPageHeader"
-                        // value={this.state.currentPage}
-                        style={{ float: 'right' }}
-                        onClick={() => this.actionPage('nextPageHeader')}
-                        disabled={
-                          this.state.result.length === 0 ||
-                          this.state.result === null
-                        }
-                      >
-                        Next &#10093;
-                      </Button>
-                    </ButtonGroup>
+                  <Col md="9" sm="12" xs="12"></Col>
+                  <Col md="3" sm="12" xs="12">
+                    <Card className="mb-3s">
+                      <ButtonGroup>
+                        <Button
+                          name="FirstButton"
+                          value={1}
+                          onClick={e =>
+                            this.paginationButton(e, 0, this.state.maxPage)
+                          }
+                        >
+                          &#10092;&#10092;
+                        </Button>
+                        <Button
+                          name="PrevButton"
+                          value={this.state.currentPage}
+                          onClick={e =>
+                            this.paginationButton(e, -1, this.state.maxPage)
+                          }
+                        >
+                          &#10092;
+                        </Button>
+                        <input
+                          type="text"
+                          placeholder="Page"
+                          disabled={true}
+                          outline="none"
+                          value={this.state.currentPage}
+                          onChange={e =>
+                            this.setState({ currentPage: e.target.value })
+                          }
+                          onKeyPress={e => this.enterPressedPage(e)}
+                          style={{
+                            height: '38px',
+                            width: '75px',
+                            textAlign: 'center',
+                          }}
+                        />
+                        <Button
+                          name="NextButton"
+                          value={this.state.currentPage}
+                          onClick={e =>
+                            this.paginationButton(e, 1, this.state.maxPage)
+                          }
+                        >
+                          &#10093;
+                        </Button>
+                        <Button
+                          name="LastButton"
+                          value={this.state.maxPage}
+                          onClick={e =>
+                            this.paginationButton(e, 0, this.state.maxPage)
+                          }
+                        >
+                          &#10093;&#10093;
+                        </Button>
+                      </ButtonGroup>
+                    </Card>
                   </Col>
                 </Row>
-              </CardBody> */}
+              </CardBody>
             </Card>
           </Col>
         </Row>
@@ -5487,8 +5545,10 @@ class Transaksi extends React.Component {
               }
               onClick={this.toggle('nested_editAlsin')}
             >
-              {console.log("COST PRICING",this.state.editPricing &&
-                this.state.editPricing.transport_cost)}
+              {console.log(
+                'COST PRICING',
+                this.state.editPricing && this.state.editPricing.transport_cost,
+              )}
               Simpan Edit Alsin
             </Button>
             <Modal
