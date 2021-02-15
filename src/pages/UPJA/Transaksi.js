@@ -2978,7 +2978,7 @@ class Transaksi extends React.Component {
             resultRMUS: data.result.rmus,
             resultSparePart: data.result.spare_parts,
             resultTrainings: data.result.trainings,
-            resultItemSelected: data.result.alsin_item_selected,
+            resultItemSelected: data.result.alsin_item_selected.data,
 
             fisrtPage: data.result.alsins.first_page_url,
             nextPage: data.result.alsins.next_page_url,
