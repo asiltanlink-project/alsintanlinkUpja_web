@@ -2750,7 +2750,7 @@ class Transaksi extends React.Component {
           {
             namaStatus: '',
           },
-          () => this.getTransaksi(),
+          () => this.getTransaksi(this.state.currentPage),
         ),
     );
   }
