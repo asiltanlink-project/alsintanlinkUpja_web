@@ -80,6 +80,8 @@ class Profile extends React.Component {
       powerWeeder: false,
       combineHarvester: false,
       dryer: false,
+      powerThresher: false,
+      cornSheller: false,
       benihPadiInpari33: false,
       benihPadiIR64: false,
       benihPadiSintanur: false,
@@ -316,6 +318,8 @@ class Profile extends React.Component {
     var powerWeeder = document.getElementById('powerWeeder');
     var combineHarvester = document.getElementById('combineHarvester');
     var dryer = document.getElementById('dryer');
+    var powerThresher = document.getElementById('powerThresher');
+    var cornSheller = document.getElementById('cornSheller');
     console.log('ISI INPUT', input);
 
     this.setState({ loading: true });
@@ -361,6 +365,8 @@ class Profile extends React.Component {
       powerWeeder: this.state.powerWeeder === true ? 1 : 0,
       combineHarvester: this.state.combineHarvester === true ? 1 : 0,
       dryer: this.state.dryer === true ? 1 : 0,
+      powerThresher: this.state.powerThresher === true ? 1 : 0,
+      cornSheller: this.state.cornSheller === true ? 1 : 0,
     };
 
     console.log('PAYLOAD SAVE', payload);
@@ -410,6 +416,8 @@ class Profile extends React.Component {
           powerWeeder.disabled = true;
           combineHarvester.disabled = true;
           dryer.disabled = true;
+          powerThresher.disabled = true;
+          cornSheller.disabled = true;
           benihPadiInpari30.disabled = true;
           benihPadiInpari33.disabled = true;
           benihPadiIR64.disabled = true;
@@ -682,6 +690,16 @@ class Profile extends React.Component {
                 this.setState({ dryer: true });
               } else {
                 this.setState({ dryer: false });
+              }
+              if (this.state.result.powerThresher === 1) {
+                this.setState({ powerThresher: true });
+              } else {
+                this.setState({ powerThresher: false });
+              }
+              if (this.state.result.cornSheller === 1) {
+                this.setState({ cornSheller: true });
+              } else {
+                this.setState({ cornSheller: false });
               }
               if (this.state.result.benihPadiInpari33 === 1) {
                 this.setState({ benihPadiInpari33: true });
@@ -1037,7 +1055,8 @@ class Profile extends React.Component {
     var powerWeeder = document.getElementById('powerWeeder');
     var combineHarvester = document.getElementById('combineHarvester');
     var dryer = document.getElementById('dryer');
-
+    var powerThresher = document.getElementById('powerThresher');
+    var cornSheller = document.getElementById('cornSheller');
     namaLengkap.disabled = false;
     namaProvinsi.style.display = 'block';
     namaKotaKab.style.display = 'block';
@@ -1054,6 +1073,8 @@ class Profile extends React.Component {
     powerWeeder.disabled = false;
     combineHarvester.disabled = false;
     dryer.disabled = false;
+    powerThresher.disabled = false;
+    cornSheller.disabled = false;
     benihPadiInpari30.disabled = false;
     benihPadiInpari33.disabled = false;
     benihPadiIR64.disabled = false;
@@ -1124,7 +1145,8 @@ class Profile extends React.Component {
     var powerWeeder = document.getElementById('powerWeeder');
     var combineHarvester = document.getElementById('combineHarvester');
     var dryer = document.getElementById('dryer');
-
+    var powerThresher = document.getElementById('powerThresher');
+    var cornSheller = document.getElementById('cornSheller');
     namaLengkap.disabled = true;
     namaProvinsi.style.display = 'none';
     namaKotaKab.style.display = 'none';
@@ -1141,6 +1163,8 @@ class Profile extends React.Component {
     powerWeeder.disabled = true;
     combineHarvester.disabled = true;
     dryer.disabled = true;
+    powerThresher.disabled = true;
+    cornSheller.disabled = true;
     benihPadiInpari30.disabled = true;
     benihPadiInpari33.disabled = true;
     benihPadiCiherang.disabled = true;
@@ -1192,6 +1216,8 @@ class Profile extends React.Component {
       powerWeeder: !powerWeeder,
       combineHarvester: !combineHarvester,
       dryer: !dryer,
+      powerThresher: !powerThresher,
+      cornSheller: !cornSheller,
     });
     namaKelas.style.display = 'none';
     simpan.style.display = 'none';
@@ -2181,7 +2207,7 @@ class Profile extends React.Component {
                           </FormGroup>
                         </Col>
                       </Col>
-                      <Col>
+
                         <Col>
                           <FormGroup check>
                             <Label check>
@@ -2199,7 +2225,38 @@ class Profile extends React.Component {
                               Dryer
                             </Label>
                           </FormGroup>
-                        </Col>
+                          <FormGroup check>
+                            <Label check>
+                              <Input
+                                type="checkbox"
+                                disabled
+                                id="powerThresher"
+                                checked={this.state.powerThresher}
+                                onChange={() =>
+                                  this.setState({
+                                    powerThresher: !this.state.powerThresher,
+                                  })
+                                }
+                              />
+                              Power Thresher
+                            </Label>
+                          </FormGroup>
+                          <FormGroup check>
+                            <Label check>
+                              <Input
+                                type="checkbox"
+                                disabled
+                                id="cornSheller"
+                                checked={this.state.cornSheller}
+                                onChange={() =>
+                                  this.setState({
+                                    cornSheller: !this.state.cornSheller,
+                                  })
+                                }
+                              />
+                              Corn Sheller
+                            </Label>
+                          </FormGroup>
                       </Col>
                     </Row>
                     {/* REPARASI */}
