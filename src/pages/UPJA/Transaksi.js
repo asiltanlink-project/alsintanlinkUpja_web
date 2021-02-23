@@ -3624,6 +3624,8 @@ class Transaksi extends React.Component {
       pricingResultSelected.map((todo, i) => {
         return (
           <tr key={i}>
+            {console.log('TODOS ITEM SELECTED', todo)}
+            <td>{todo.alsin_type_name} </td>
             <td>{todo.vechile_code} </td>
             <td>{todo.description}</td>
           </tr>
@@ -4153,6 +4155,7 @@ class Transaksi extends React.Component {
       this.state.listEditMasal.map((todo, i) => {
         return (
           <tr key={i}>
+            {console.log('TODOS LIST EDIT MASSAL', todo)}
             <td style={{ textAlign: 'left' }}>
               {todo.alsin_type_name}({todo.vechile_code} - {todo.description})
             </td>
@@ -4425,7 +4428,7 @@ class Transaksi extends React.Component {
                   <thead>
                     {
                       <tr>
-                        <td style={{borderTop:'none'}}>
+                        <td style={{ borderTop: 'none' }}>
                           <Row>
                             <Col style={{ textAlign: 'left' }}>
                               <Label
@@ -4685,7 +4688,26 @@ class Transaksi extends React.Component {
                 >
                   Pesanan yang dipesan Farmer (
                   {HeaderTodos && HeaderTodos.farmer_name} -{' '}
-                  {HeaderTodos && HeaderTodos.phone_number})
+                  {
+                    <Label
+                      style={{
+                        marginBottom: 0,
+                        fontWeight: 'bold',
+                        cursor: 'pointer',
+                        textDecoration: 'underline',
+                        color: '#009688',
+                      }}
+                      onClick={() => {
+                        window.open(
+                          'https://wa.me/' +
+                            (HeaderTodos && HeaderTodos.phone_number),
+                        );
+                      }}
+                    >
+                      {HeaderTodos && HeaderTodos.phone_number}
+                    </Label>
+                  }
+                  )
                 </th>
                 {/* <td>Edit</td> */}
               </tr>
@@ -7464,48 +7486,48 @@ class Transaksi extends React.Component {
     var listRiceSeed = listEditMasalRice_Seed && listEditMasalRice_Seed;
     var listRice = listEditMasalRice && listEditMasalRice;
 
-    console.log('ISINYA ALSIN', listAlsin, 'ALSIN SAVE', resultPricing);
-    console.log('ISINYA RMUS', listRMUS, 'RMUS SAVE', resultRMUS);
-    console.log(
-      'ISINYA TRAINING',
-      listTraining,
-      'TRAINING SAVE',
-      resultTrainings,
-    );
-    console.log(
-      'ISINYA REPARATION',
-      listReparation,
-      'REPARATION SAVE',
-      resultReparation,
-    );
-    console.log('ISINYA RICE', listRice, 'RICE SAVE', resultRices);
-    console.log(
-      'ISINYA RICE SEED',
-      listRiceSeed,
-      'RICE SEED SAVE',
-      resultRiceSeeds,
-    );
-    console.log(
-      'ISINYA SPARE PART',
-      listSparePart,
-      'SPARE PART SAVE',
-      resultSparePart,
-      'VALIDASI',
-      listSparePart.length === 0,
-      resultSparePart === 0,
-    );
+    // console.log('ISINYA ALSIN', listAlsin, 'ALSIN SAVE', resultPricing);
+    // console.log('ISINYA RMUS', listRMUS, 'RMUS SAVE', resultRMUS);
+    // console.log(
+    //   'ISINYA TRAINING',
+    //   listTraining,
+    //   'TRAINING SAVE',
+    //   resultTrainings,
+    // );
+    // console.log(
+    //   'ISINYA REPARATION',
+    //   listReparation,
+    //   'REPARATION SAVE',
+    //   resultReparation,
+    // );
+    // console.log('ISINYA RICE', listRice, 'RICE SAVE', resultRices);
+    // console.log(
+    //   'ISINYA RICE SEED',
+    //   listRiceSeed,
+    //   'RICE SEED SAVE',
+    //   resultRiceSeeds,
+    // );
+    // console.log(
+    //   'ISINYA SPARE PART',
+    //   listSparePart,
+    //   'SPARE PART SAVE',
+    //   resultSparePart,
+    //   'VALIDASI',
+    //   listSparePart.length === 0,
+    //   resultSparePart === 0,
+    // );
 
-    console.log(
-      'VALIDASI',
-      transportCost !== null &&
-        (listAlsin.length !== 0 || resultPricing.length !== 0) &&
-        (listReparation.length !== 0 || resultReparation.length !== 0) &&
-        (listTraining.length !== 0 || resultTrainings.length !== 0) &&
-        (listSparePart.length !== 0 || resultSparePart !== 0) &&
-        (listRMUS.length !== 0 || resultRMUS !== 0) &&
-        (listRiceSeed.length !== 0 || resultRiceSeeds.length !== 0) &&
-        (listRice.length !== 0 || resultRices !== 0),
-    );
+    // console.log(
+    //   'VALIDASI',
+    //   transportCost !== null &&
+    //     (listAlsin.length !== 0 || resultPricing.length !== 0) &&
+    //     (listReparation.length !== 0 || resultReparation.length !== 0) &&
+    //     (listTraining.length !== 0 || resultTrainings.length !== 0) &&
+    //     (listSparePart.length !== 0 || resultSparePart !== 0) &&
+    //     (listRMUS.length !== 0 || resultRMUS !== 0) &&
+    //     (listRiceSeed.length !== 0 || resultRiceSeeds.length !== 0) &&
+    //     (listRice.length !== 0 || resultRices !== 0),
+    // );
 
     return (
       transportCost !== null &&
