@@ -105,7 +105,7 @@ class Transaksi extends React.Component {
       ecommerceDetail: [],
       listEditMasal: [],
       listEditMasalReparation: [],
-      listEditMasalRMUS: [],
+      listEditMasalRMU: [],
       listEditMasalSparePart: [],
       listEditMasalRice: [],
       listEditMasalRice_Seed: [],
@@ -116,7 +116,7 @@ class Transaksi extends React.Component {
       resultReparation: [],
       resultRiceSeeds: [],
       resultRices: [],
-      resultRMUS: [],
+      resultRMU: [],
       resultSparePart: [],
       resultTrainings: [],
       resultPeriode: [
@@ -738,7 +738,7 @@ class Transaksi extends React.Component {
       alsins: this.state.resultalsin,
       // alsin_items: this.state.resultalsinItem,
       alsin_items: this.state.listEditMasal,
-      rmus: this.state.resultRMUS,
+      rmus: this.state.resultRMU,
       rice: this.state.resultRices,
       training: this.state.resultTrainings,
       reparation: this.state.resultReparation,
@@ -799,7 +799,7 @@ class Transaksi extends React.Component {
               modal_nested_parent_editAlsin: false,
               modal_nested_editAlsin: false,
               listEditMasal: [],
-              listEditMasalRMUS: [],
+              listEditMasalRMU: [],
               listEditMasalReparation: [],
               listEditMasalRice: [],
               listEditMasalRice_Seed: [],
@@ -1241,17 +1241,17 @@ class Transaksi extends React.Component {
     );
   };
 
-  setListEditMassalRMUS = (param, param2) => {
-    var listDetail = this.state.listEditMasalRMUS;
+  setListEditMassalRMU = (param, param2) => {
+    var listDetail = this.state.listEditMasalRMU;
     console.log('EDIT BATAS BAWAH', param, '@@@', param2);
     console.log('TERPANGGIL');
 
     this.setState(
       {
-        listEditMasalRMUS: listDetail,
+        listEditMasalRMU: listDetail,
       },
       () => {
-        var newlistEditMasalRMUS = {
+        var newlistEditMasalRMU = {
           alsin_type_id: this.state.addAlsin.alsin_type_id,
           cost: parseInt(this.state.addAlsin.cost),
           id: this.state.addAlsin.id,
@@ -1265,7 +1265,7 @@ class Transaksi extends React.Component {
 
         if (newArr.length > 0) {
         } else {
-          listDetail.push(newlistEditMasalRMUS);
+          listDetail.push(newlistEditMasalRMU);
         }
 
         console.log('LIST EDIT MASAL', newArr);
@@ -1439,17 +1439,31 @@ class Transaksi extends React.Component {
       },
       () => {
         var newlistEditMasalRice = {
-          alsin_type_id: this.state.addAlsin.alsin_type_id,
-          cost: parseInt(this.state.addAlsin.cost),
-          total_rice: parseInt(this.state.addAlsin.total_rice),
-          id: this.state.addAlsin.id,
-          alsin_type_name: this.state.addAlsin.alsin_type_name,
-          vechile_code: this.state.addAlsin.vechile_code,
-          alsin_item_id: this.state.addAlsin.alsin_item_id,
-          land_area_range: parseInt(this.state.addAlsin.land_area_range),
+          alsin_type_id: this.state.addAlsinRice.alsin_type_id,
+          cost: isNaN(this.state.addAlsinRice.cost)
+            ? null
+            : parseInt(this.state.addAlsinRice.cost),
+          total_rice:
+            this.state.addAlsinRice.total_rice === ''
+              ? null
+              : parseInt(this.state.addAlsinRice.total_rice),
+          id: this.state.addAlsinRice.id,
+          alsin_type_name: this.state.addAlsinRice.alsin_type_name,
+          vechile_code: this.state.addAlsinRice.vechile_code,
+          alsin_item_id: this.state.addAlsinRice.alsin_item_id,
+          land_area_range: parseInt(this.state.addAlsinRice.land_area_range),
         };
 
-        console.log('PARAM ID', param2.id, 'ITEM ID', listDetail);
+        console.log(
+          'PARAM ID',
+          param2.id,
+          'newlistedit',
+          isNaN(newlistEditMasalRice.total_rice),
+          'nilai total rice',
+          this.state.addAlsinRice.total_rice,
+          'nilai harga',
+          isNaN(this.state.addAlsinRice.cost),
+        );
 
         var newArr = listDetail.filter(
           item => item.id === param2.id,
@@ -1516,7 +1530,7 @@ class Transaksi extends React.Component {
     this.setState(
       {
         listEditMasal: [],
-        listEditMasalRMUS: [],
+        listEditMasalRMU: [],
         listEditMasalReparation: [],
         listEditMasalRice: [],
         listEditMasalRice_Seed: [],
@@ -2415,7 +2429,9 @@ class Transaksi extends React.Component {
     }
   };
 
+
   toggle = (modalType, todo) => () => {
+    // console.log("MODAL TYPE", modalType);
     if (!modalType) {
       return this.setState({
         modal: !this.state.modal,
@@ -2475,7 +2491,7 @@ class Transaksi extends React.Component {
       // console.log('LOG 1');
       this.setState({
         [`modal_${modalType}`]: !this.state[`modal_${modalType}`],
-        addAlsin: todo,
+        addAlsinRice: {...todo},
       });
     } else if (modalType === 'nested_parent_tambahProdukRMU') {
       // console.log('LOG 1');
@@ -2672,11 +2688,11 @@ class Transaksi extends React.Component {
   }
 
   deleteListEditMassalRMU(todo) {
-    var newArr = this.state.listEditMasalRMUS.filter(
+    var newArr = this.state.listEditMasalRMU.filter(
       item => item.id !== todo.id,
     );
     this.setState({
-      listEditMasalRMUS: newArr,
+      listEditMasalRMU: newArr,
     });
   }
 
@@ -2892,7 +2908,7 @@ class Transaksi extends React.Component {
             resultReparation: data.result.reparations,
             resultRiceSeeds: data.result.rice_seeds,
             resultRices: data.result.rices,
-            resultRMUS: data.result.rmus,
+            resultRMU: data.result.rmus,
             resultSparePart: data.result.spare_parts,
             resultTrainings: data.result.trainings,
 
@@ -2975,7 +2991,7 @@ class Transaksi extends React.Component {
             resultReparation: data.result.reparations,
             resultRiceSeeds: data.result.rice_seeds,
             resultRices: data.result.rices,
-            resultRMUS: data.result.rmus,
+            resultRMU: data.result.rmus,
             resultSparePart: data.result.spare_parts,
             resultTrainings: data.result.trainings,
             resultItemSelected: data.result.alsin_item_selected.data,
@@ -3052,7 +3068,7 @@ class Transaksi extends React.Component {
             resultReparation: data.result.reparations,
             resultRiceSeeds: data.result.rice_seeds,
             resultRices: data.result.rices,
-            resultRMUS: data.result.rmus,
+            resultRMU: data.result.rmus,
             resultSparePart: data.result.spare_parts,
             resultTrainings: data.result.trainings,
 
@@ -3128,7 +3144,7 @@ class Transaksi extends React.Component {
             resultReparation: data.result.reparations,
             resultRiceSeeds: data.result.rice_seeds,
             resultRices: data.result.rices,
-            resultRMUS: data.result.rmus,
+            resultRMU: data.result.rmus,
             resultSparePart: data.result.spare_parts,
             resultTrainings: data.result.trainings,
 
@@ -3204,7 +3220,7 @@ class Transaksi extends React.Component {
             resultReparation: data.result.reparations,
             resultRiceSeeds: data.result.rice_seeds,
             resultRices: data.result.rices,
-            resultRMUS: data.result.rmus,
+            resultRMU: data.result.rmus,
             resultSparePart: data.result.spare_parts,
             resultTrainings: data.result.trainings,
 
@@ -3775,8 +3791,12 @@ class Transaksi extends React.Component {
       this.state.resultRices.map((todo, i) => {
         return (
           <tr key={i}>
-            {/* {console.log('TOTAL REPARATION', todo)} */}
-            <td>{todo.total_rice}</td>
+            {console.log('TOTAL RICE', todo.total_rice)}
+            {todo.total_rice === null ? (
+              <td>-</td>
+            ) : (
+              <td>{todo.total_rice} Dapok</td>
+            )}
             <td style={{ textAlign: 'right' }}>
               {todo.land_area_range} Hektar
             </td>
@@ -3811,8 +3831,8 @@ class Transaksi extends React.Component {
       });
 
     const renderTodosRMU =
-      this.state.resultRMUS &&
-      this.state.resultRMUS.map((todo, i) => {
+      this.state.resultRMU &&
+      this.state.resultRMU.map((todo, i) => {
         return (
           <tr key={i}>
             {/* {console.log('TOTAL REPARATION', todo)} */}
@@ -4263,9 +4283,9 @@ class Transaksi extends React.Component {
           </tr>
         );
       });
-    const renderListEditMassalRMUS =
-      this.state.listEditMasalRMUS &&
-      this.state.listEditMasalRMUS.map((todo, i) => {
+    const renderListEditMassalRMU =
+      this.state.listEditMasalRMU &&
+      this.state.listEditMasalRMU.map((todo, i) => {
         return (
           <tr key={i}>
             <td style={{ textAlign: 'left' }}>{todo.packaging}</td>
@@ -4322,10 +4342,23 @@ class Transaksi extends React.Component {
       this.state.listEditMasalRice.map((todo, i) => {
         return (
           <tr key={i}>
-            <td style={{ textAlign: 'left' }}>{todo.total_rice}</td>
+            {isNaN(todo.total_rice) ? (
+              <td>-</td>
+            ) : (
+              <td style={{ textAlign: 'left' }}>{todo.total_rice} Dapok</td>
+            )}
+
             <td style={{ textAlign: 'right' }}>
-              {formatter.format(todo.cost)}
+              {todo.land_area_range} Hektar
             </td>
+            {isNaN(todo.cost) ? (
+              <td style={{ textAlign: 'right' }}>-</td>
+            ) : (
+              <td style={{ textAlign: 'right' }}>
+                {formatter.format(todo.cost)}
+              </td>
+            )}
+
             {this.state.editPricing &&
               this.state.editPricing.status ===
                 'Menunggu Penentuan Pembayaran' && (
@@ -4687,7 +4720,8 @@ class Transaksi extends React.Component {
                 // untuk gmaps
                 >
                   Pesanan yang dipesan Farmer (
-                  {HeaderTodos && HeaderTodos.farmer_name} -{' '}
+                  {HeaderTodos && HeaderTodos.farmer_name}
+                  {/* -{' '}
                   {
                     <Label
                       style={{
@@ -4706,7 +4740,7 @@ class Transaksi extends React.Component {
                     >
                       {HeaderTodos && HeaderTodos.phone_number}
                     </Label>
-                  }
+                  } */}
                   )
                 </th>
                 {/* <td>Edit</td> */}
@@ -5273,8 +5307,14 @@ class Transaksi extends React.Component {
                     {this.state.editPricing &&
                       this.state.editPricing.status ===
                         'Menunggu Penentuan Pembayaran' && (
+                        <th style={{ textAlign: 'right' }}>Luas Lahan</th>
+                      )}
+                    {this.state.editPricing &&
+                      this.state.editPricing.status ===
+                        'Menunggu Penentuan Pembayaran' && (
                         <th style={{ textAlign: 'right' }}>Harga</th>
                       )}
+
                     {/* <th>Total Item</th> */}
                     {/* <th>Edit</th> */}
                     {this.state.editPricing &&
@@ -5292,9 +5332,9 @@ class Transaksi extends React.Component {
                 )}
               </Table>
             </CardBody>
-            {/* Untuk Other Service RMUS */}
+            {/* Untuk Other Service RMU */}
             <hr style={{ borderWidth: 'medium' }}></hr>
-            <Label style={{ fontWeight: 'bold' }}>Table RMUS</Label>
+            <Label style={{ fontWeight: 'bold' }}>Table RMU</Label>
             <Table responsive striped id="tableUtama">
               <thead>
                 <tr>
@@ -5314,10 +5354,10 @@ class Transaksi extends React.Component {
                 </tr>
               </thead>
               <tbody>
-                {!this.state.resultRMUS && loadingAlsin === true ? (
+                {!this.state.resultRMU && loadingAlsin === true ? (
                   <LoadingSpinner status={4} />
                 ) : loadingAlsin === false &&
-                  this.state.resultRMUS.length === 0 ? (
+                  this.state.resultRMU.length === 0 ? (
                   (
                     <tr>
                       <td
@@ -5329,7 +5369,7 @@ class Transaksi extends React.Component {
                       </td>
                     </tr>
                   ) || <LoadingSpinner status={4} />
-                ) : loadingAlsin === true && this.state.resultRMUS ? (
+                ) : loadingAlsin === true && this.state.resultRMU ? (
                   <LoadingSpinner status={4} />
                 ) : (
                   renderTodosRMU
@@ -5361,7 +5401,7 @@ class Transaksi extends React.Component {
                   'Menunggu Penentuan Pembayaran' ? (
                   <tbody></tbody>
                 ) : (
-                  <tbody>{renderListEditMassalRMUS}</tbody>
+                  <tbody>{renderListEditMassalRMU}</tbody>
                 )}
               </Table>
             </CardBody>
@@ -6536,7 +6576,7 @@ class Transaksi extends React.Component {
           className={this.props.className}
         >
           <ModalHeader toggle={this.toggle('nested_parent_tambahProdukRice')}>
-            Tambah Alsin
+            Tambah Bibit Padi
           </ModalHeader>
           <ModalBody>
             <Form onSubmit={e => e.preventDefault()}>
@@ -6546,26 +6586,34 @@ class Transaksi extends React.Component {
                   type="text"
                   disabled={true}
                   value={
-                    this.state.addAlsin && this.state.addAlsin.land_area_range
+                    this.state.addAlsinRice && this.state.addAlsinRice.land_area_range
                   }
                 ></Input>
                 <Label>Total Bibit</Label>
-                <Input
-                  type="number"
-                  min={0}
-                  name="total_rice"
-                  style={{ textAlign: 'right' }}
-                  placeholder="Total Bibit..."
-                  onKeyPress={e => this.numValidate(e)}
-                  onChange={evt =>
-                    this.updateInputValue(
-                      evt.target.value,
-                      evt.target.name,
-                      'addAlsin',
-                    )
-                  }
-                  value={this.state.addAlsin && this.state.addAlsin.total_rice}
-                />
+                <InputGroup>
+                  <Input
+                    type="number"
+                    min={0}
+                    name="total_rice"
+                    style={{ textAlign: 'right' }}
+                    placeholder="Total Bibit..."
+                    onKeyPress={e => this.numValidate(e)}
+                    onChange={evt =>
+                      this.updateInputValue(
+                        evt.target.value,
+                        evt.target.name,
+                        'addAlsinRice',
+                      )
+                    }
+                    value={
+                      this.state.addAlsinRice && this.state.addAlsinRice.total_rice
+                    }
+                  />
+                  <InputGroupAddon>
+                    <Label style={{ marginTop: '8px' }}>/ Dapok</Label>
+                  </InputGroupAddon>
+                </InputGroup>
+
                 <Label>Harga</Label>
                 <Input
                   type="number"
@@ -6578,10 +6626,10 @@ class Transaksi extends React.Component {
                     this.updateInputValue(
                       evt.target.value,
                       evt.target.name,
-                      'addAlsin',
+                      'addAlsinRice',
                     )
                   }
-                  value={this.state.addAlsin && this.state.addAlsin.cost}
+                  value={this.state.addAlsinRice && this.state.addAlsinRice.cost}
                 />
 
                 <Label
@@ -6613,8 +6661,8 @@ class Transaksi extends React.Component {
                 <Button
                   color="primary"
                   onClick={() =>
-                    this.setListEditMassalRice(this.state.addAlsin, {
-                      ...this.state.addAlsin,
+                    this.setListEditMassalRice(this.state.addAlsinRice, {
+                      ...this.state.addAlsinRice,
                     })
                   }
                   disabled={loading}
@@ -6742,7 +6790,7 @@ class Transaksi extends React.Component {
         </Modal>
         {/* Modal Tambah Alsin Item */}
 
-        {/* Modal Tambah Alsin Item RMUS */}
+        {/* Modal Tambah Alsin Item RMU */}
         <Modal
           onExit={this.handleClose}
           isOpen={this.state.modal_nested_parent_tambahProdukRMU}
@@ -6806,7 +6854,7 @@ class Transaksi extends React.Component {
                 <Button
                   color="primary"
                   onClick={() =>
-                    this.setListEditMassalRMUS(this.state.addAlsin, {
+                    this.setListEditMassalRMU(this.state.addAlsin, {
                       ...this.state.addAlsin,
                     })
                   }
@@ -7466,13 +7514,13 @@ class Transaksi extends React.Component {
       listEditMasalReparation,
       listEditMasalTraining,
       listEditMasalSparePart,
-      listEditMasalRMUS,
+      listEditMasalRMU,
       listEditMasalRice_Seed,
       listEditMasalRice,
       resultReparation,
       resultRiceSeeds,
       resultRices,
-      resultRMUS,
+      resultRMU,
       resultSparePart,
       resultTrainings,
       resultPricing,
@@ -7482,12 +7530,12 @@ class Transaksi extends React.Component {
     var listReparation = listEditMasalReparation && listEditMasalReparation;
     var listTraining = listEditMasalTraining && listEditMasalTraining;
     var listSparePart = listEditMasalSparePart && listEditMasalSparePart;
-    var listRMUS = listEditMasalRMUS && listEditMasalRMUS;
+    var listRMU = listEditMasalRMU && listEditMasalRMU;
     var listRiceSeed = listEditMasalRice_Seed && listEditMasalRice_Seed;
     var listRice = listEditMasalRice && listEditMasalRice;
 
     // console.log('ISINYA ALSIN', listAlsin, 'ALSIN SAVE', resultPricing);
-    // console.log('ISINYA RMUS', listRMUS, 'RMUS SAVE', resultRMUS);
+    // console.log('ISINYA RMU', listRMU, 'RMU SAVE', resultRMU);
     // console.log(
     //   'ISINYA TRAINING',
     //   listTraining,
@@ -7524,7 +7572,7 @@ class Transaksi extends React.Component {
     //     (listReparation.length !== 0 || resultReparation.length !== 0) &&
     //     (listTraining.length !== 0 || resultTrainings.length !== 0) &&
     //     (listSparePart.length !== 0 || resultSparePart !== 0) &&
-    //     (listRMUS.length !== 0 || resultRMUS !== 0) &&
+    //     (listRMU.length !== 0 || resultRMU !== 0) &&
     //     (listRiceSeed.length !== 0 || resultRiceSeeds.length !== 0) &&
     //     (listRice.length !== 0 || resultRices !== 0),
     // );
@@ -7535,7 +7583,7 @@ class Transaksi extends React.Component {
       (listReparation.length !== 0 || resultReparation.length !== 0) &&
       (listTraining.length !== 0 || resultTrainings.length !== 0) &&
       (listSparePart.length !== 0 || resultSparePart !== 0) &&
-      (listRMUS.length !== 0 || resultRMUS !== 0) &&
+      (listRMU.length !== 0 || resultRMU !== 0) &&
       (listRiceSeed.length !== 0 || resultRiceSeeds.length !== 0) &&
       (listRice.length !== 0 || resultRices !== 0)
     );
