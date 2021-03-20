@@ -48,6 +48,7 @@ var url_showSparePartParam =
 var url_insertSukuCadang =
   'https://alsintanlink.com/api/upja/insert_spare_part_upja';
 
+
 export {
   url_resendOTP,
   url_submitOTP,

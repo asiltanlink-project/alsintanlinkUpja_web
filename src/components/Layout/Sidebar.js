@@ -4,7 +4,7 @@ import SourceLink from 'components/SourceLink';
 import React from 'react';
 import { MdHdrStrong } from 'react-icons/md';
 import { NavLink } from 'react-router-dom';
-import { Nav, Navbar, NavItem, NavLink as BSNavLink } from 'reactstrap';
+import { Button, Nav, Navbar, NavItem, NavLink as BSNavLink } from 'reactstrap';
 import bn from 'utils/bemnames';
 
 const sidebarBackground = {

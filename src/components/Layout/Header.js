@@ -7,6 +7,7 @@ import {
   MdExitToApp,
   MdEditLocation,
   MdNotificationsActive,
+  MdBook,
 } from 'react-icons/md';
 import {
   Button,
@@ -117,14 +118,6 @@ class Header extends React.Component {
         <NavLink id="Popover2">
           <Avatar onClick={this.toggleUserCardPopover} className="can-click" />
         </NavLink>
-        <Popover
-          placement="bottom-end"
-          isOpen={this.state.isOpenUserCardPopover}
-          toggle={this.toggleUserCardPopover}
-          target="Popover2"
-          className="p-0 border-0"
-          style={{ minWidth: 250 }}
-        ></Popover>
 
         <Popover
           placement="bottom-end"
@@ -140,6 +133,18 @@ class Header extends React.Component {
               // subtitle={gudangName}
               className="border-light"
             >
+              <ListGroup flush>
+                <ListGroupItem
+                  tag="button"
+                  action
+                  onClick={() => {
+                    window.open('http://alsintanlink.com/api/manual_book/upja');
+                  }}
+                  className="border-light"
+                >
+                  <MdBook /> Manual Book
+                </ListGroupItem>
+              </ListGroup>
               <ListGroup flush>
                 <ListGroupItem
                   tag="button"
