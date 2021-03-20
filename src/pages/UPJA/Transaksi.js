@@ -152,8 +152,8 @@ class Transaksi extends React.Component {
           status_name: 'Menunggu Konfirmasi Upja',
         },
         {
-          status_id: 'Menunggu Alsin dikirim',
-          status_name: 'Menunggu Alsin dikirim',
+          status_id: 'Pekerjaan Siap Dilaksanakan',
+          status_name: 'Pekerjaan Siap Dilaksanakan',
         },
         {
           status_id: 'Sedang dikerjakan',
@@ -198,14 +198,14 @@ class Transaksi extends React.Component {
           status_name: 'Menungggu Konfirmasi Upja',
         },
         {
-          status_id: 'Menunggu Alsin dikirim',
-          status_name: 'Menunggu Alsin dikirim',
+          status_id: 'Pekerjaan Siap Dilaksanakan',
+          status_name: 'Pekerjaan Siap Dilaksanakan',
         },
       ],
       resultPricing4: [
         {
-          status_id: 'Menunggu Alsin dikirim',
-          status_name: 'Menunggu Alsin dikirim',
+          status_id: 'Pekerjaan Siap Dilaksanakan',
+          status_name: 'Pekerjaan Siap Dilaksanakan',
         },
         {
           status_id: 'Sedang  dikerjakan',
@@ -3449,7 +3449,7 @@ class Transaksi extends React.Component {
     } else if (
       this.state.editPricing &&
       // (
-      this.state.editPricing.status === 'Menunggu Alsin dikirim'
+      this.state.editPricing.status === 'Pekerjaan Siap Dilaksanakan'
       // ||
       // this.state.editPricing.status === 'Sedang dikerjakan')
     ) {
@@ -5587,7 +5587,7 @@ class Transaksi extends React.Component {
                 this.state.editPricing.status === 'Menungggu Konfirmasi Upja' &&
                 renderStatus3}
               {this.state.editPricing &&
-                this.state.editPricing.status === 'Menunggu Alsin dikirim' &&
+                this.state.editPricing.status === 'Pekerjaan Siap Dilaksanakan' &&
                 renderStatus4}
               {this.state.editPricing &&
                 this.state.editPricing.status === 'Sedang dikerjakan' &&
