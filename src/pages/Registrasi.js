@@ -29,6 +29,7 @@ import zxcvbn from 'zxcvbn';
 import NotificationSystem from 'react-notification-system';
 import { NOTIFICATION_SYSTEM_STYLE } from 'utils/constants';
 import CardBody from 'reactstrap/lib/CardBody';
+import { element } from 'prop-types';
 
 const colors = getThemeColors();
 
@@ -144,7 +145,7 @@ class Registrasi extends React.Component {
   // untuk pilih Class
   setClass = event => {
     var nama = this.state.resultClass.find(function (element) {
-      return element.class_id === (event.target.value);
+      return element.class_id === event.target.value;
     });
     this.setState({
       pilihClass: event.target.value,
@@ -213,8 +214,11 @@ class Registrasi extends React.Component {
   // untuk pilih Desa
   setDesa = event => {
     var nama = this.state.resultDesa.find(function (element) {
+      console.log('element id', element);
       return element.id === parseInt(event.target.value);
     });
+    console.log('NAMA DESA 1', event.target.value);
+    console.log('NAMA DESA 2', nama.id === parseInt(event.target.value));
 
     this.setState(
       {
@@ -436,12 +440,14 @@ class Registrasi extends React.Component {
         if (data.status === 0) {
           this.showNotification('Data tidak ditemukan!', 'error');
         } else {
-          this.setState({
-            resultDesa: data.result.villages,
-            // maxPages: data.metadata.pages ? data.metadata.pages : 1,
-            loading: false,
-            loadingPage: false,
-          });
+          this.setState(
+            {
+              resultDesa: data.result.villages,
+              // maxPages: data.metadata.pages ? data.metadata.pages : 1,
+              loading: false,
+              loadingPage: false,
+            },
+          );
         }
       });
   }
@@ -581,22 +587,28 @@ class Registrasi extends React.Component {
     if (password.length < 6 && password.length > 0) {
       this.setState({
         progress: 0,
-        suggestions: ['Panjang harus lebih dari 5 Karakter'],
+        suggestions: ['* Panjang harus lebih dari 5 Karakter'],
       });
       return;
-    }
-    if (password.match(strongRegex)) {
-      const evaluation = zxcvbn(password);
-      strengthBar = evaluation.score * 25;
-      this.setState({ progress: strengthBar, suggestions: [] });
     } else {
       this.setState({
-        suggestions: [
-          'Password harus mengandung angka, huruf kecil, huruf kapital, dan simbol',
-        ],
+        progress: 0,
+        suggestions: ['Password sudah memenuhi syarat'],
       });
       return;
     }
+    // if (password.match(strongRegex)) {
+    //   const evaluation = zxcvbn(password);
+    //   strengthBar = evaluation.score * 25;
+    //   this.setState({ progress: strengthBar, suggestions: [] });
+    // } else {
+    //   this.setState({
+    //     suggestions: [
+    //       'Password harus mengandung angka, huruf kecil, huruf kapital, dan simbol',
+    //     ],
+    //   });
+    //   return;
+    // }
   }
 
   checkConfirmation = () => {
@@ -608,7 +620,19 @@ class Registrasi extends React.Component {
       messages.innerHTML = '';
       return;
     }
-    if (password === confirmPassword) {
+    else if (
+      password === confirmPassword &&
+      password.length < 5 &&
+      confirmPassword.length < 5
+    ) {
+      messages.style.color = 'red';
+      messages.innerHTML = 'Kata sandi Cocok namun panjang kurang dari 6 karakter';
+    } 
+    else if (
+      password === confirmPassword &&
+      password.length > 5 &&
+      confirmPassword.length > 5
+    ) {
       messages.style.color = 'green';
       messages.innerHTML = 'Kata sandi Cocok';
     } else {
@@ -737,6 +761,7 @@ class Registrasi extends React.Component {
       desaTodos.map((todo, i) => {
         return (
           <tr key={i}>
+            {console.log('RENDER DESA', todo)}
             <td>{todo.name}</td>
             <td style={{ textAlign: 'right' }}>
               <Button
@@ -929,7 +954,7 @@ class Registrasi extends React.Component {
                     <InputGroup style={{ float: 'right' }}>
                       <Input
                         disabled
-                        placeholder="Pilih Kecamatan"
+                        placeholder="Pilih Desa"
                         style={{ fontWeight: 'bold' }}
                         value={this.state.namaDesa}
                       />
@@ -1122,7 +1147,7 @@ class Registrasi extends React.Component {
                       onKeyUp={this.checkConfirmation}
                       autoComplete="off"
                     />
-                    <Progress
+                    {/* <Progress
                       max="100"
                       value={this.state.progress}
                       style={{ height: '10px' }}
@@ -1131,12 +1156,13 @@ class Registrasi extends React.Component {
                     ></Progress>
                     <Label style={{ marginBottom: 0 }} hidden={!isEnabled}>
                       Kekuatan Kata Sandi: {strengthProgress}
-                    </Label>
+                    </Label> */}
                     <Row>
                       <Col>
                         {suggestions.map((s, index) => (
                           <Label
-                            style={{ color: 'red', fontSize: '15px' }}
+                            // style={{ color: 'red', fontSize: '15px' }}
+                            style={{ color: 'black', fontSize: '15px' }}
                             key={index}
                           >
                             {s}

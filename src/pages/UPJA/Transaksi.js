@@ -31,6 +31,7 @@ import {
   MdAdd,
   MdInsertChart,
   MdLocationOn,
+  MdEventNote,
 } from 'react-icons/md';
 import { MdLoyalty, MdRefresh } from 'react-icons/md';
 import NotificationSystem from 'react-notification-system';
@@ -739,7 +740,7 @@ class Transaksi extends React.Component {
       // alsin_items: this.state.resultalsinItem,
       alsin_items: this.state.listEditMasal,
       rmus: this.state.resultRMU,
-      rice: this.state.resultRices,
+      rice: this.state.listEditMasalRice,
       training: this.state.resultTrainings,
       reparation: this.state.resultReparation,
       rice_seed: this.state.resultRiceSeeds,
@@ -2429,7 +2430,6 @@ class Transaksi extends React.Component {
     }
   };
 
-
   toggle = (modalType, todo) => () => {
     // console.log("MODAL TYPE", modalType);
     if (!modalType) {
@@ -2491,7 +2491,7 @@ class Transaksi extends React.Component {
       // console.log('LOG 1');
       this.setState({
         [`modal_${modalType}`]: !this.state[`modal_${modalType}`],
-        addAlsinRice: {...todo},
+        addAlsinRice: { ...todo },
       });
     } else if (modalType === 'nested_parent_tambahProdukRMU') {
       // console.log('LOG 1');
@@ -4751,6 +4751,16 @@ class Transaksi extends React.Component {
               style={{
                 marginBottom: 0,
                 fontWeight: 'bold',
+              }}
+            >
+              <MdEventNote />
+              Keterangan:&nbsp;{HeaderTodos && HeaderTodos.note}
+            </Label>
+            <br></br>
+            <Label
+              style={{
+                marginBottom: 0,
+                fontWeight: 'bold',
                 cursor: 'pointer',
                 textDecoration: 'underline',
                 color: '#009688',
@@ -4774,6 +4784,7 @@ class Transaksi extends React.Component {
               <MdLocationOn />
               Klik untuk Mengetahui Lokasi
             </Label>
+            
             {this.state.editPricing &&
               this.state.editPricing.status ===
                 'Menunggu Penentuan Pembayaran' && (
@@ -5587,7 +5598,8 @@ class Transaksi extends React.Component {
                 this.state.editPricing.status === 'Menungggu Konfirmasi Upja' &&
                 renderStatus3}
               {this.state.editPricing &&
-                this.state.editPricing.status === 'Pekerjaan Siap Dilaksanakan' &&
+                this.state.editPricing.status ===
+                  'Pekerjaan Siap Dilaksanakan' &&
                 renderStatus4}
               {this.state.editPricing &&
                 this.state.editPricing.status === 'Sedang dikerjakan' &&
@@ -6586,7 +6598,8 @@ class Transaksi extends React.Component {
                   type="text"
                   disabled={true}
                   value={
-                    this.state.addAlsinRice && this.state.addAlsinRice.land_area_range
+                    this.state.addAlsinRice &&
+                    this.state.addAlsinRice.land_area_range
                   }
                 ></Input>
                 <Label>Total Bibit</Label>
@@ -6606,7 +6619,8 @@ class Transaksi extends React.Component {
                       )
                     }
                     value={
-                      this.state.addAlsinRice && this.state.addAlsinRice.total_rice
+                      this.state.addAlsinRice &&
+                      this.state.addAlsinRice.total_rice
                     }
                   />
                   <InputGroupAddon>
@@ -6629,7 +6643,9 @@ class Transaksi extends React.Component {
                       'addAlsinRice',
                     )
                   }
-                  value={this.state.addAlsinRice && this.state.addAlsinRice.cost}
+                  value={
+                    this.state.addAlsinRice && this.state.addAlsinRice.cost
+                  }
                 />
 
                 <Label
