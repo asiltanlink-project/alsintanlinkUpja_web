@@ -91,6 +91,7 @@ class AuthPage extends React.Component {
 
     var payload = {
       email: email,
+      otp_code: this.state.otp
     };
 
     console.log('ISI PAYLOAD', payload);
@@ -147,6 +148,7 @@ class AuthPage extends React.Component {
 
     var payload = {
       email: email,
+      otp_code: this.state.otp
     };
 
     console.log('ISI PAYLOAD LOGIN', payload);
