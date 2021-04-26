@@ -789,7 +789,7 @@ class Transaksi extends React.Component {
         var status = data.status;
         var message = data.result.message;
         if (status === 0) {
-          this.showNotification(message + 'AAAA', 'error');
+          this.showNotification(message, 'error');
           this.setState({
             loadingPage: false,
             loading: false,
@@ -1418,6 +1418,7 @@ class Transaksi extends React.Component {
           alsin_type_id: this.state.addAlsin.alsin_type_id,
           cost: parseInt(this.state.addAlsin.cost),
           // total_item: parseInt(this.state.addAlsin.total_item),
+          transaction_order_id: this.state.addAlsin.transaction_order_id,
           alsin_type_name: this.state.addAlsin.alsin_type_name,
           name: this.state.addAlsin.name,
           vechile_code: this.state.addAlsin.vechile_code,
@@ -1464,6 +1465,7 @@ class Transaksi extends React.Component {
           alsin_type_name: this.state.addAlsinRice.alsin_type_name,
           vechile_code: this.state.addAlsinRice.vechile_code,
           alsin_item_id: this.state.addAlsinRice.alsin_item_id,
+          transaction_order_id: this.state.addAlsinRice.transaction_order_id,
           land_area_range: parseInt(this.state.addAlsinRice.land_area_range),
         };
 
