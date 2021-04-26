@@ -717,11 +717,14 @@ class Transaksi extends React.Component {
     var url = myUrl.url_updateTransaksi;
     const updateHeaderData = first_param;
     const updateDetailData = this.state.resultPricing;
+    let statusDataBak = '';
     var token = window.localStorage.getItem('tokenCookies');
     console.log('DATA DETAIL', updateDetailData);
 
     this.fetchData();
     if (updateHeaderData.statusFarmer !== undefined) {
+      statusDataBak = updateHeaderData.status;
+      console.log('status data bak', statusDataBak);
       console.log('MASUK IF', updateHeaderData);
       if (updateHeaderData.status === updateHeaderData.statusFarmer) {
         updateHeaderData.status = updateHeaderData.status;
@@ -786,11 +789,20 @@ class Transaksi extends React.Component {
         var status = data.status;
         var message = data.result.message;
         if (status === 0) {
-          this.showNotification(message, 'error');
+          this.showNotification(message + 'AAAA', 'error');
           this.setState({
             loadingPage: false,
             loading: false,
           });
+          console.log(
+            'MASUK IF',
+            updateHeaderData.status,
+            'IF 2',
+            updateHeaderData.statusFarmer,
+          );
+            console.log('status data bak 2', statusDataBak);
+            console.log('MASUK IF', updateHeaderData);
+            updateHeaderData.status = statusDataBak;
         } else {
           this.showNotification(message, 'info');
           this.setState(
@@ -4784,7 +4796,7 @@ class Transaksi extends React.Component {
               <MdLocationOn />
               Klik untuk Mengetahui Lokasi
             </Label>
-            
+
             {this.state.editPricing &&
               this.state.editPricing.status ===
                 'Menunggu Penentuan Pembayaran' && (

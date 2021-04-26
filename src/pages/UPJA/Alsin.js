@@ -2411,7 +2411,7 @@ class Alsin extends React.Component {
             <td style={{ textAlign: 'right' }}>{todo.not_available}</td>
             <td style={{ textAlign: 'right' }}>{todo.rusak}</td>
             <td style={{ textAlign: 'right' }}>{todo.total_item}</td>
-            <td>
+            {/* <td>
               <Button
                 style={{ margin: '0px' }}
                 color="secondary"
@@ -2420,7 +2420,7 @@ class Alsin extends React.Component {
               >
                 <MdEdit />
               </Button>
-            </td>
+            </td> */}
             <td>
               <Button
                 style={{ margin: '0px' }}
@@ -2744,7 +2744,7 @@ class Alsin extends React.Component {
                       <th style={{ textAlign: 'right' }}>Sedang Digunakan</th>
                       <th style={{ textAlign: 'right' }}>Rusak</th>
                       <th style={{ textAlign: 'right' }}>Total Item</th>
-                      <th>Edit</th>
+                      {/* <th>Edit</th> */}
                       <th>Hapus</th>
                     </tr>
                   </thead>

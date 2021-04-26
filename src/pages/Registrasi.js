@@ -41,7 +41,7 @@ class Registrasi extends React.Component {
     this.state = {
       dataAvailable: false,
       loading: false,
-      input: {},
+      input: { badanHukum: '-' },
       password: '',
       confirm: '',
       progress: 0,
@@ -440,14 +440,12 @@ class Registrasi extends React.Component {
         if (data.status === 0) {
           this.showNotification('Data tidak ditemukan!', 'error');
         } else {
-          this.setState(
-            {
-              resultDesa: data.result.villages,
-              // maxPages: data.metadata.pages ? data.metadata.pages : 1,
-              loading: false,
-              loadingPage: false,
-            },
-          );
+          this.setState({
+            resultDesa: data.result.villages,
+            // maxPages: data.metadata.pages ? data.metadata.pages : 1,
+            loading: false,
+            loadingPage: false,
+          });
         }
       });
   }
@@ -619,16 +617,15 @@ class Registrasi extends React.Component {
     if (this.state.confirm.length === 0) {
       messages.innerHTML = '';
       return;
-    }
-    else if (
+    } else if (
       password === confirmPassword &&
       password.length < 5 &&
       confirmPassword.length < 5
     ) {
       messages.style.color = 'red';
-      messages.innerHTML = 'Kata sandi Cocok namun panjang kurang dari 6 karakter';
-    } 
-    else if (
+      messages.innerHTML =
+        'Kata sandi Cocok namun panjang kurang dari 6 karakter';
+    } else if (
       password === confirmPassword &&
       password.length > 5 &&
       confirmPassword.length > 5
@@ -991,7 +988,9 @@ class Registrasi extends React.Component {
 
                   {/* untuk isi Badan Hukum */}
                   <FormGroup>
-                    <Label style={{ textAlign: 'center' }}>Badan Hukum:</Label>
+                    <Label style={{ textAlign: 'center' }}>
+                      Badan Hukum (Jika tidak ada, maka isi '-'):
+                    </Label>
                     <Input
                       autoComplete="off"
                       type="text"
@@ -1004,7 +1003,7 @@ class Registrasi extends React.Component {
                           'input',
                         )
                       }
-                      value={this.state.badanHukum}
+                      value={this.state.input && this.state.input.badanHukum}
                     ></Input>
                   </FormGroup>
 

@@ -32,7 +32,7 @@ import CardBody from 'reactstrap/lib/CardBody';
 import { doc } from 'prettier';
 import CardFooter from 'reactstrap/lib/CardFooter';
 import * as firebase from 'firebase/app';
-const analytics = firebase.analytics()
+const analytics = firebase.analytics();
 
 const colors = getThemeColors();
 
@@ -1618,10 +1618,13 @@ class Profile extends React.Component {
 
                   {/* untuk isi Badan Hukum */}
                   <FormGroup>
-                    <Label style={{ textAlign: 'center' }}>Badan Hukum:</Label>
+                    <Label style={{ textAlign: 'center' }}>
+                      Badan Hukum (Jika tidak ada, maka isi '-'):
+                    </Label>
                     <Input
                       disabled
                       id="badanHukum"
+                      defaultValue='-'
                       autoComplete="off"
                       type="text"
                       name="legality"
@@ -2208,55 +2211,55 @@ class Profile extends React.Component {
                         </Col>
                       </Col>
 
-                        <Col>
-                          <FormGroup check>
-                            <Label check>
-                              <Input
-                                type="checkbox"
-                                disabled
-                                id="dryer"
-                                checked={this.state.dryer}
-                                onChange={() =>
-                                  this.setState({
-                                    dryer: !this.state.dryer,
-                                  })
-                                }
-                              />
-                              Dryer
-                            </Label>
-                          </FormGroup>
-                          <FormGroup check>
-                            <Label check>
-                              <Input
-                                type="checkbox"
-                                disabled
-                                id="powerThresher"
-                                checked={this.state.powerThresher}
-                                onChange={() =>
-                                  this.setState({
-                                    powerThresher: !this.state.powerThresher,
-                                  })
-                                }
-                              />
-                              Power Thresher
-                            </Label>
-                          </FormGroup>
-                          <FormGroup check>
-                            <Label check>
-                              <Input
-                                type="checkbox"
-                                disabled
-                                id="cornSheller"
-                                checked={this.state.cornSheller}
-                                onChange={() =>
-                                  this.setState({
-                                    cornSheller: !this.state.cornSheller,
-                                  })
-                                }
-                              />
-                              Corn Sheller
-                            </Label>
-                          </FormGroup>
+                      <Col>
+                        <FormGroup check>
+                          <Label check>
+                            <Input
+                              type="checkbox"
+                              disabled
+                              id="dryer"
+                              checked={this.state.dryer}
+                              onChange={() =>
+                                this.setState({
+                                  dryer: !this.state.dryer,
+                                })
+                              }
+                            />
+                            Dryer
+                          </Label>
+                        </FormGroup>
+                        <FormGroup check>
+                          <Label check>
+                            <Input
+                              type="checkbox"
+                              disabled
+                              id="powerThresher"
+                              checked={this.state.powerThresher}
+                              onChange={() =>
+                                this.setState({
+                                  powerThresher: !this.state.powerThresher,
+                                })
+                              }
+                            />
+                            Power Thresher
+                          </Label>
+                        </FormGroup>
+                        <FormGroup check>
+                          <Label check>
+                            <Input
+                              type="checkbox"
+                              disabled
+                              id="cornSheller"
+                              checked={this.state.cornSheller}
+                              onChange={() =>
+                                this.setState({
+                                  cornSheller: !this.state.cornSheller,
+                                })
+                              }
+                            />
+                            Corn Sheller
+                          </Label>
+                        </FormGroup>
                       </Col>
                     </Row>
                     {/* REPARASI */}
