@@ -742,12 +742,12 @@ class Transaksi extends React.Component {
       alsins: this.state.resultalsin,
       // alsin_items: this.state.resultalsinItem,
       alsin_items: this.state.listEditMasal,
-      rmus: this.state.resultRMU,
+      rmus: this.state.listEditMasalRMU,
       rice: this.state.listEditMasalRice,
-      training: this.state.resultTrainings,
-      reparation: this.state.resultReparation,
-      rice_seed: this.state.resultRiceSeeds,
-      spare_part: this.state.resultSparePart,
+      training: this.state.listEditMasalTraining,
+      reparation: this.state.listEditMasalReparation,
+      rice_seed: this.state.listEditMasalRice_Seed,
+      spare_part: this.state.listEditMasalSparePart,
     };
 
     console.log('PAYLOAD EDIT', payload);
@@ -1265,13 +1265,13 @@ class Transaksi extends React.Component {
       },
       () => {
         var newlistEditMasalRMU = {
-          alsin_type_id: this.state.addAlsin.alsin_type_id,
-          cost: parseInt(this.state.addAlsin.cost),
-          id: this.state.addAlsin.id,
-          packaging: this.state.addAlsin.packaging,
-          alsin_type_name: this.state.addAlsin.alsin_type_name,
-          vechile_code: this.state.addAlsin.vechile_code,
-          alsin_item_id: this.state.addAlsin.alsin_item_id,
+          alsin_type_id: param.alsin_type_id,
+          cost: parseInt(param.cost),
+          id: param.id,
+          packaging: param.packaging,
+          alsin_type_name: param.alsin_type_name,
+          vechile_code: param.vechile_code,
+          alsin_item_id: param.alsin_item_id,
         };
 
         var newArr = listDetail.filter(item => item.id === param2.id);
@@ -1302,12 +1302,9 @@ class Transaksi extends React.Component {
       },
       () => {
         var newlistEditMasalReparation = {
-          alsin_type_id: this.state.addAlsin.alsin_type_id,
-          cost: parseInt(this.state.addAlsin.cost),
-          // total_item: parseInt(this.state.addAlsin.total_item),
-          alsin_type_order_name: this.state.addAlsin.alsin_type_order_name,
-          vechile_code: this.state.addAlsin.vechile_code,
-          alsin_item_id: this.state.addAlsin.alsin_item_id,
+          cost: parseInt(param.cost),
+          id: param.id,
+          transaction_order_id: param.transaction_order_id
         };
 
         var newArr = listDetail.filter(
@@ -1332,7 +1329,7 @@ class Transaksi extends React.Component {
   };
   setListEditMassalSparePart = (param, param2) => {
     var listDetail = this.state.listEditMasalSparePart;
-    // console.log('EDIT BATAS BAWAH', param, '@@@', param2);
+    console.log('EDIT BATAS BAWAH', param.id, '@@@', param2);
 
     this.setState(
       {
@@ -1340,14 +1337,9 @@ class Transaksi extends React.Component {
       },
       () => {
         var newlistEditMasalSparePart = {
-          alsin_type_id: this.state.addAlsin.alsin_type_id,
-          cost: parseInt(this.state.addAlsin.cost),
-          // total_item: parseInt(this.state.addAlsin.total_item),
-          id: this.state.addAlsin.id,
-          name: this.state.addAlsin.name,
-          alsin_type_name: this.state.addAlsin.alsin_type_name,
-          vechile_code: this.state.addAlsin.vechile_code,
-          alsin_item_id: this.state.addAlsin.alsin_item_id,
+          cost: parseInt(param.cost),
+          id: param.id,
+          transaction_order_id: param.transaction_order_id
         };
 
         var newArr = listDetail.filter(item => item.id === param2.id);
@@ -1378,13 +1370,14 @@ class Transaksi extends React.Component {
       },
       () => {
         var newlistEditMasalTraining = {
-          alsin_type_id: this.state.addAlsin.alsin_type_id,
-          cost: parseInt(this.state.addAlsin.cost),
+          alsin_type_id: param.alsin_type_id,
+          cost: parseInt(param.cost),
           // total_item: parseInt(this.state.addAlsin.total_item),
-          id: this.state.addAlsin.id,
-          alsin_type_name: this.state.addAlsin.alsin_type_name,
-          vechile_code: this.state.addAlsin.vechile_code,
-          alsin_item_id: this.state.addAlsin.alsin_item_id,
+          id: param.id,
+          alsin_type_name: param.alsin_type_name,
+          vechile_code: param.vechile_code,
+          alsin_item_id: param.alsin_item_id,
+          transaction_order_id: param.transaction_order_id
         };
 
         var newArr = listDetail.filter(item => item.id === param2.id);
@@ -1415,14 +1408,15 @@ class Transaksi extends React.Component {
       },
       () => {
         var newlistEditMasalRice_Seed = {
-          alsin_type_id: this.state.addAlsin.alsin_type_id,
-          cost: parseInt(this.state.addAlsin.cost),
+          alsin_type_id: param.alsin_type_id,
+          cost: parseInt(param.cost),
           // total_item: parseInt(this.state.addAlsin.total_item),
-          transaction_order_id: this.state.addAlsin.transaction_order_id,
-          alsin_type_name: this.state.addAlsin.alsin_type_name,
-          name: this.state.addAlsin.name,
-          vechile_code: this.state.addAlsin.vechile_code,
-          alsin_item_id: this.state.addAlsin.alsin_item_id,
+          id: param.id,
+          transaction_order_id: param.transaction_order_id,
+          alsin_type_name: param.alsin_type_name,
+          name: param.name,
+          vechile_code: param.vechile_code,
+          alsin_item_id: param.alsin_item_id,
         };
 
         var newArr = listDetail.filter(item => item.name === param2.name);
@@ -1469,16 +1463,16 @@ class Transaksi extends React.Component {
           land_area_range: parseInt(this.state.addAlsinRice.land_area_range),
         };
 
-        console.log(
-          'PARAM ID',
-          param2.id,
-          'newlistedit',
-          isNaN(newlistEditMasalRice.total_rice),
-          'nilai total rice',
-          this.state.addAlsinRice.total_rice,
-          'nilai harga',
-          isNaN(this.state.addAlsinRice.cost),
-        );
+        // console.log(
+        //   'PARAM ID',
+        //   param2.id,
+        //   'newlistedit',
+        //   isNaN(newlistEditMasalRice.total_rice),
+        //   'nilai total rice',
+        //   this.state.addAlsinRice.total_rice,
+        //   'nilai harga',
+        //   isNaN(this.state.addAlsinRice.cost),
+        // );
 
         var newArr = listDetail.filter(
           item => item.id === param2.id,
@@ -2481,25 +2475,25 @@ class Transaksi extends React.Component {
       // console.log('LOG 1');
       this.setState({
         [`modal_${modalType}`]: !this.state[`modal_${modalType}`],
-        addAlsin: todo,
+        addReparation: { ...todo },
       });
     } else if (modalType === 'nested_parent_tambahProdukTraining') {
       // console.log('LOG 1');
       this.setState({
         [`modal_${modalType}`]: !this.state[`modal_${modalType}`],
-        addAlsin: todo,
+        addTraining: { ...todo },
       });
     } else if (modalType === 'nested_parent_tambahProdukSparePart') {
       // console.log('LOG 1');
       this.setState({
         [`modal_${modalType}`]: !this.state[`modal_${modalType}`],
-        addAlsin: todo,
+        addSparePart: { ...todo },
       });
     } else if (modalType === 'nested_parent_tambahProdukRice_Seed') {
       // console.log('LOG 1');
       this.setState({
         [`modal_${modalType}`]: !this.state[`modal_${modalType}`],
-        addAlsin: todo,
+        addRiceSeed: { ...todo },
       });
     } else if (modalType === 'nested_parent_tambahProdukRice') {
       // console.log('LOG 1');
@@ -2511,7 +2505,7 @@ class Transaksi extends React.Component {
       // console.log('LOG 1');
       this.setState({
         [`modal_${modalType}`]: !this.state[`modal_${modalType}`],
-        addAlsin: todo,
+        addRMU: { ...todo },
       });
     } else {
       this.setState({
@@ -6408,16 +6402,12 @@ class Transaksi extends React.Component {
             <Form onSubmit={e => e.preventDefault()}>
               <FormGroup>
                 <Label>Alsin</Label>
-                {/* {console.log(
-                  'ISI TAMBAH REPARASI',
-                  this.state.addAlsin && this.state.addAlsin,
-                )} */}
                 <Input
                   type="text"
                   disabled={true}
                   value={
-                    this.state.addAlsin &&
-                    this.state.addAlsin.alsin_type_order_name
+                    this.state.addReparation &&
+                    this.state.addReparation.alsin_type_order_name
                   }
                 ></Input>
                 <Label>Harga</Label>
@@ -6432,10 +6422,10 @@ class Transaksi extends React.Component {
                     this.updateInputValue(
                       evt.target.value,
                       evt.target.name,
-                      'addAlsin',
+                      'addReparation',
                     )
                   }
-                  value={this.state.addAlsin && this.state.addAlsin.cost}
+                  value={this.state.addReparation && this.state.addReparation.cost}
                 />
                 <Label
                   style={{ fontSize: '0.8em', marginBottom: 0, color: 'red' }}
@@ -6465,8 +6455,8 @@ class Transaksi extends React.Component {
                 <Button
                   color="primary"
                   onClick={() =>
-                    this.setListEditMassalReparation(this.state.addAlsin, {
-                      ...this.state.addAlsin,
+                    this.setListEditMassalReparation(this.state.addReparation, {
+                      ...this.state.addReparation,
                     })
                   }
                   disabled={loading}
@@ -6515,7 +6505,7 @@ class Transaksi extends React.Component {
                   type="text"
                   disabled={true}
                   value={
-                    this.state.addAlsin && this.state.addAlsin.alsin_type_name
+                    this.state.addTraining && this.state.addTraining.alsin_type_name
                   }
                 ></Input>
                 <Label>Harga</Label>
@@ -6530,10 +6520,10 @@ class Transaksi extends React.Component {
                     this.updateInputValue(
                       evt.target.value,
                       evt.target.name,
-                      'addAlsin',
+                      'addTraining',
                     )
                   }
-                  value={this.state.addAlsin && this.state.addAlsin.cost}
+                  value={this.state.addTraining && this.state.addTraining.cost}
                 />
                 <Label
                   style={{ fontSize: '0.8em', marginBottom: 0, color: 'red' }}
@@ -6564,8 +6554,8 @@ class Transaksi extends React.Component {
                 <Button
                   color="primary"
                   onClick={() =>
-                    this.setListEditMassalTraining(this.state.addAlsin, {
-                      ...this.state.addAlsin,
+                    this.setListEditMassalTraining(this.state.addTraining, {
+                      ...this.state.addTraining,
                     })
                   }
                   disabled={loading}
@@ -6741,7 +6731,7 @@ class Transaksi extends React.Component {
                   type="text"
                   disabled={true}
                   value={
-                    this.state.addAlsin && this.state.addAlsin.alsin_type_name
+                    this.state.addRiceSeed && this.state.addRiceSeed.alsin_type_name
                   }
                 ></Input>
                 <Label>Harga</Label>
@@ -6756,10 +6746,10 @@ class Transaksi extends React.Component {
                     this.updateInputValue(
                       evt.target.value,
                       evt.target.name,
-                      'addAlsin',
+                      'addRiceSeed',
                     )
                   }
-                  value={this.state.addAlsin && this.state.addAlsin.cost}
+                  value={this.state.addRiceSeed && this.state.addRiceSeed.cost}
                 />
                 <Label
                   style={{ fontSize: '0.8em', marginBottom: 0, color: 'red' }}
@@ -6790,8 +6780,8 @@ class Transaksi extends React.Component {
                 <Button
                   color="primary"
                   onClick={() =>
-                    this.setListEditMassalRice_Seed(this.state.addAlsin, {
-                      ...this.state.addAlsin,
+                    this.setListEditMassalRice_Seed(this.state.addRiceSeed, {
+                      ...this.state.addRiceSeed,
                     })
                   }
                   disabled={loading}
@@ -6837,7 +6827,7 @@ class Transaksi extends React.Component {
                 <Input
                   type="text"
                   disabled={true}
-                  value={this.state.addAlsin && this.state.addAlsin.packaging}
+                  value={this.state.addRMU && this.state.addRMU.packaging}
                 ></Input>
                 <Label>Harga</Label>
                 <Input
@@ -6851,10 +6841,10 @@ class Transaksi extends React.Component {
                     this.updateInputValue(
                       evt.target.value,
                       evt.target.name,
-                      'addAlsin',
+                      'addRMU',
                     )
                   }
-                  value={this.state.addAlsin && this.state.addAlsin.cost}
+                  value={this.state.addRMU && this.state.addRMU.cost}
                 />
                 <Label
                   style={{ fontSize: '0.8em', marginBottom: 0, color: 'red' }}
@@ -6884,8 +6874,8 @@ class Transaksi extends React.Component {
                 <Button
                   color="primary"
                   onClick={() =>
-                    this.setListEditMassalRMU(this.state.addAlsin, {
-                      ...this.state.addAlsin,
+                    this.setListEditMassalRMU(this.state.addRMU, {
+                      ...this.state.addRMU,
                     })
                   }
                   disabled={loading}
@@ -6933,7 +6923,7 @@ class Transaksi extends React.Component {
                 <Input
                   type="text"
                   disabled={true}
-                  value={this.state.addAlsin && this.state.addAlsin.name}
+                  value={this.state.addSparePart && this.state.addSparePart.name}
                 ></Input>
                 <Label>Harga</Label>
                 <Input
@@ -6947,10 +6937,10 @@ class Transaksi extends React.Component {
                     this.updateInputValue(
                       evt.target.value,
                       evt.target.name,
-                      'addAlsin',
+                      'addSparePart',
                     )
                   }
-                  value={this.state.addAlsin && this.state.addAlsin.cost}
+                  value={this.state.addSparePart && this.state.addSparePart.cost}
                 />
                 <Label
                   style={{ fontSize: '0.8em', marginBottom: 0, color: 'red' }}
@@ -6981,8 +6971,8 @@ class Transaksi extends React.Component {
                 <Button
                   color="primary"
                   onClick={() =>
-                    this.setListEditMassalSparePart(this.state.addAlsin, {
-                      ...this.state.addAlsin,
+                    this.setListEditMassalSparePart(this.state.addSparePart, {
+                      ...this.state.addSparePart,
                     })
                   }
                   disabled={loading}
