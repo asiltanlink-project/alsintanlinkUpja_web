@@ -800,9 +800,9 @@ class Transaksi extends React.Component {
             'IF 2',
             updateHeaderData.statusFarmer,
           );
-            console.log('status data bak 2', statusDataBak);
-            console.log('MASUK IF', updateHeaderData);
-            updateHeaderData.status = statusDataBak;
+          console.log('status data bak 2', statusDataBak);
+          console.log('MASUK IF', updateHeaderData);
+          updateHeaderData.status = statusDataBak;
         } else {
           this.showNotification(message, 'info');
           this.setState(
@@ -1304,7 +1304,7 @@ class Transaksi extends React.Component {
         var newlistEditMasalReparation = {
           cost: parseInt(param.cost),
           id: param.id,
-          transaction_order_id: param.transaction_order_id
+          transaction_order_id: param.transaction_order_id,
         };
 
         var newArr = listDetail.filter(
@@ -1339,7 +1339,8 @@ class Transaksi extends React.Component {
         var newlistEditMasalSparePart = {
           cost: parseInt(param.cost),
           id: param.id,
-          transaction_order_id: param.transaction_order_id
+          transaction_order_id: param.transaction_order_id,
+          nama: param.nama,
         };
 
         var newArr = listDetail.filter(item => item.id === param2.id);
@@ -1377,7 +1378,7 @@ class Transaksi extends React.Component {
           alsin_type_name: param.alsin_type_name,
           vechile_code: param.vechile_code,
           alsin_item_id: param.alsin_item_id,
-          transaction_order_id: param.transaction_order_id
+          transaction_order_id: param.transaction_order_id,
         };
 
         var newArr = listDetail.filter(item => item.id === param2.id);
@@ -3879,7 +3880,8 @@ class Transaksi extends React.Component {
         return (
           <tr key={i}>
             {/* {console.log('TOTAL REPARATION', todo)} */}
-            <td>{todo.name}</td>
+            <td>{todo.nama}</td>
+            <td>{todo.alsin_type_name}</td>
             {/* <td>{todo.weight}</td> */}
             {/* <td style={{ textAlign: 'right' }}>
               {formatter.format(todo.cost)}
@@ -5431,6 +5433,7 @@ class Transaksi extends React.Component {
               <thead>
                 <tr>
                   <th style={{ width: '50%' }}>Nama</th>
+                  <th>Nama Alsin</th>
                   {this.state.editPricing &&
                     this.state.editPricing.status !==
                       'Menunggu Penentuan Pembayaran' && (
@@ -6425,7 +6428,9 @@ class Transaksi extends React.Component {
                       'addReparation',
                     )
                   }
-                  value={this.state.addReparation && this.state.addReparation.cost}
+                  value={
+                    this.state.addReparation && this.state.addReparation.cost
+                  }
                 />
                 <Label
                   style={{ fontSize: '0.8em', marginBottom: 0, color: 'red' }}
@@ -6505,7 +6510,8 @@ class Transaksi extends React.Component {
                   type="text"
                   disabled={true}
                   value={
-                    this.state.addTraining && this.state.addTraining.alsin_type_name
+                    this.state.addTraining &&
+                    this.state.addTraining.alsin_type_name
                   }
                 ></Input>
                 <Label>Harga</Label>
@@ -6731,7 +6737,8 @@ class Transaksi extends React.Component {
                   type="text"
                   disabled={true}
                   value={
-                    this.state.addRiceSeed && this.state.addRiceSeed.alsin_type_name
+                    this.state.addRiceSeed &&
+                    this.state.addRiceSeed.alsin_type_name
                   }
                 ></Input>
                 <Label>Harga</Label>
@@ -6923,7 +6930,43 @@ class Transaksi extends React.Component {
                 <Input
                   type="text"
                   disabled={true}
-                  value={this.state.addSparePart && this.state.addSparePart.name}
+                  value={
+                    this.state.addSparePart && this.state.addSparePart.nama
+                  }
+                ></Input>
+                <Label>Alsin</Label>
+                <Input
+                  type="text"
+                  disabled={true}
+                  value={
+                    this.state.addSparePart &&
+                    this.state.addSparePart.alsin_type_name
+                  }
+                ></Input>
+                <Label>Merk</Label>
+                <Input
+                  type="text"
+                  disabled={true}
+                  value={
+                    this.state.addSparePart && this.state.addSparePart.merek
+                  }
+                ></Input>
+                <Label>Type Model</Label>
+                <Input
+                  type="text"
+                  disabled={true}
+                  value={
+                    this.state.addSparePart &&
+                    this.state.addSparePart.type_model
+                  }
+                ></Input>
+                <Label>Jumlah Alsin</Label>
+                <Input
+                  type="text"
+                  disabled={true}
+                  value={
+                    this.state.addSparePart && this.state.addSparePart.jumlah
+                  }
                 ></Input>
                 <Label>Harga</Label>
                 <Input
@@ -6940,7 +6983,9 @@ class Transaksi extends React.Component {
                       'addSparePart',
                     )
                   }
-                  value={this.state.addSparePart && this.state.addSparePart.cost}
+                  value={
+                    this.state.addSparePart && this.state.addSparePart.cost
+                  }
                 />
                 <Label
                   style={{ fontSize: '0.8em', marginBottom: 0, color: 'red' }}
