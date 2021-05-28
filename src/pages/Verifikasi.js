@@ -8,6 +8,7 @@ import {
   Button,
   CardBody,
   CardFooter,
+  Input
 } from 'reactstrap';
 import Page from 'components/Page';
 import ReactInputVerificationCode from 'react-input-verification-code';
@@ -56,8 +57,13 @@ class AuthPage extends React.Component {
       () => console.log('OTP INPUT', this.state.otp),
     );
   }
-  handleChange = OTP => {
+  handleChange = (OTP) => {
     this.setState({ otp: OTP }, () => console.log('ISINYA', this.state.otp));
+  };
+
+  onOTPChange = e => {
+    const otp = e.target.value;
+    this.setState({ otp: otp });
   };
 
   tickTock() {
@@ -91,7 +97,7 @@ class AuthPage extends React.Component {
 
     var payload = {
       email: email,
-      otp_code: this.state.otp
+      otp_code: this.state.otp,
     };
 
     console.log('ISI PAYLOAD', payload);
@@ -148,7 +154,7 @@ class AuthPage extends React.Component {
 
     var payload = {
       email: email,
-      otp_code: this.state.otp
+      otp_code: this.state.otp,
     };
 
     console.log('ISI PAYLOAD LOGIN', payload);
@@ -224,14 +230,22 @@ class AuthPage extends React.Component {
               <FormGroup>
                 <Label>Verifikasi OTP Input:</Label>
                 <CardBody id="otp">
-                  <div className="otpInput">
+                  {/* <div className="otpInput">
                     <ReactInputVerificationCode
                       length={4}
                       onChange={this.handleChange}
                       placeholder=""
                       value={this.state.otp}
                     />
-                  </div>
+                  </div> */}
+                  <Input
+                    type="text"
+                    maxLength='4'
+                    autocomplete="off"
+                    style={{ textAlign: 'center' }}
+                    value={this.state.otp}
+                    onChange={(e)=> this.onOTPChange(e)}
+                  ></Input>
                   <br></br>
                   <Label style={{ display: this.state.timeUp }}>
                     Sisa Waktu:&nbsp;
